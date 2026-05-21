@@ -1,0 +1,282 @@
+[
+    {
+        "source": "inhouse",
+        "tour_id": "usual_house_20260521_160953",
+        "time": "2026-05-21T16:09:53.093929+00:00",
+        "team_size": 4,
+        "teams": {
+            "team1": {
+                "display_name": "unborned (17.837) comete (12.969) dry (9.315) feyfey (-19.738)",
+                "players": [
+                    {
+                        "name": "unborned",
+                        "rating": 17.837
+                    },
+                    {
+                        "name": "comete",
+                        "rating": 12.969
+                    },
+                    {
+                        "name": "dry",
+                        "rating": 9.315
+                    },
+                    {
+                        "name": "feyfey",
+                        "rating": -19.738
+                    }
+                ]
+            },
+            "team2": {
+                "display_name": "watashiii (49.745) beautiful (-5.404) atsui (-8.062) md22 (-9.149)",
+                "players": [
+                    {
+                        "name": "watashiii",
+                        "rating": 49.745
+                    },
+                    {
+                        "name": "beautiful",
+                        "rating": -5.404
+                    },
+                    {
+                        "name": "atsui",
+                        "rating": -8.062
+                    },
+                    {
+                        "name": "md22",
+                        "rating": -9.149
+                    }
+                ]
+            }
+        },
+        "matches": [
+            {
+                "round": 1,
+                "team1_score": 1,
+                "team2_score": 0,
+                "winner": "team1"
+            },
+            {
+                "round": 2,
+                "team1_score": 3,
+                "team2_score": 0,
+                "winner": "team1"
+            },
+            {
+                "round": 3,
+                "team1_score": 2,
+                "team2_score": 0,
+                "winner": "team1"
+            },
+            {
+                "round": 4,
+                "team1_score": 3,
+                "team2_score": 0,
+                "winner": "team1"
+            },
+            {
+                "round": 5,
+                "team1_score": 2,
+                "team2_score": 0,
+                "winner": "team1"
+            }
+        ]
+    },
+    {
+        "source": "inhouse",
+        "tour_id": "usual_house_20260521_161649",
+        "time": "2026-05-21T16:16:49.275485+00:00",
+        "team_size": 4,
+        "teams": {
+            "team1": {
+                "display_name": "unborned (24.392) comete (19.524) beautiful (-11.959) feyfey (-13.183)",
+                "players": [
+                    {
+                        "name": "unborned",
+                        "rating": 24.392
+                    },
+                    {
+                        "name": "comete",
+                        "rating": 19.524
+                    },
+                    {
+                        "name": "beautiful",
+                        "rating": -11.959
+                    },
+                    {
+                        "name": "feyfey",
+                        "rating": -13.183
+                    }
+                ]
+            },
+            "team2": {
+                "display_name": "watashiii (43.190) dry (15.870) atsui (-14.617) md22 (-15.704)",
+                "players": [
+                    {
+                        "name": "watashiii",
+                        "rating": 43.19
+                    },
+                    {
+                        "name": "dry",
+                        "rating": 15.87
+                    },
+                    {
+                        "name": "atsui",
+                        "rating": -14.617
+                    },
+                    {
+                        "name": "md22",
+                        "rating": -15.704
+                    }
+                ]
+            }
+        },
+        "matches": [
+            {
+                "round": 1,
+                "team1_score": 0,
+                "team2_score": 5,
+                "winner": "team2"
+            },
+            {
+                "round": 2,
+                "team1_score": 0,
+                "team2_score": 5,
+                "winner": "team2"
+            },
+            {
+                "round": 3,
+                "team1_score": 0,
+                "team2_score": 5,
+                "winner": "team2"
+            }
+        ]
+    },
+    {
+        "source": "inhouse",
+        "tour_id": "usual_house_20260521_161755",
+        "time": "2026-05-21T16:17:55.869518+00:00",
+        "team_size": 4,
+        "teams": {
+            "team1": {
+                "display_name": "unborned (24.392) comete (19.524) beautiful (-11.959) feyfey (-13.183)",
+                "players": [
+                    {
+                        "name": "unborned",
+                        "rating": 24.392
+                    },
+                    {
+                        "name": "comete",
+                        "rating": 19.524
+                    },
+                    {
+                        "name": "beautiful",
+                        "rating": -11.959
+                    },
+                    {
+                        "name": "feyfey",
+                        "rating": -13.183
+                    }
+                ]
+            },
+            "team2": {
+                "display_name": "watashiii (43.190) dry (15.870) atsui (-14.617) md22 (-15.704)",
+                "players": [
+                    {
+                        "name": "watashiii",
+                        "rating": 43.19
+                    },
+                    {
+                        "name": "dry",
+                        "rating": 15.87
+                    },
+                    {
+                        "name": "atsui",
+                        "rating": -14.617
+                    },
+                    {
+                        "name": "md22",
+                        "rating": -15.704
+                    }
+                ]
+            }
+        },
+        "matches": [
+            {
+                "round": 1,
+                "team1_score": 0,
+                "team2_score": 5,
+                "winner": "team2"
+            },
+            {
+                "round": 2,
+                "team1_score": 0,
+                "team2_score": 5,
+                "winner": "team2"
+            },
+            {
+                "round": 3,
+                "team1_score": 0,
+                "team2_score": 5,
+                "winner": "team2"
+            }
+        ]
+    },
+    {
+        "source": "inhouse",
+        "tour_id": "usual_house_20260521_170222",
+        "time": "2026-05-21T17:02:22.800423+00:00",
+        "team_size": 4,
+        "teams": {
+            "team1": {
+                "display_name": "watashiii (51.330) unborned (16.252) beautiful (-20.098) feyfey (-21.323)",
+                "players": [
+                    {
+                        "name": "watashiii",
+                        "rating": 51.33
+                    },
+                    {
+                        "name": "unborned",
+                        "rating": 16.252
+                    },
+                    {
+                        "name": "beautiful",
+                        "rating": -20.098
+                    },
+                    {
+                        "name": "feyfey",
+                        "rating": -21.323
+                    }
+                ]
+            },
+            "team2": {
+                "display_name": "dry (24.009) comete (11.384) atsui (-6.477) md22 (-7.564)",
+                "players": [
+                    {
+                        "name": "dry",
+                        "rating": 24.009
+                    },
+                    {
+                        "name": "comete",
+                        "rating": 11.384
+                    },
+                    {
+                        "name": "atsui",
+                        "rating": -6.477
+                    },
+                    {
+                        "name": "md22",
+                        "rating": -7.564
+                    }
+                ]
+            }
+        },
+        "matches": [
+            {
+                "round": 1,
+                "team1_score": 0,
+                "team2_score": 5,
+                "winner": "team2"
+            }
+        ]
+    }
+]

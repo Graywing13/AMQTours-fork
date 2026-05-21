@@ -150,23 +150,23 @@ class TierMaker:
         if not gui:
             _ = input("Finished updating ranks. Press any key to continue...")
         
-    def update_elos(self, tourlist_cell):
+    def update_elos(self, tourlist_cell=None, backlog_cell=None):
         gc = readCredentials(self.directory)
 
         sheet = gc.open(self.sheetName)
         wks_elos = sheet.get_worksheet_by_id(self.tabEloStorage)
         elos = json.loads(wks_elos.get_values(self.tabEloStorageCell)[0][0])
 
-        wks_ids = sheet.get_worksheet_by_id(self.tabIDs)
-        rows_ids = wks_ids.get_all_values()
-        with open(self.IDTABLE, "w", newline="", encoding="utf-8") as f:
-            writer = csv.writer(f)
-            writer.writerows(rows_ids)
-
         with open(self.ELOS, 'w') as f:
             json.dump(elos, f, indent=4)
 
-        tourlist_file = os.path.join(self.directory, "tourlist.txt")
-        with open(tourlist_file, "w") as t:
-            tourlist_content = wks_elos.get_values(tourlist_cell)[0][0]
-            t.write(tourlist_content)
+        if os.path.basename(self.directory) == "usual_house":
+            inhouse_backlog = json.loads(wks_elos.get_values(backlog_cell)[0][0])
+            with open(os.path.join(self.directory, "match_backlog.json"), "w") as f:
+                json.dump(inhouse_backlog, f, indent=4)
+
+        if tourlist_cell:
+            tourlist_file = os.path.join(self.directory, "tourlist.txt")
+            with open(tourlist_file, "w") as t:
+                tourlist_content = wks_elos.get_values(tourlist_cell)[0][0]
+                t.write(tourlist_content)

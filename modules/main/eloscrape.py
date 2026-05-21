@@ -52,10 +52,11 @@ class EloScrape:
         self.ELOS_ADJUSTED_TL = os.path.join(self.directory, "elo_adjusted_tl.txt")
         self.ELOS_ADJUSTED_TL_FINEGRAINED = os.path.join(self.directory, "elo_adjusted_tl_finegrained.txt")
         self.IDTABLE = os.path.join(self.directory, "ids.csv")
+        self.MATCH_BACKLOG = os.path.join(self.directory, "match_backlog.json")
         self.PROXY_SERVER = '' # get from tsui if necessary
         self.TEAMSIZE = 4
 
-    async def eloscrape(self, saveToSheet = True, tourlist_cell = None):  
+    async def eloscrape(self, saveToSheet = True, tourlist_cell = None, backlog_cell = None):  
         trueskill.setup(
             mu=self.mu,
             sigma=self.sigma, 
@@ -187,24 +188,77 @@ class EloScrape:
             match_info['tour_id'] = tour_id
             return match_info
 
+
+        async def load_inhouse_backlog():
+            if not os.path.exists(self.MATCH_BACKLOG):
+                return []
+
+            with open(self.MATCH_BACKLOG, encoding="utf-8") as f:
+                backlog = json.load(f)
+
+            tours = []
+            for event in backlog:
+                team1_id = "team1"
+                team2_id = "team2"
+                team1 = event["teams"][team1_id]
+                team2 = event["teams"][team2_id]
+                matches_by_round = {}
+
+                for match in event["matches"]:
+                    winner = match.get("winner")
+                    if winner == team1_id:
+                        winner_id = team1_id
+                        loser_id = team2_id
+                    elif winner == team2_id:
+                        winner_id = team2_id
+                        loser_id = team1_id
+                    else:
+                        winner_id = None
+                        loser_id = None
+
+                    round_key = str(match["round"])
+                    matches_by_round.setdefault(round_key, []).append({
+                        "round": match["round"],
+                        "player1": {"id": team1_id, "display_name": team1["display_name"]},
+                        "player2": {"id": team2_id, "display_name": team2["display_name"]},
+                        "winner_id": winner_id,
+                        "loser_id": loser_id,
+                        "scores": {
+                            team1_id: match["team1_score"],
+                            team2_id: match["team2_score"],
+                        },
+                    })
+
+                tours.append({
+                    "tour_id": event["tour_id"],
+                    "time": dp.parse(event["time"]),
+                    "matches_by_round": matches_by_round,
+                })
+
+            return tours
+
         init_timezones()
 
         aliases = getAliasesDF(self.IDTABLE)
 
-        tourlist = getTourlist(self.TOURLIST_PATH)
+        if not os.path.basename(self.directory) == "usual_house":
+            tourlist = getTourlist(self.TOURLIST_PATH)
         
         # comment this out if tsui is asleep
         # only use if having issues w/ curl-cffi
         # tourlist = [PROXY_SERVER + tour for tour in tourlist]
         elos = {}
         
-        async with AsyncSession(impersonate='chrome123', max_clients=2) as session:
-            try:
-                challonges = await asyncio.gather(*[get_challonge_info(session, url) for url in tourlist])
-                challonges.sort(key=lambda tour:tour['time'].timestamp())
-            except IndexError:
-                input('matches not processed, need to replace cookies, press enter to close')
-                sys.exit(1)
+        if os.path.basename(self.directory) == "usual_house":
+            challonges = await load_inhouse_backlog()
+        else:
+            async with AsyncSession(impersonate='chrome123', max_clients=2) as session:
+                try:
+                    challonges = await asyncio.gather(*[get_challonge_info(session, url) for url in tourlist])
+                    challonges.sort(key=lambda tour:tour['time'].timestamp())
+                except IndexError:
+                    input('matches not processed, need to replace cookies, press enter to close')
+                    sys.exit(1)
         
         match_count = 0
         draw_count = 0
@@ -307,6 +361,9 @@ class EloScrape:
         
         with open(self.ELOS_HISTORY, 'w', encoding='utf-8') as f:
             json.dump(elo_history_list, f, indent='\t')
+
+        if not elo_history_list:
+            return
             
         with open(self.ELOS_HISTORY_LATEST, 'w', encoding='utf-8') as f:
             json.dump(elo_history_list[-1], f, indent='\t')
@@ -330,4 +387,4 @@ class EloScrape:
                 f.write(f'{tier}: {", ".join([f"{player} ({elos_print[player]})" for player in tierlist[tier]])}\n')
 
         if saveToSheet:
-            saveElos(self.directory, self.tabEloStorage, self.sheetName, self.tabEloStorageCell, self.ELOS, tourlist_path=self.TOURLIST_PATH, tourlist_cell=tourlist_cell)
+            saveElos(self.directory, self.tabEloStorage, self.sheetName, self.tabEloStorageCell, self.ELOS, tourlist_path=self.TOURLIST_PATH, tourlist_cell=tourlist_cell, backlog_path=self.MATCH_BACKLOG, backlog_cell=backlog_cell)

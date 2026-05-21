@@ -11,6 +11,16 @@ from modules.support.getAliases import *
 from modules.support.getRanks import getRanks
 from modules.support.LPProblem import LPProblem
 
+def sync_ids_from_sheet(path, sheetName, tabIDs):
+    gc = readCredentials(path)
+    sheet = gc.open(sheetName)
+    wks_ids = sheet.get_worksheet_by_id(tabIDs)
+    rows_ids = wks_ids.get_all_values()
+    idtable = os.path.join(path, "ids.csv")
+    with open(idtable, "w", newline="", encoding="utf-8") as f:
+        writer = csv.writer(f)
+        writer.writerows(rows_ids)
+
 def create_teams(path, players, team_size, whitelist, blacklist, separateT1):
     aliases = getAliasesDF(os.path.join(path, "ids.csv"))
     players_ids = {getAliasesID(aliases, player): player for player, _ in players}

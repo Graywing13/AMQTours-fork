@@ -19,8 +19,8 @@ def LPProblem(players, team_size, blacklist, whitelist, max_solutions, think_tim
     x = LpVariable.dicts("assign", (p_names, range(k)), 0, 1, LpBinary)
 
     # Variables for max and min partition sums
-    z = LpVariable("max_sum", lowBound=0)
-    y = LpVariable("min_sum", lowBound=0)
+    z = LpVariable("max_sum")
+    y = LpVariable("min_sum")
 
     # Constraint: Each player assigned to one partition
     for name in p_names:

@@ -17,6 +17,12 @@ def quagsual():
     tourlist = get_tourlist("usual")
     return render_template("tour.html", elos=elos, tourType="random 15s", tourlist=tourlist, dryelo=False)
 
+@app.get("/usual_house")
+def usual_house():
+    folder = "usual_house"
+    elos = get_elos(folder)
+    return render_template("tour.html", elos=elos, tourType="usual-house", dryelo=False)
+
 @app.get("/watched")
 def watched():
     folder = "watched_autoelo"

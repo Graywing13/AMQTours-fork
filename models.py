@@ -19,6 +19,7 @@ class WhiteList(BaseModel):
 class TourType(str, Enum):
     RANDOM = "random"
     RANDOM_15S = "random 15s"
+    RANDOM_HOUSE = "usual-house"
     WATCHED = "watched"
     RANDOM_OP = "random op"
     RANDOM_ED = "random ed"
@@ -30,6 +31,17 @@ class TourType(str, Enum):
     WATCHED_X_2009 = "watched x-2009"
     WATCHED_ED = "watched ed"
     WATCHED_OP = "watched op"
+
+
+class InhouseMatch(BaseModel):
+    round: int
+    team1_score: int
+    team2_score: int
+
+class InhouseResults(BaseModel):
+    team1: List[Player]
+    team2: List[Player]
+    matches: List[InhouseMatch]
 
 class Tour(BaseModel):
     type: TourType

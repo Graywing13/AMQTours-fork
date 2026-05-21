@@ -38,6 +38,7 @@
                 <ul class="dropdown-menu">
                     <li><a class="dropdown-item" href="{{ url_for('usual') }}">Usual</a></li>
                     <li><a class="dropdown-item" href="{{ url_for('quagsual') }}">Quagsual</a></li>
+                    <li><a class="dropdown-item" href="{{ url_for('usual_house') }}">Usual In-House</a></li>
                     <li><hr class="dropdown-divider"></li>
                     <li><a class="dropdown-item" href="{{ url_for('random_op') }}">Random OP</a></li>
                     <li><a class="dropdown-item" href="{{ url_for('random_ed') }}">Random ED</a></li>
@@ -83,7 +84,7 @@
             </li>
             {% if not dryelo %}
             <li class="nav-item" role="presentation">
-                <button class="nav-link" data-bs-toggle="tab" data-bs-target="#menu0" type="button">Eloscrape</button>
+                <button class="nav-link" data-bs-toggle="tab" data-bs-target="#menu0" type="button">{% if tourType == "usual-house" %}Results{% else %}Eloscrape{% endif %}</button>
             </li>
             {% else %}
             <li class="nav-item" role="presentation">
@@ -142,6 +143,26 @@
             </div>
             {% if not dryelo %}
             <div class="tab-pane fade" id="menu0">
+                {% if tourType == "usual-house" %}
+                <div class="row">
+                    <div class="col-3">
+                        <label for="inhouse-rounds" class="form-label">Rounds</label>
+                        <input type="number" class="form-control" id="inhouse-rounds" min="1" value="1">
+                    </div>
+                    <div class="col-3 d-flex align-items-end">
+                        <button type="button" class="btn btn-primary" onclick="buildInhouseRounds()">Create score sheet</button>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-12">
+                        <div id="inhouse-teams-preview"></div>
+                        <div id="inhouse-rounds-container"></div>
+                        <button type="button" class="btn btn-primary mt-2" onclick="submitInhouseResults()">Submit Results</button>
+                        <div id="loading-inhouse" style="display:none;">Loading...</div>
+                        <div id="error-inhouse" style="display:none;">Could not submit results</div>
+                    </div>
+                </div>
+                {% else %}
                 <div class="row">
                     <div class="col-6">
                         <label for="elo-input" class="form-label">Current Elos</label>
@@ -166,13 +187,14 @@
                     <div class="col-3">
                         <button type="button" class="btn btn-primary" onclick="eloscrape()">Run eloscrape</button>
                         <div id="loading-eloscrape" style="display:none;">
-                            ⏳ Loading...
+                            ??Loading...
                         </div>
                         <div id="error-eloscrape" style="display:none;">
-                            ❌ Could not update elos
+                            ??Could not update elos
                         </div>
                     </div>
-                </div>       
+                </div>
+                {% endif %}
             </div>
             {% else %}
             <div class="tab-pane fade" id="menu1">
@@ -234,6 +256,7 @@ const list = document.createElement("div");
 container.appendChild(list);
 
 let whitelistPairs = [];
+let latestInhouseTeams = null;
 
 function renderList() {
   list.innerHTML = "";
@@ -395,6 +418,9 @@ async function solver() {
     }
     loading.style.display = "none";
     document.getElementById("codes").value = data;
+    if (tourType == "usual-house") {
+        prepareInhouseResults(data);
+    }
 }
 
 function copy(id) {
@@ -420,6 +446,134 @@ async function tiermaker(){
         window.location.reload();
     } else {
         loadingWrong.style.display = "block"
+    }
+}
+
+
+function parseTeamLine(line) {
+    const members = [];
+    const teamText = line.split("| Total =")[0].trim();
+    const regex = /(.+?) \((-?\d+(?:\.\d+)?)\)(?:\s|$)/g;
+    let match;
+    while ((match = regex.exec(teamText)) !== null) {
+        members.push({name: match[1].trim(), rating: Number(match[2])});
+    }
+    return members;
+}
+
+function prepareInhouseResults(codeText) {
+    const lines = codeText.split("\n").filter(line => line.includes("| Total ="));
+    if (lines.length < 2) {
+        latestInhouseTeams = null;
+        return;
+    }
+
+    latestInhouseTeams = [parseTeamLine(lines[0]), parseTeamLine(lines[1])];
+    const preview = document.getElementById("inhouse-teams-preview");
+    if (preview) {
+        preview.innerHTML = `
+            <p><strong>Team 1:</strong> ${latestInhouseTeams[0].map(p => p.name).join(", ")}</p>
+            <p><strong>Team 2:</strong> ${latestInhouseTeams[1].map(p => p.name).join(", ")}</p>
+        `;
+    }
+    buildInhouseRounds();
+}
+
+function scoreSelect(id) {
+    const select = document.createElement("select");
+    select.classList.add("form-select");
+    select.id = id;
+    for (let score = 0; score <= 5; score++) {
+        const option = document.createElement("option");
+        option.value = score;
+        option.text = score;
+        select.add(option);
+    }
+    return select;
+}
+
+function buildInhouseRounds() {
+    const container = document.getElementById("inhouse-rounds-container");
+    if (!container) return;
+
+    const rounds = Number(document.getElementById("inhouse-rounds").value || 1);
+    container.innerHTML = "";
+
+    for (let round = 1; round <= rounds; round++) {
+        const row = document.createElement("div");
+        row.classList.add("row", "align-items-end");
+
+        const roundCol = document.createElement("div");
+        roundCol.classList.add("col-2");
+        const label = document.createElement("span");
+        label.classList.add("input-group-text");
+        label.textContent = `Round ${round}`;
+        roundCol.appendChild(label);
+
+        const team1Col = document.createElement("div");
+        team1Col.classList.add("col-2");
+        const team1Label = document.createElement("label");
+        team1Label.classList.add("form-label");
+        team1Label.textContent = "Team 1";
+        team1Col.appendChild(team1Label);
+        team1Col.appendChild(scoreSelect(`round-${round}-team1`));
+
+        const team2Col = document.createElement("div");
+        team2Col.classList.add("col-2");
+        const team2Label = document.createElement("label");
+        team2Label.classList.add("form-label");
+        team2Label.textContent = "Team 2";
+        team2Col.appendChild(team2Label);
+        team2Col.appendChild(scoreSelect(`round-${round}-team2`));
+
+        row.appendChild(roundCol);
+        row.appendChild(team1Col);
+        row.appendChild(team2Col);
+        container.appendChild(row);
+    }
+}
+
+async function submitInhouseResults() {
+    const loading = document.getElementById("loading-inhouse");
+    const error = document.getElementById("error-inhouse");
+    error.style.display = "none";
+
+    if (!latestInhouseTeams) {
+        prepareInhouseResults(document.getElementById("codes").value);
+    }
+    if (!latestInhouseTeams) {
+        error.textContent = "Run the solver first.";
+        error.style.display = "block";
+        return;
+    }
+
+    const rounds = Number(document.getElementById("inhouse-rounds").value || 1);
+    const matches = [];
+    for (let round = 1; round <= rounds; round++) {
+        matches.push({
+            round: round,
+            team1_score: Number(document.getElementById(`round-${round}-team1`).value),
+            team2_score: Number(document.getElementById(`round-${round}-team2`).value)
+        });
+    }
+
+    loading.style.display = "block";
+    const response = await fetch(`http://127.0.0.1:8000/inhouse_results?tourType=${tourType}`, {
+        method: "POST",
+        headers: {"Content-Type": "application/json"},
+        body: JSON.stringify({
+            team1: latestInhouseTeams[0],
+            team2: latestInhouseTeams[1],
+            matches: matches
+        })
+    });
+    loading.style.display = "none";
+
+    if (response.ok) {
+        window.location.reload();
+    } else {
+        error.textContent = "Could not submit results";
+        error.style.display = "block";
     }
 }
 

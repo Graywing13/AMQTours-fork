@@ -1,18 +1,18 @@
 {
-	"tour_id": "e8hcfhxr",
-	"time": "2025-11-14 10:30:00+01:00",
+	"tour_id": "usual_house_20260521_170222",
+	"time": "2026-05-21 17:02:22.800423+00:00",
 	"teams": {
-		"sniparook (42.66) fortnayt (33.34) dry (-1.80) okitanobu (-42.14) = 32.05": "2W 0L 0D",
-		"chata (9.00) jakemonkey (5.31) feyfey (5.14) skychael (3.26) = 22.70": "0W 2L 0D"
+		"watashiii (51.33) unborned (16.25) beautiful (-20.10) feyfey (-21.32) = 26.16": "0W 1L 0D",
+		"dry (24.01) comete (11.38) atsui (-6.48) md22 (-7.56) = 21.35": "1W 0L 0D"
 	},
 	"player": {
-		"sniparook": "initial elo: 42.656, new elo: 49.336, rating change: 6.680",
-		"fortnayt": "initial elo: 33.336, new elo: 40.195, rating change: 6.859",
-		"dry": "initial elo: -1.802, new elo: 4.979, rating change: 6.781",
-		"okitanobu": "initial elo: -42.137, new elo: -35.353, rating change: 6.784",
-		"chata": "initial elo: 9.000, new elo: 7.934, rating change: -1.066",
-		"jakemonkey": "initial elo: 5.308, new elo: -1.562, rating change: -6.870",
-		"feyfey": "initial elo: 5.135, new elo: -0.301, rating change: -5.437",
-		"skychael": "initial elo: 3.261, new elo: -2.992, rating change: -6.253"
+		"watashiii": "initial elo: 51.330, new elo: 46.781, rating change: -4.549",
+		"unborned": "initial elo: 16.252, new elo: 11.703, rating change: -4.549",
+		"beautiful": "initial elo: -20.098, new elo: -24.647, rating change: -4.549",
+		"feyfey": "initial elo: -21.323, new elo: -25.872, rating change: -4.549",
+		"dry": "initial elo: 24.009, new elo: 28.558, rating change: 4.549",
+		"comete": "initial elo: 11.384, new elo: 15.933, rating change: 4.549",
+		"atsui": "initial elo: -6.477, new elo: -1.928, rating change: 4.549",
+		"md22": "initial elo: -7.564, new elo: -3.015, rating change: 4.549"
 	}
 }
