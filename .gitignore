@@ -1,3 +1,4 @@
 cl-watched/
 credentials/
 __pycache__/
+*.pyc

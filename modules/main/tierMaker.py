@@ -5,7 +5,6 @@ import csv
 import shutil
 import argparse
 from collections import defaultdict
-import json
 from modules.support.cleanData import *
 from modules.support.readCredentials import readCredentials
 from modules.support.trim import *

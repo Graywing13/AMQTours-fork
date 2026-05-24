@@ -20,11 +20,11 @@ def normalize_stats(df, normalization_specs):
     return df_norm
 
 def compute_rank_scores(df, alpha, midpoint, minRating, maxRating):
-    mu = df["RANK"].mean()
-    sigma = df["RANK"].std()
+    # mu = df["RANK"].mean()
+    # sigma = df["RANK"].std()
 
-    z = (df["RANK"] - mu) / sigma
-    df["ELO"] = 1000 + 200 * z
+    # z = (df["RANK"] - mu) / sigma
+    df["ELO"] = 3000 * df["RANK"]
     df["ELO"] = (df["ELO"] / 10).round(2)
     return df
 
@@ -127,23 +127,44 @@ def compute_ranks(clean_stats, full_stats, normalization_spec, tiers, tier_weigh
     # WR + Streak accounting
     final_ranks["PALL"] = final_ranks["WIN"] + final_ranks["LOSE"] + final_ranks["TIE"]
     final_ranks["PRECENT"] = final_ranks["WINSTREAK"] + final_ranks["LOSESTREAK"] + final_ranks["TIESTREAK"]
-    final_ranks["WR"] = (final_ranks["WIN"] + 0.5 * final_ranks["TIE"]) / final_ranks["PALL"]
-    final_ranks["STREAK"] = (final_ranks["WINSTREAK"] + 0.5 * final_ranks["TIESTREAK"]) / final_ranks["PRECENT"]
-    final_ranks["DELTAWR"] =  final_ranks["STREAK"] - final_ranks["WR"]
-    final_ranks["WR MODIFIER"] = np.where(
+    final_ranks["WR"] = ((final_ranks["WIN"] + 0.5 * final_ranks["TIE"]) / final_ranks["PALL"]) - 0.5
+    final_ranks["STREAK"] = ((final_ranks["WINSTREAK"] + 0.5 * final_ranks["TIESTREAK"]) / final_ranks["PRECENT"]) - 0.5
+    #final_ranks["DELTAWR"] =  final_ranks["STREAK"] - final_ranks["WR"]
+    # final_ranks["WR MODIFIER"] = np.where(
+    #     final_ranks["PALL"] > 30,
+    #     final_ranks["WR"] - 0.5,
+    #     0.0
+    # )
+    ELOBONUS = 20
+    STREAKBONUS = 10
+    final_ranks["WR"] = np.where(
         final_ranks["PALL"] > 30,
-        final_ranks["WR"] - 0.5,
+        final_ranks["WR"],
         0.0
     )
-    final_ranks["STREAK MODIFIER"] = 0.5 * np.maximum(0, final_ranks["DELTAWR"]) ** 2
-    confidence = np.log1p(final_ranks["PALL"]) / np.log1p(final_ranks["PALL"].max())
-    final_ranks["STREAK MODIFIER"] *= confidence
-    final_ranks["WR MODIFIER"] *= confidence
-    final_ranks["ELO"] = final_ranks["ELONOWR"] * (1 + final_ranks["WR MODIFIER"] + final_ranks["STREAK MODIFIER"])
-    final_ranks.insert(3, "STREAK MODIFIER", final_ranks.pop("STREAK MODIFIER"))
-    final_ranks.insert(3, "WR MODIFIER", final_ranks.pop("WR MODIFIER"))
+    final_ranks["STREAK"] = np.where(
+        final_ranks["PALL"] > 30,
+        final_ranks["STREAK"],
+        0.0
+    )
+    # final_ranks["STREAK MODIFIER"] = final_ranks["STREAK"]
+    # 0.5 * np.maximum(0, final_ranks["DELTAWR"]) ** 2
+    # confidence = np.log1p(final_ranks["PALL"]) / np.log1p(final_ranks["PALL"].max())
+    # final_ranks["STREAK MODIFIER"] *= confidence
+    # final_ranks["WR MODIFIER"] *= confidence
+    final_ranks["FINAL MODIFIER"] = final_ranks["WR"] + final_ranks["STREAK"]
+    final_ranks["ELO"] = final_ranks["ELONOWR"] + final_ranks["WR"] * ELOBONUS + final_ranks["STREAK"] * STREAKBONUS
+    #(1 + final_ranks["WR MODIFIER"] + final_ranks["STREAK MODIFIER"])
+    # final_ranks.insert(3, "STREAK MODIFIER", final_ranks.pop("STREAK MODIFIER"))
+    # final_ranks.insert(3, "WR MODIFIER", final_ranks.pop("WR MODIFIER"))
     final_ranks.insert(3, "ELO", final_ranks.pop("ELO"))
     final_ranks = final_ranks.round(3)
     final_ranks = final_ranks.sort_values(by='ELO', ascending=False)
+
+    # columns_to_keep = ['PlayerName', 'ELONOWR', 'ELO', 'RANK', "FINAL MODIFIER", "WR", "STREAK"]
+    # sort_column="FINAL MODIFIER"
+    # result = final_ranks.sort_values(by=sort_column, key=abs, ascending=False)[columns_to_keep].head(50)
+
+    # print(result)
 
     return final_ranks
