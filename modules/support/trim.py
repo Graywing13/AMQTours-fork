@@ -21,7 +21,7 @@ def get_tiers(tourType):
     if tourType.startswith("watched"):
         tiers = {
             "Tier1": ["GuessRate"],
-            "Tier2": ["LivesTaken", "erigs", "avg8"]#, "SoloRigs", "rigs8"],
+            "Tier2": ["erigs", "avg8"]#, "LivesTaken", "SoloRigs", "rigs8"],
             # "Tier3": ["Rigs", "LivesSaved", "OfflistErigs", "RigsHit", "OfflistHit"],
             # "Tier4": ["LivesLostOnRigs", "RigsMissed", "MissedSolos", "Seven8"]
         }
@@ -33,7 +33,7 @@ def get_tiers(tourType):
     else:
         tiers = {
             "Tier1": ["GuessRate"],
-            "Tier2": ["LivesTaken", "erigs", "avg8"]
+            "Tier2": ["erigs", "avg8"]#"LivesTaken", 
             # "Tier3": ["LivesSaved"],
             # "Tier4": ["Seven8"]
         }
@@ -53,11 +53,6 @@ def get_normalization_spec(full_stats, tourType):
                 "max": 100,
                 "direction": "max"
             },
-            "LivesTaken": {
-                "min": 0,
-                "max": full_stats["Lives taken"].max(),
-                "direction": "max"
-            },
             "avg8": {
                 "min": 1,
                 "max": 8,
@@ -67,8 +62,12 @@ def get_normalization_spec(full_stats, tourType):
                 "min": 0,
                 "max": full_stats["erigs"].max(),
                 "direction": "max"
-            }
-            # ,
+            }#,
+            # "LivesTaken": {
+            #     "min": 0,
+            #     "max": full_stats["Lives taken"].max(),
+            #     "direction": "max"
+            # },
             # "LivesSaved": {
             #     "min": 0,
             #     "max": full_stats["Lives saved"].max(),
@@ -132,11 +131,6 @@ def get_normalization_spec(full_stats, tourType):
                 "max": 100,
                 "direction": "max"
             },
-            "LivesTaken": {
-                "min": 0,
-                "max": full_stats["Lives taken"].max(),
-                "direction": "max"
-            },
             "avg8": {
                 "min": 1,
                 "max": 8,
@@ -147,6 +141,11 @@ def get_normalization_spec(full_stats, tourType):
                 "max": full_stats["erigs"].max(),
                 "direction": "max"
             }
+            # "LivesTaken": {
+            #     "min": 0,
+            #     "max": full_stats["Lives taken"].max(),
+            #     "direction": "max"
+            # },
             # "LivesSaved": {
             #     "min": 0,
             #     "max": full_stats["Lives saved"].max(),
