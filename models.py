@@ -26,6 +26,7 @@ class TourType(str, Enum):
     RANDOM_INS = "random ins"
     RANDOM_CL = "random cl"
     WATCHED_INS = "watched ins"
+    WATCHED_INS_NO_CHANTING  = "watched ins no chanting"
     WATCHED_5S = "watched 5s"
     WATCHED_2_PLUS_8 = "watched 2 8"
     WATCHED_X_2009 = "watched x-2009"

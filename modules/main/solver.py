@@ -308,6 +308,11 @@ class Solver:
                     False: (get_guess_watched_gr,   generate_codes_watched_2009_gr)
                 }
             },
+            "watched-in-no-chanting": {
+                "gr": {
+                    False: (get_guess_watched_gr,   generate_codes_watched_in_no_chanting_gr)
+                }
+            },
             "op": {
                 "normal": {
                     False: (get_guess_op,     generate_codes_op),

@@ -48,6 +48,14 @@ def solver(people: Players, team_size: int, tourType: TourType, whitelist: Optio
             finalcodes = handleCodes(foundSolutions=teams, p_values=p_values, k=teams_number, get_guesses=get_guess_watched,
                 kwargs_guesses=kwargs or None, get_codes=generate_codes_watched_in_gr, gamemode="45", gr_based=True)
             
+        case TourType.WATCHED_INS_NO_CHANTING:
+            path = "in_watched_no_chanting"
+            teams = create_teams(path, players, team_size, whitelist, blacklist, separateT1)
+            player_stats, idtable = get_player_stats(path=path, tabStats=154982033, tabIDs=1903970832, type="watched-in-no-chanting")
+            kwargs = {"player_stats": player_stats, "idtable": idtable, "oneg": 6, "twog": 12, "threeg": 18, "fourg": 28}
+            finalcodes = handleCodes(foundSolutions=teams, p_values=p_values, k=teams_number, get_guesses=get_guess_watched,
+                kwargs_guesses=kwargs or None, get_codes=generate_codes_watched_in_no_chanting_gr, gamemode="40", gr_based=True)
+
         case TourType.WATCHED_5S:
             path = "5s"
             teams = create_teams(path, players, team_size, whitelist, blacklist, separateT1)
@@ -169,6 +177,14 @@ def tiermaker(tourType: TourType):
             tiermaker.make_tiers(alpha=3.75,midpoint=0.4,minRating=0,maxRating=25,tourType="watched-in",gui=True)
             return True
         
+        case TourType.WATCHED_INS_NO_CHANTING:
+            path = "in_watched_no_chanting"
+            sync_ids_from_sheet(path, sheetName="NGM Stats Export v2", tabIDs=1903970832)
+            tiermaker = TierMaker(directory=path, sheetName="NGM Stats Export v2", tabStats=154982033, 
+                tabIDs=1903970832, tabEloStorage=82254993, tabEloStorageCell='A19',maxFallbackWindow=6,activeTours=10)
+            tiermaker.make_tiers(alpha=3.75,midpoint=0.4,minRating=0,maxRating=25,tourType="watched-in-no-chanting",gui=True)
+            return True
+
         case TourType.WATCHED_ED:
             path = "ed_watched"
             sync_ids_from_sheet(path, sheetName="NGM Stats Export v2", tabIDs=1903970832)

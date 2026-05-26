@@ -11,6 +11,11 @@ from modules.support.getAliases import *
 from modules.support.getRanks import getRanks
 from modules.support.LPProblem import LPProblem
 
+def get_sheet_ids(path, sheetName):
+    gc = readCredentials(path)
+    sheet = gc.open(sheetName)
+    return {ws.title: ws.id for ws in sheet.worksheets()}
+
 def sync_ids_from_sheet(path, sheetName, tabIDs):
     gc = readCredentials(path)
     sheet = gc.open(sheetName)
@@ -165,3 +170,5 @@ def get_changelog(folder):
 def get_tourlist(folder):
     with open(f"./{folder}/tourlist.txt", encoding="utf-8") as f:
      return f.read()
+
+print(get_sheet_ids("usual", "NGM Stats Export v2"))

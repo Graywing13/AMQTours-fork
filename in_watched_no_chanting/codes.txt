@@ -1,0 +1,14 @@
+neptune (115.020) julialess64 (109.840) janoxx (88.135) 2skr (84.337) | Total = 397.332 | Guesses = [5555]
+zozo (109.922) shelterrin (104.320) chommy (92.262) potassiumf (90.724) | Total = 397.228 | Guesses = [5555]
+yurimeguri (124.930) mahzrunner (105.840) chemist (87.510) metak (79.200) | Total = 397.480 | Guesses = [5555]
+neoburnz (122.285) fumiii (115.736) yahallonyanpasu (91.500) xeyz (67.815) | Total = 397.336 | Guesses = [5555]
+
+Average: 397.344
+
+<YOURCHALLONGEURLHERE>
+Distribution of guesses:
+≥28% = 5 guesses
+18% - 28% = 4 guesses
+12% - 18% = 3 guesses
+6% - 12% = 2 guesses
+<6% = 1 guess

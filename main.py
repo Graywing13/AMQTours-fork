@@ -108,6 +108,14 @@ def watched_2009():
     tourlist = get_tourlist(folder)
     return render_template("tour.html", elos=elos, tourType="watched x-2009", tourlist=tourlist, dryelo=False)
 
+@app.get("/watched_in_no_chanting")
+def watched_in_no_chanting():
+    folder = "in_watched_no_chanting"
+    elos = get_elos(folder)
+    mvps = get_mvps(folder)
+    changelog = get_changelog(folder)
+    return render_template("tour.html", elos=elos, tourType="watched ins no chanting", mvps=mvps, changelog=changelog, dryelo=True)
+
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=3000, debug=True)
 
