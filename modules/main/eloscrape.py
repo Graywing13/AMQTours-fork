@@ -6,9 +6,12 @@ import dateutil.parser as dp
 from bs4 import BeautifulSoup
 from curl_cffi.requests import AsyncSession
 import os
+from urllib.parse import urlsplit, urlunsplit
 from modules.support.saveElos import saveElos
 from modules.support.getAliases import *
 from modules.support.getTourlist import getTourlist
+from modules.support.readCredentials import readCredentials
+from modules.support.inhouseData import load_inhouse_tours
 
 class EloScrape:
     def __init__(
@@ -21,7 +24,9 @@ class EloScrape:
             sigma, 
             beta, 
             tau, 
-            draw_probability):
+            draw_probability,
+            cache_mode=None,
+            inhouse_type=None):
         """
         directory = Directory where the file you are calling from resides
         tabEloStorage = GID of the Elo Storage tab
@@ -43,20 +48,41 @@ class EloScrape:
         self.beta = beta
         self.tau = tau
         self.draw_probability = draw_probability
+        self.cache_mode = cache_mode
+        self.inhouse_type = inhouse_type
 
-        self.ALIASES_PATH = os.path.abspath(os.path.join(self.directory, os.pardir, "aliases.txt"))
+        self.ALIASES_PATH = os.path.abspath(os.path.join(self.directory, os.pardir, os.pardir, "aliases.txt"))
         self.TOURLIST_PATH = os.path.join(self.directory, "tourlist.txt")
         self.ELOS = os.path.join(self.directory, "elos.json")
         self.ELOS_HISTORY = os.path.join(self.directory, "elo_history.json")
         self.ELOS_HISTORY_LATEST = os.path.join(self.directory, "elo_history_latest.json")
+        self.ELOSCRAPE_STATE = os.path.join(self.directory, "eloscrape_state.json")
         self.ELOS_ADJUSTED_TL = os.path.join(self.directory, "elo_adjusted_tl.txt")
         self.ELOS_ADJUSTED_TL_FINEGRAINED = os.path.join(self.directory, "elo_adjusted_tl_finegrained.txt")
         self.IDTABLE = os.path.join(self.directory, "ids.csv")
         self.MATCH_BACKLOG = os.path.join(self.directory, "match_backlog.json")
         self.PROXY_SERVER = '' # get from tsui if necessary
         self.TEAMSIZE = 4
+        self.SHEET_CACHE_VERSION = "1"
+        self.CACHE_WORKBOOK = "NGM Stats Export v2"
+        self.CACHE_SHEET = "Cache"
+        self.SUBSTITUTE_CACHE_SUFFIX = "__substitutes"
+        self.CACHE_HEADERS = [
+            "cache_version", "mode", "tour_id", "tour_url", "time", "round",
+            "player1_id", "player1_display", "player2_id", "player2_display",
+            "winner_id", "loser_id", "player1_score", "player2_score", "match_count"
+        ]
 
-    async def eloscrape(self, saveToSheet = True, tourlist_cell = None, backlog_cell = None):  
+    async def eloscrape(
+            self,
+            saveToSheet=True,
+            tourlist_cell=None,
+            backlog_cell=None,
+            progress_callback=None,
+            force_refresh_tour_ids=None,
+            force_refresh_tour_urls=None,
+            ignore_sheet_cache=False,
+        ):  
         trueskill.setup(
             mu=self.mu,
             sigma=self.sigma, 
@@ -64,6 +90,10 @@ class EloScrape:
             tau=self.tau, 
             draw_probability=self.draw_probability,
             backend='mpmath')
+
+        def report_progress(percent, message=""):
+            if progress_callback:
+                progress_callback(max(0, min(100, percent)), message)
 
         tzd = {}
         def init_timezones():
@@ -150,46 +180,463 @@ class EloScrape:
             return players, rounds_played
 
         def handle_subs(team, rounds_played, round, teamid):
-            if len(team) == self.TEAMSIZE:
+            team_rounds = rounds_played.get(teamid, {})
+            if len(team) == self.TEAMSIZE and not team_rounds:
                 return team
 
-            new_team = team.copy()
-            for player in team.keys():
-                if player in rounds_played[teamid] and round not in rounds_played[teamid][player]:
+            new_team = {}
+            for player, rating in team.items():
+                if player in team_rounds and round not in team_rounds[player]:
                     print(f'deleting {player} in round {round}')
-                    del new_team[player]
+                    continue
+                new_team[player] = rating
             return new_team
 
-        async def parse_challonge_html(text):
-            match_info_str = text.split("['TournamentStore'] = ")[1].split("; window._initialStoreState['ThemeStore'] = ")[0]
-            match_info = json.loads(match_info_str)
+        class ChallongeFetchError(RuntimeError):
+            pass
+
+        async def parse_challonge_html(text, url):
+            store_marker = "['TournamentStore'] = "
+            theme_marker = "; window._initialStoreState['ThemeStore'] = "
+            if store_marker not in text or theme_marker not in text:
+                preview = BeautifulSoup(text[:500], 'lxml').get_text(" ", strip=True)
+                preview = preview[:180] if preview else "empty page"
+                raise ChallongeFetchError(
+                    f"Could not read Challonge match data for {url}. "
+                    f"Challonge returned a page without tournament data: {preview}"
+                )
+
+            match_info_str = text.split(store_marker, 1)[1].split(theme_marker, 1)[0]
+            try:
+                match_info = json.loads(match_info_str)
+            except json.JSONDecodeError as exc:
+                raise ChallongeFetchError(f"Could not parse Challonge match data for {url}: {exc}") from exc
             
             search = BeautifulSoup(text, 'lxml')
-            time_str = search.find(start_time).string.strip()
+            time_tag = search.find(start_time)
+            if time_tag is None or time_tag.string is None:
+                raise ChallongeFetchError(f"Could not find start time on Challonge page for {url}.")
+            time_str = time_tag.string.strip()
             match_info['time'] = dp.parse(time_str, tzinfos=tzd)
             
             return match_info
 
-        async def get_challonge_info(session, url):
-            tour_id = url.rstrip('/').split('/')[-1]
-            html = os.path.join(self.directory, f"htmls/{tour_id}.html")
+        def mode_key():
+            return self.cache_mode or os.path.basename(os.path.normpath(self.directory))
+
+        def substitute_mode_key(current_mode):
+            return f"{current_mode}{self.SUBSTITUTE_CACHE_SUFFIX}"
+
+        def normalize_challonge_link(url):
+            url = str(url or "").strip()
+            if not url:
+                return ""
+            parsed = urlsplit(url if "://" in url else f"https://{url}")
+            netloc = parsed.netloc.lower()
+            if netloc.startswith("www."):
+                netloc = netloc[4:]
+            path = parsed.path.rstrip("/")
+            return urlunsplit((parsed.scheme.lower() or "https", netloc, path, "", ""))
+
+        def tour_id_from_url(url):
+            return normalize_challonge_link(url).rstrip("/").split("/")[-1]
+
+        def cache_value(value):
+            if value is None:
+                return ""
+            if hasattr(value, "isoformat"):
+                return value.isoformat()
+            return str(value)
+
+        def cache_id(value):
+            if value is None or value == "":
+                return None
+            return str(value)
+
+        def cache_score(scores, player_id):
+            if not isinstance(scores, dict):
+                return ""
+            for key in (player_id, str(player_id)):
+                if key in scores:
+                    return cache_value(scores[key])
             try:
-                with open(html, 'r', encoding='utf-8') as f:
-                    text = f.read()
-                match_info = await parse_challonge_html(text)
-            except:
-                print(f'cached html for {tour_id} not found, querying challonge...')
-                resp = await session.get(url)
-                text = resp.text
-                with open(html, 'w', encoding='utf-8') as f:
-                    f.write(text)
-                match_info = await parse_challonge_html(text)
+                numeric_key = int(player_id)
+                if numeric_key in scores:
+                    return cache_value(scores[numeric_key])
+            except (TypeError, ValueError):
+                pass
+            return ""
+
+        def normalize_match(match):
+            player1 = match.get("player1") or {}
+            player2 = match.get("player2") or {}
+            player1_id = cache_id(player1.get("id"))
+            player2_id = cache_id(player2.get("id"))
+            scores = match.get("scores", {})
+            return {
+                "round": int(match.get("round")),
+                "player1": {
+                    "id": player1_id,
+                    "display_name": player1.get("display_name", ""),
+                },
+                "player2": {
+                    "id": player2_id,
+                    "display_name": player2.get("display_name", ""),
+                },
+                "winner_id": cache_id(match.get("winner_id")),
+                "loser_id": cache_id(match.get("loser_id")),
+                "scores": {
+                    player1_id: cache_score(scores, player1_id),
+                    player2_id: cache_score(scores, player2_id),
+                },
+            }
+
+        def normalize_tour(match_info, tour_id, tour_url):
+            return {
+                "tour_id": tour_id,
+                "tour_url": normalize_challonge_link(tour_url),
+                "time": match_info["time"],
+                "matches_by_round": {
+                    str(round_key): [normalize_match(match) for match in round_info]
+                    for round_key, round_info in match_info["matches_by_round"].items()
+                },
+            }
+
+        def display_has_substitute(display_name):
+            return "[" in str(display_name) and "]" in str(display_name)
+
+        def tour_has_substitutes(tour):
+            for matches in tour.get("matches_by_round", {}).values():
+                for match in matches:
+                    for side in ("player1", "player2"):
+                        if display_has_substitute((match.get(side) or {}).get("display_name", "")):
+                            return True
+            return False
+
+        def load_eloscrape_state(challonges):
+            if not os.path.exists(self.ELOSCRAPE_STATE):
+                return {}, [], challonges
+
+            try:
+                with open(self.ELOSCRAPE_STATE, encoding="utf-8") as f:
+                    state = json.load(f)
+            except (OSError, json.JSONDecodeError):
+                return {}, [], challonges
+
+            if state.get("version") != 1:
+                return {}, [], challonges
+
+            current_ids = [tour["tour_id"] for tour in challonges]
+            processed_ids = state.get("tour_ids", [])
+            if not processed_ids or current_ids[:len(processed_ids)] != processed_ids:
+                return {}, [], challonges
+            if len(processed_ids) > len(current_ids):
+                return {}, [], challonges
+
+            ratings = {}
+            for player, value in state.get("ratings", {}).items():
+                try:
+                    ratings[player] = trueskill.Rating(mu=float(value["mu"]), sigma=float(value["sigma"]))
+                except (KeyError, TypeError, ValueError):
+                    return {}, [], challonges
+
+            history = state.get("elo_history", [])
+            if not isinstance(history, list):
+                history = []
+
+            return ratings, history, challonges[len(processed_ids):]
+
+        def save_eloscrape_state(challonges, ratings, history):
+            state = {
+                "version": 1,
+                "tour_ids": [tour["tour_id"] for tour in challonges],
+                "ratings": {
+                    player: {"mu": rating.mu, "sigma": rating.sigma}
+                    for player, rating in ratings.items()
+                },
+                "elo_history": history,
+            }
+            with open(self.ELOSCRAPE_STATE, "w", encoding="utf-8") as f:
+                json.dump(state, f, indent="\t")
+
+        def save_latest_elo_history(history):
+            if not history:
+                return
+            with open(self.ELOS_HISTORY_LATEST, "w", encoding="utf-8") as f:
+                json.dump(history[-1], f, indent="\t")
+
+        def tour_match_count(tour):
+            return sum(len(matches) for matches in tour["matches_by_round"].values())
+
+        def open_sheet_cache():
+            gc = readCredentials(self.directory)
+            sheet = gc.open(self.CACHE_WORKBOOK)
+            try:
+                wks = sheet.worksheet(self.CACHE_SHEET)
+            except Exception:
+                wks = sheet.add_worksheet(title=self.CACHE_SHEET, rows=1000, cols=len(self.CACHE_HEADERS))
+
+            values = wks.get_all_values()
+            if not values:
+                for column, header in enumerate(self.CACHE_HEADERS, start=1):
+                    wks.update_cell(1, column, header)
+                return wks, {header: index for index, header in enumerate(self.CACHE_HEADERS)}, []
+
+            headers = values[0]
+            if not any(headers):
+                for column, header in enumerate(self.CACHE_HEADERS, start=1):
+                    wks.update_cell(1, column, header)
+                return wks, {header: index for index, header in enumerate(self.CACHE_HEADERS)}, values[1:]
+
+            missing_headers = [header for header in self.CACHE_HEADERS if header not in headers]
+            if missing_headers:
+                for offset, header in enumerate(missing_headers, start=len(headers) + 1):
+                    wks.update_cell(1, offset, header)
+                headers = headers + missing_headers
+
+            return wks, {header: headers.index(header) for header in self.CACHE_HEADERS}, values[1:]
+
+        def read_cell(row, headers, name):
+            index = headers[name]
+            return row[index] if index < len(row) else ""
+
+        def column_letter(index):
+            letters = ""
+            while index:
+                index, remainder = divmod(index - 1, 26)
+                letters = chr(65 + remainder) + letters
+            return letters
+
+        def backfill_cache_links(wks, rows, headers, current_mode, url_by_tour_id):
+            tour_url_column = column_letter(headers["tour_url"] + 1)
+            updates = []
+            for row_index, row in enumerate(rows, start=2):
+                if read_cell(row, headers, "cache_version") != self.SHEET_CACHE_VERSION:
+                    continue
+                if read_cell(row, headers, "mode") != current_mode:
+                    continue
+                if read_cell(row, headers, "tour_url"):
+                    continue
+
+                tour_url = url_by_tour_id.get(read_cell(row, headers, "tour_id"))
+                if tour_url:
+                    updates.append({
+                        "range": f"{tour_url_column}{row_index}",
+                        "values": [[tour_url]],
+                    })
+
+            for start in range(0, len(updates), 500):
+                batch = updates[start:start + 500]
+                try:
+                    wks.batch_update(batch, value_input_option="RAW")
+                except TypeError:
+                    wks.batch_update(batch)
+            return len(updates)
+
+        def load_sheet_cache(rows, headers, current_mode):
+            cached_by_id = {}
+            cached_by_url = {}
+
+            latest_blocks = {}
+            current_block_key = None
+            current_block_start = None
+            for row_index, row in enumerate(rows):
+                if read_cell(row, headers, "cache_version") != self.SHEET_CACHE_VERSION:
+                    current_block_key = None
+                    current_block_start = None
+                    continue
+                if read_cell(row, headers, "mode") != current_mode:
+                    current_block_key = None
+                    current_block_start = None
+                    continue
+
+                tour_id = read_cell(row, headers, "tour_id")
+                if not tour_id:
+                    current_block_key = None
+                    current_block_start = None
+                    continue
+                tour_url = normalize_challonge_link(read_cell(row, headers, "tour_url"))
+                cache_key = tour_url if tour_url else tour_id
+                if cache_key != current_block_key:
+                    current_block_key = cache_key
+                    current_block_start = row_index
+                latest_blocks[cache_key] = (current_block_start, row_index)
+
+            for row_index, row in enumerate(rows):
+                if read_cell(row, headers, "cache_version") != self.SHEET_CACHE_VERSION:
+                    continue
+                if read_cell(row, headers, "mode") != current_mode:
+                    continue
+
+                tour_id = read_cell(row, headers, "tour_id")
+                if not tour_id:
+                    continue
+                tour_url = normalize_challonge_link(read_cell(row, headers, "tour_url"))
+                cache_key = tour_url if tour_url else tour_id
+                block = latest_blocks.get(cache_key)
+                if not block or not (block[0] <= row_index <= block[1]):
+                    continue
+
+                cache_bucket = cached_by_url if tour_url else cached_by_id
+                tour = cache_bucket.setdefault(cache_key, {
+                    "tour_id": tour_id,
+                    "tour_url": tour_url,
+                    "time": dp.parse(read_cell(row, headers, "time")),
+                    "matches_by_round": {},
+                    "_cache_match_keys": set(),
+                })
+                expected_match_count = read_cell(row, headers, "match_count")
+                if expected_match_count:
+                    try:
+                        tour["_expected_match_count"] = max(
+                            int(tour.get("_expected_match_count", 0)),
+                            int(expected_match_count),
+                        )
+                    except ValueError:
+                        pass
+
+                player1_id = cache_id(read_cell(row, headers, "player1_id"))
+                player2_id = cache_id(read_cell(row, headers, "player2_id"))
+                round_number = int(read_cell(row, headers, "round"))
+                match_key = (
+                    round_number,
+                    player1_id,
+                    player2_id,
+                    cache_id(read_cell(row, headers, "winner_id")),
+                    cache_id(read_cell(row, headers, "loser_id")),
+                    read_cell(row, headers, "player1_score"),
+                    read_cell(row, headers, "player2_score"),
+                )
+                if match_key in tour["_cache_match_keys"]:
+                    continue
+                tour["_cache_match_keys"].add(match_key)
+                match = {
+                    "round": round_number,
+                    "player1": {
+                        "id": player1_id,
+                        "display_name": read_cell(row, headers, "player1_display"),
+                    },
+                    "player2": {
+                        "id": player2_id,
+                        "display_name": read_cell(row, headers, "player2_display"),
+                    },
+                    "winner_id": cache_id(read_cell(row, headers, "winner_id")),
+                    "loser_id": cache_id(read_cell(row, headers, "loser_id")),
+                    "scores": {
+                        player1_id: read_cell(row, headers, "player1_score"),
+                        player2_id: read_cell(row, headers, "player2_score"),
+                    },
+                }
+                tour["matches_by_round"].setdefault(str(round_number), []).append(match)
+            return cached_by_id, cached_by_url
+
+        def cache_rows_for_tour(tour, current_mode):
+            rows = []
+            match_count = tour_match_count(tour)
+            for round_key in tour["matches_by_round"]:
+                for match in tour["matches_by_round"][round_key]:
+                    player1 = match["player1"]
+                    player2 = match["player2"]
+                    player1_id = cache_id(player1["id"])
+                    player2_id = cache_id(player2["id"])
+                    scores = match.get("scores", {})
+                    rows.append([
+                        self.SHEET_CACHE_VERSION,
+                        current_mode,
+                        tour["tour_id"],
+                        tour.get("tour_url", ""),
+                        cache_value(tour["time"]),
+                        match["round"],
+                        player1_id,
+                        player1.get("display_name", ""),
+                        player2_id,
+                        player2.get("display_name", ""),
+                        cache_value(match.get("winner_id")),
+                        cache_value(match.get("loser_id")),
+                        cache_score(scores, player1_id),
+                        cache_score(scores, player2_id),
+                        match_count,
+                    ])
+            return rows
+
+        def append_sheet_cache(wks, tours, current_mode):
+            rows = []
+            for tour in tours:
+                rows.extend(cache_rows_for_tour(tour, current_mode))
+            for start in range(0, len(rows), 500):
+                batch = rows[start:start + 500]
+                try:
+                    wks.append_rows(batch, value_input_option="RAW")
+                except AttributeError:
+                    for row in batch:
+                        wks.append_row(row, value_input_option="RAW")
+                except TypeError:
+                    try:
+                        wks.append_rows(batch)
+                    except AttributeError:
+                        for row in batch:
+                            wks.append_row(row)
+            return len(rows)
+
+        def delete_sheet_cache_rows(wks, rows, headers, current_modes, tour_ids=None, tour_urls=None):
+            if isinstance(current_modes, str):
+                current_modes = {current_modes}
+            else:
+                current_modes = set(current_modes)
+            tour_ids = {str(tour_id).strip().lower() for tour_id in (tour_ids or []) if str(tour_id).strip()}
+            tour_urls = {normalize_challonge_link(url) for url in (tour_urls or []) if str(url).strip()}
+            if not tour_ids and not tour_urls:
+                return rows, 0
+
+            kept_rows = []
+            rows_to_delete = []
+            for sheet_row_index, row in enumerate(rows, start=2):
+                if read_cell(row, headers, "cache_version") != self.SHEET_CACHE_VERSION:
+                    kept_rows.append(row)
+                    continue
+                if read_cell(row, headers, "mode") not in current_modes:
+                    kept_rows.append(row)
+                    continue
+
+                row_tour_id = read_cell(row, headers, "tour_id").strip().lower()
+                row_tour_url = normalize_challonge_link(read_cell(row, headers, "tour_url"))
+                if row_tour_id in tour_ids or row_tour_url in tour_urls:
+                    rows_to_delete.append(sheet_row_index)
+                else:
+                    kept_rows.append(row)
+
+            for row_index in reversed(rows_to_delete):
+                try:
+                    wks.delete_rows(row_index)
+                except Exception:
+                    try:
+                        wks.delete_row(row_index)
+                    except Exception:
+                        pass
+            return kept_rows, len(rows_to_delete)
+
+        def cached_tour_is_complete(tour):
+            expected_match_count = tour.get("_expected_match_count")
+            if not expected_match_count:
+                return True
+            return tour_match_count(tour) >= int(expected_match_count)
+
+        async def get_challonge_info(session, url):
+            url = normalize_challonge_link(url)
+            tour_id = tour_id_from_url(url)
+            resp = await session.get(url)
+            status_code = getattr(resp, "status_code", None)
+            if status_code and status_code >= 400:
+                raise ChallongeFetchError(f"Could not fetch {url}: HTTP {status_code}.")
+            match_info = await parse_challonge_html(resp.text, url)
             
-            match_info['tour_id'] = tour_id
-            return match_info
+            return normalize_tour(match_info, tour_id, url)
 
 
         async def load_inhouse_backlog():
+            if self.inhouse_type:
+                return load_inhouse_tours(self.directory, self.inhouse_type)
+
             if not os.path.exists(self.MATCH_BACKLOG):
                 return []
 
@@ -240,30 +687,144 @@ class EloScrape:
         init_timezones()
 
         aliases = getAliasesDF(self.IDTABLE)
+        current_mode = mode_key()
+        substitute_cache_mode = substitute_mode_key(current_mode)
+        report_progress(2, "Reading sheet cache")
+        cache_wks, cache_headers, cache_values = open_sheet_cache()
+        force_refresh_tour_ids = {
+            str(tour_id).strip().lower()
+            for tour_id in (force_refresh_tour_ids or [])
+            if str(tour_id).strip()
+        }
+        force_refresh_tour_urls = {
+            normalize_challonge_link(url)
+            for url in (force_refresh_tour_urls or [])
+            if str(url).strip()
+        }
+        if force_refresh_tour_ids or force_refresh_tour_urls:
+            cache_values, deleted_rows = delete_sheet_cache_rows(
+                cache_wks,
+                cache_values,
+                cache_headers,
+                {current_mode, substitute_cache_mode},
+                force_refresh_tour_ids,
+                force_refresh_tour_urls,
+            )
+            if deleted_rows:
+                report_progress(6, f"Cleared {deleted_rows} stale cache row(s)")
+        if ignore_sheet_cache:
+            cached_tours_by_id, cached_tours_by_url = {}, {}
+            substitute_tours_by_id, substitute_tours_by_url = {}, {}
+            report_progress(8, "Ignoring old sheet cache")
+        else:
+            cached_tours_by_id, cached_tours_by_url = load_sheet_cache(cache_values, cache_headers, current_mode)
+            substitute_tours_by_id, substitute_tours_by_url = load_sheet_cache(cache_values, cache_headers, substitute_cache_mode)
+        report_progress(8, "Loaded sheet cache")
 
-        if not os.path.basename(self.directory) == "usual_house":
-            tourlist = getTourlist(self.TOURLIST_PATH)
+        if not self.inhouse_type:
+            tourlist = [normalize_challonge_link(url) for url in getTourlist(self.TOURLIST_PATH)]
+            url_by_tour_id = {tour_id_from_url(url): url for url in tourlist}
+            backfilled_links = backfill_cache_links(cache_wks, cache_values, cache_headers, current_mode, url_by_tour_id)
+            if backfilled_links:
+                report_progress(10, f"Backfilled {backfilled_links} cache links")
+            for tour_id, url in url_by_tour_id.items():
+                if tour_id in cached_tours_by_id:
+                    cached_tours_by_id[tour_id]["tour_url"] = url
+                    cached_tours_by_url[url] = cached_tours_by_id[tour_id]
+                if tour_id in substitute_tours_by_id:
+                    substitute_tours_by_id[tour_id]["tour_url"] = url
+                    substitute_tours_by_url[url] = substitute_tours_by_id[tour_id]
         
         # comment this out if tsui is asleep
         # only use if having issues w/ curl-cffi
         # tourlist = [PROXY_SERVER + tour for tour in tourlist]
-        elos = {}
-        
-        if os.path.basename(self.directory) == "usual_house":
-            challonges = await load_inhouse_backlog()
+        if self.inhouse_type:
+            backlog_tours = await load_inhouse_backlog()
+            missing_tours = [tour for tour in backlog_tours if tour["tour_id"] not in cached_tours_by_id]
+            report_progress(18, f"{len(missing_tours)} missing in-house cache event(s)")
+            written_rows = append_sheet_cache(cache_wks, missing_tours, current_mode)
+            if written_rows:
+                report_progress(25, f"Wrote {written_rows} cache rows")
+            for tour in missing_tours:
+                cached_tours_by_id[tour["tour_id"]] = tour
+            challonges = [cached_tours_by_id[tour["tour_id"]] for tour in backlog_tours if tour["tour_id"] in cached_tours_by_id]
+            report_progress(35, "Prepared cached matches")
         else:
+            missing_urls = []
+            ordered_cache = {}
+            for url in tourlist:
+                tour = substitute_tours_by_url.get(url)
+                if tour is None:
+                    tour = substitute_tours_by_id.get(tour_id_from_url(url))
+                    if tour is not None and not tour.get("tour_url"):
+                        tour["tour_url"] = url
+                if tour is None:
+                    tour = cached_tours_by_url.get(url)
+                if tour is None:
+                    tour = cached_tours_by_id.get(tour_id_from_url(url))
+                    if tour is not None and not tour.get("tour_url"):
+                        tour["tour_url"] = url
+                if tour is None or not cached_tour_is_complete(tour):
+                    missing_urls.append(url)
+                else:
+                    ordered_cache[url] = tour
             async with AsyncSession(impersonate='chrome123', max_clients=2) as session:
                 try:
-                    challonges = await asyncio.gather(*[get_challonge_info(session, url) for url in tourlist])
+                    missing_tours = []
+                    missing_total = len(missing_urls)
+                    if missing_total == 0:
+                        report_progress(35, "All Challonges already cached")
+                    else:
+                        report_progress(10, f"{missing_total} missing Challonge cache(s)")
+                    fetch_tasks = [asyncio.create_task(get_challonge_info(session, url)) for url in missing_urls]
+                    for missing_index, task in enumerate(asyncio.as_completed(fetch_tasks), start=1):
+                        missing_tours.append(await task)
+                        fetch_progress = 10 + (25 * missing_index / missing_total)
+                        report_progress(fetch_progress, "Caching missing Challonges")
+                    report_progress(38, "Saving missing cache rows")
+                    written_rows = append_sheet_cache(cache_wks, missing_tours, current_mode)
+                    if written_rows:
+                        report_progress(40, f"Wrote {written_rows} cache rows")
+                    substitute_tours = [tour for tour in missing_tours if tour_has_substitutes(tour)]
+                    substitute_rows = append_sheet_cache(cache_wks, substitute_tours, substitute_cache_mode)
+                    if substitute_rows:
+                        report_progress(41, f"Wrote {substitute_rows} substitute cache rows")
+                    for tour in missing_tours:
+                        cached_tours_by_id[tour["tour_id"]] = tour
+                        cached_tours_by_url[tour["tour_url"]] = tour
+                        if tour_has_substitutes(tour):
+                            substitute_tours_by_id[tour["tour_id"]] = tour
+                            substitute_tours_by_url[tour["tour_url"]] = tour
+                        ordered_cache[tour["tour_url"]] = tour
+                    challonges = [
+                        ordered_cache[url]
+                        for url in tourlist
+                        if url in ordered_cache
+                    ]
                     challonges.sort(key=lambda tour:tour['time'].timestamp())
-                except IndexError:
-                    input('matches not processed, need to replace cookies, press enter to close')
-                    sys.exit(1)
+                    report_progress(42, "Prepared cached matches")
+                except ChallongeFetchError:
+                    raise
+                except (IndexError, KeyError, TypeError, ValueError, json.JSONDecodeError) as exc:
+                    raise ChallongeFetchError(f"Could not process Challonge cache for {current_mode}: {exc}") from exc
+
+        elos, elo_history_list, challonges_to_process = load_eloscrape_state(challonges)
         
         match_count = 0
         draw_count = 0
-        elo_history_list = []
-        for tour in challonges:
+        last_rounds_played = {}
+        total_challonges = len(challonges_to_process)
+        if self.inhouse_type and total_challonges == 0:
+            save_eloscrape_state(challonges, elos, elo_history_list)
+            save_latest_elo_history(elo_history_list)
+            report_progress(100, "No new in-house results")
+            return
+        if not self.inhouse_type and total_challonges == 0:
+            save_eloscrape_state(challonges, elos, elo_history_list)
+            save_latest_elo_history(elo_history_list)
+            report_progress(100, "No new Challonges")
+            return
+        for tour_index, tour in enumerate(challonges_to_process, start=1):
             teams = {}
             rounds_played = {}
             elo_history = {
@@ -352,8 +913,12 @@ class EloScrape:
             del elo_history['results']
             del elo_history['players']
             elo_history_list.append(elo_history)
+            last_rounds_played = rounds_played
+            if total_challonges:
+                report_progress(42 + (50 * tour_index / total_challonges), "Calculating ratings")
         
-        print(rounds_played)
+        print(last_rounds_played)
+        report_progress(94, "Saving local elo files")
         
         with open(self.ELOS, 'w', encoding='utf-8') as f:
             elos_print = {player: round(rating.mu, 3) for player, rating in sorted(elos.items(), key=lambda elo: elo[1], reverse=True)}
@@ -361,12 +926,13 @@ class EloScrape:
         
         with open(self.ELOS_HISTORY, 'w', encoding='utf-8') as f:
             json.dump(elo_history_list, f, indent='\t')
+        save_eloscrape_state(challonges, elos, elo_history_list)
 
         if not elo_history_list:
+            report_progress(100, "Done")
             return
             
-        with open(self.ELOS_HISTORY_LATEST, 'w', encoding='utf-8') as f:
-            json.dump(elo_history_list[-1], f, indent='\t')
+        save_latest_elo_history(elo_history_list)
         
         tierlist = {}
         for player, rating in elos_print.items():
@@ -387,4 +953,6 @@ class EloScrape:
                 f.write(f'{tier}: {", ".join([f"{player} ({elos_print[player]})" for player in tierlist[tier]])}\n')
 
         if saveToSheet:
+            report_progress(97, "Saving elos to sheet")
             saveElos(self.directory, self.tabEloStorage, self.sheetName, self.tabEloStorageCell, self.ELOS, tourlist_path=self.TOURLIST_PATH, tourlist_cell=tourlist_cell, backlog_path=self.MATCH_BACKLOG, backlog_cell=backlog_cell)
+        report_progress(100, "Done")

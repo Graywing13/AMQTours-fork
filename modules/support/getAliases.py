@@ -21,7 +21,7 @@ def getAliasesDF(idtable):
     if not os.path.exists(idtable) and os.path.basename(os.path.dirname(idtable)) == "usual_house":
         directory = os.path.dirname(idtable)
         elos_path = os.path.join(directory, "elos.json")
-        aliases_path = os.path.join(os.path.dirname(directory), "aliases.txt")
+        aliases_path = os.path.join(os.path.dirname(os.path.dirname(directory)), "aliases.txt")
         if os.path.exists(elos_path):
             with open(elos_path, encoding="utf-8") as f:
                 elo_names = [name.strip().lower() for name in json.load(f)]

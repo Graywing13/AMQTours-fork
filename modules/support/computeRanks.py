@@ -1,5 +1,6 @@
 import numpy as np
 
+
 def normalize_stats(df, normalization_specs):
     df_norm = df.copy()
 
@@ -8,76 +9,66 @@ def normalize_stats(df, normalization_specs):
         min_val = spec.get("min", 0)
         max_val = spec.get("max", 1)
         direction = spec.get("direction", "max")
-        
+
         norm = (df_norm[column] - min_val) / (max_val - min_val)
         norm = norm.clip(0, 1)
 
         if direction == "min":
             norm = 1 - norm
-        
+
         df_norm[column] = norm
-    
+
     return df_norm
 
-def compute_rank_scores(df, alpha, midpoint, minRating, maxRating):
-    # mu = df["RANK"].mean()
-    # sigma = df["RANK"].std()
 
-    # z = (df["RANK"] - mu) / sigma
+def compute_rank_scores(df, alpha, midpoint, minRating, maxRating):
     df["ELO"] = 3000 * df["RANK"]
     df["ELO"] = (df["ELO"] / 10).round(2)
     return df
 
-def compute_ranks(clean_stats, full_stats, normalization_spec, tiers, tier_weights, 
-                  alpha=3.75, midpoint=0.4, minRating=0, maxRating=25,
-                  full=True, path=None, isWatched = True, wrpath=None, isMVP=False):
-    """
-    Compute a smoothed rank score for players based on guess rate and usefulness.
 
-    Parameters:
-        df (pd.DataFrame): DataFrame with 'guess rate' and 'usefulness' columns.
-        gr_max (float): Max value to normalize guess rate (default: 100%).
-        uf_max (float): Max value to normalize usefulness (default: 30).
-        alpha (float): Controls steepness of sigmoid (higher = steeper).
-        midpoint (float): Sigmoid center (default: 0.5 = average players).
-        max_score (float): Maximum output score (default: 25).
-
-    Returns:
-        pd.DataFrame: DataFrame with avg_gr, avg_uf, norm_gr, norm_Uf, raw_score and elo columns.
-    """
+def compute_ranks(
+    clean_stats,
+    full_stats,
+    normalization_spec,
+    tiers,
+    tier_weights,
+    alpha=3.75,
+    midpoint=0.4,
+    minRating=0,
+    maxRating=25,
+    full=True,
+    path=None,
+    isWatched=True,
+    wrpath=None,
+    isMVP=False,
+):
     if isWatched:
-        player_stats = (
-            clean_stats
-            .groupby("Player ID", as_index=False)
-            .agg(
-                PlayerName=("Player name", "last"),
-                GuessRate=("Guess rate", "mean"),
-                erigs=("erigs", "mean"),
-                Seven8=("7/8s", "mean"),
-                avg8=("avg/8", "mean"),
-                LivesTaken=("Lives taken", "mean"),
-                LivesSaved=("Lives saved", "mean"),
-                WIN=("WIN", "sum"),
-                LOSE=("LOSE", "sum"),
-                TIE=("TIE", "sum"),
-                RigsHit=("Rigs hit", "mean"),
-                OfflistHit=("Offlist hit", "mean"),
-                Rigs=("Rigs", "mean"),
-                RigsMissed=("Rigs missed", "mean"),
-                SoloRigs=("Solo rigs", "mean"),
-                MissedSolos=("Missed solos", "mean"),
-                LivesLostOnRigs=("Lives lost on rigs", "mean"),
-                OfflistErigs=("Offlist erigs", "mean"),
-                rigs8=("avg/8 of your rigs", "mean"),
-                TotalSongs=("Total songs", "mean"),
-                Samples=("Usefulness", "size")
-            )
+        player_stats = clean_stats.groupby("Player ID", as_index=False).agg(
+            PlayerName=("Player name", "last"),
+            GuessRate=("Guess rate", "mean"),
+            erigs=("erigs", "mean"),
+            Seven8=("7/8s", "mean"),
+            avg8=("avg/8", "mean"),
+            LivesTaken=("Lives taken", "mean"),
+            LivesSaved=("Lives saved", "mean"),
+            WIN=("WIN", "sum"),
+            LOSE=("LOSE", "sum"),
+            TIE=("TIE", "sum"),
+            RigsHit=("Rigs hit", "mean"),
+            OfflistHit=("Offlist hit", "mean"),
+            Rigs=("Rigs", "mean"),
+            RigsMissed=("Rigs missed", "mean"),
+            SoloRigs=("Solo rigs", "mean"),
+            MissedSolos=("Missed solos", "mean"),
+            LivesLostOnRigs=("Lives lost on rigs", "mean"),
+            OfflistErigs=("Offlist erigs", "mean"),
+            rigs8=("avg/8 of your rigs", "mean"),
+            TotalSongs=("Total songs", "mean"),
+            Samples=("Usefulness", "size"),
         )
     else:
-        player_stats = (
-        clean_stats
-        .groupby("Player ID", as_index=False)
-        .agg(
+        player_stats = clean_stats.groupby("Player ID", as_index=False).agg(
             PlayerName=("Player name", "last"),
             GuessRate=("Guess rate", "mean"),
             erigs=("erigs", "mean"),
@@ -89,12 +80,11 @@ def compute_ranks(clean_stats, full_stats, normalization_spec, tiers, tier_weigh
             WIN=("WIN", "sum"),
             LOSE=("LOSE", "sum"),
             TIE=("TIE", "sum"),
-            Samples=("Usefulness", "size")
+            Samples=("Usefulness", "size"),
         )
-    )
 
+    player_stats = player_stats.round(3)
     if full:
-        player_stats = player_stats.round(3)
         player_stats.to_csv(path, index=False, encoding="utf-8")
 
     stats = list(normalization_spec.keys())
@@ -103,9 +93,10 @@ def compute_ranks(clean_stats, full_stats, normalization_spec, tiers, tier_weigh
         n = len(stat_list)
         for stat in stat_list:
             weights[stat] = tier_weights[tier_name] / n
+
     player_stats["erigs"] = player_stats["erigs"] / player_stats["TotalSongs"]
     final_ranks = normalize_stats(player_stats, normalization_spec)
-    final_ranks["RANK"]  = final_ranks.apply(lambda row: sum(row[stat]*weights[stat] for stat in stats), axis=1)
+    final_ranks["RANK"] = final_ranks.apply(lambda row: sum(row[stat] * weights[stat] for stat in stats), axis=1)
     final_ranks["WIN"] = final_ranks["Player ID"].map(full_stats.set_index("Player ID")["WIN"])
     final_ranks["LOSE"] = final_ranks["Player ID"].map(full_stats.set_index("Player ID")["LOSE"])
     final_ranks["TIE"] = final_ranks["Player ID"].map(full_stats.set_index("Player ID")["TIE"])
@@ -116,7 +107,7 @@ def compute_ranks(clean_stats, full_stats, normalization_spec, tiers, tier_weigh
     final_ranks = compute_rank_scores(final_ranks, alpha, midpoint, minRating, maxRating)
     final_ranks["ELONOWR"] = final_ranks["ELO"]
     final_ranks.insert(2, "ELONOWR", final_ranks.pop("ELONOWR"))
-    
+
     if full:
         final_ranks = final_ranks.round(3)
         final_ranks.to_csv(wrpath, index=False, encoding="utf-8")
@@ -124,47 +115,17 @@ def compute_ranks(clean_stats, full_stats, normalization_spec, tiers, tier_weigh
     if isMVP:
         return final_ranks
 
-    # WR + Streak accounting
     final_ranks["PALL"] = final_ranks["WIN"] + final_ranks["LOSE"] + final_ranks["TIE"]
     final_ranks["PRECENT"] = final_ranks["WINSTREAK"] + final_ranks["LOSESTREAK"] + final_ranks["TIESTREAK"]
     final_ranks["WR"] = ((final_ranks["WIN"] + 0.5 * final_ranks["TIE"]) / final_ranks["PALL"]) - 0.5
     final_ranks["STREAK"] = ((final_ranks["WINSTREAK"] + 0.5 * final_ranks["TIESTREAK"]) / final_ranks["PRECENT"]) - 0.5
-    #final_ranks["DELTAWR"] =  final_ranks["STREAK"] - final_ranks["WR"]
-    # final_ranks["WR MODIFIER"] = np.where(
-    #     final_ranks["PALL"] > 30,
-    #     final_ranks["WR"] - 0.5,
-    #     0.0
-    # )
-    ELOBONUS = 20
-    STREAKBONUS = 10
-    final_ranks["WR"] = np.where(
-        final_ranks["PALL"] > 30,
-        final_ranks["WR"],
-        0.0
-    )
-    final_ranks["STREAK"] = np.where(
-        final_ranks["PALL"] > 30,
-        final_ranks["STREAK"],
-        0.0
-    )
-    # final_ranks["STREAK MODIFIER"] = final_ranks["STREAK"]
-    # 0.5 * np.maximum(0, final_ranks["DELTAWR"]) ** 2
-    # confidence = np.log1p(final_ranks["PALL"]) / np.log1p(final_ranks["PALL"].max())
-    # final_ranks["STREAK MODIFIER"] *= confidence
-    # final_ranks["WR MODIFIER"] *= confidence
+    elo_bonus = 20
+    streak_bonus = 10
+    final_ranks["WR"] = np.where(final_ranks["PALL"] > 30, final_ranks["WR"], 0.0)
+    final_ranks["STREAK"] = np.where(final_ranks["PALL"] > 30, final_ranks["STREAK"], 0.0)
     final_ranks["FINAL MODIFIER"] = final_ranks["WR"] + final_ranks["STREAK"]
-    final_ranks["ELO"] = final_ranks["ELONOWR"] + final_ranks["WR"] * ELOBONUS + final_ranks["STREAK"] * STREAKBONUS
-    #(1 + final_ranks["WR MODIFIER"] + final_ranks["STREAK MODIFIER"])
-    # final_ranks.insert(3, "STREAK MODIFIER", final_ranks.pop("STREAK MODIFIER"))
-    # final_ranks.insert(3, "WR MODIFIER", final_ranks.pop("WR MODIFIER"))
+    final_ranks["ELO"] = final_ranks["ELONOWR"] + final_ranks["WR"] * elo_bonus + final_ranks["STREAK"] * streak_bonus
     final_ranks.insert(3, "ELO", final_ranks.pop("ELO"))
     final_ranks = final_ranks.round(3)
-    final_ranks = final_ranks.sort_values(by='ELO', ascending=False)
-
-    # columns_to_keep = ['PlayerName', 'ELONOWR', 'ELO', 'RANK', "FINAL MODIFIER", "WR", "STREAK"]
-    # sort_column="FINAL MODIFIER"
-    # result = final_ranks.sort_values(by=sort_column, key=abs, ascending=False)[columns_to_keep].head(50)
-
-    # print(result)
-
+    final_ranks = final_ranks.sort_values(by="ELO", ascending=False)
     return final_ranks

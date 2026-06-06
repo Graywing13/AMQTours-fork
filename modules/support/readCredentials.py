@@ -1,9 +1,10 @@
-import gspread, os
+import gspread
+from modules.support.paths import find_project_root
 
 def readCredentials(directory):
-    DIRECTORY = os.path.abspath(os.path.join(directory, os.pardir))
+    project_root = find_project_root(directory)
     gc = gspread.oauth(
-        credentials_filename=DIRECTORY + '/credentials/credentials.json',
-        authorized_user_filename=DIRECTORY + '/credentials/authorized_user.json'
+        credentials_filename=str(project_root / "credentials" / "credentials.json"),
+        authorized_user_filename=str(project_root / "credentials" / "authorized_user.json")
     )
     return gc

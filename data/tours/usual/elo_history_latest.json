@@ -1,0 +1,28 @@
+{
+	"tour_id": "do4evvo4",
+	"time": "2026-06-05 02:00:00-05:00",
+	"teams": {
+		"mami (12.44) mangoss (8.79) chaabdu92 (7.34) spartric (4.17) = 32.74": "2W 4L 0D",
+		"poolnoodle (17.52) lakumix (7.52) zokie (5.45) catge (2.16) = 32.65": "2W 4L 0D",
+		"yahallonyanpasu (16.72) _nadeshiko (8.20) tugia (5.35) gabetin (2.80) = 33.06": "4W 2L 0D",
+		"asleep (15.37) zozo (7.67) kirox (5.92) nekko_khayal (4.07) = 33.04": "4W 2L 0D"
+	},
+	"player": {
+		"mami": "initial elo: 12.436, new elo: 12.258, rating change: -0.178",
+		"mangoss": "initial elo: 8.794, new elo: 8.557, rating change: -0.237",
+		"chaabdu92": "initial elo: 7.344, new elo: 7.149, rating change: -0.195",
+		"spartric": "initial elo: 4.170, new elo: 3.990, rating change: -0.180",
+		"poolnoodle": "initial elo: 17.524, new elo: 17.331, rating change: -0.193",
+		"lakumix": "initial elo: 7.517, new elo: 7.341, rating change: -0.175",
+		"zokie": "initial elo: 5.451, new elo: 5.265, rating change: -0.187",
+		"catge": "initial elo: 2.156, new elo: 1.948, rating change: -0.208",
+		"yahallonyanpasu": "initial elo: 16.718, new elo: 16.895, rating change: 0.177",
+		"_nadeshiko": "initial elo: 8.197, new elo: 8.389, rating change: 0.192",
+		"tugia": "initial elo: 5.349, new elo: 5.528, rating change: 0.178",
+		"gabetin": "initial elo: 2.798, new elo: 3.001, rating change: 0.203",
+		"asleep": "initial elo: 15.367, new elo: 15.557, rating change: 0.190",
+		"zozo": "initial elo: 7.673, new elo: 7.865, rating change: 0.192",
+		"kirox": "initial elo: 5.922, new elo: 6.106, rating change: 0.183",
+		"nekko_khayal": "initial elo: 4.075, new elo: 4.274, rating change: 0.199"
+	}
+}

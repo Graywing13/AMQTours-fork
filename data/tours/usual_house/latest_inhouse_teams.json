@@ -1,0 +1,50 @@
+{
+  "tour_id": "usual_house",
+  "inhouse_type": "random",
+  "teams": {
+    "team1": {
+      "label": "mekokicco",
+      "display_name": "mekokicco (14.000) redeyes (12.000) bamboo (8.000) lotte_616 (7.000)",
+      "players": [
+        {
+          "name": "mekokicco",
+          "rating": 14.0
+        },
+        {
+          "name": "redeyes",
+          "rating": 12.0
+        },
+        {
+          "name": "bamboo",
+          "rating": 8.0
+        },
+        {
+          "name": "lotte_616",
+          "rating": 7.0
+        }
+      ]
+    },
+    "team2": {
+      "label": "foopypoopy",
+      "display_name": "foopypoopy (22.000) cipherkai (11.000) tskr (6.000) naizuri (3.000)",
+      "players": [
+        {
+          "name": "foopypoopy",
+          "rating": 22.0
+        },
+        {
+          "name": "cipherkai",
+          "rating": 11.0
+        },
+        {
+          "name": "tskr",
+          "rating": 6.0
+        },
+        {
+          "name": "naizuri",
+          "rating": 3.0
+        }
+      ]
+    }
+  }
+}

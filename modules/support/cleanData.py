@@ -2,7 +2,7 @@ from datetime import datetime
 from dateutil.relativedelta import relativedelta
 import pandas as pd
 
-def internal_clean_data(idtable, statstable, isWatched):
+def internal_clean_data(idtable, statstable, isWatched, min_games=4):
     # Load alias table
     alias_df = pd.read_csv(idtable)
     alias_df["Player Name"] = alias_df["Player Name"].str.strip().str.lower()
@@ -32,7 +32,7 @@ def internal_clean_data(idtable, statstable, isWatched):
         cols.extend(watched_cols)
         df["Offlist hit"] = df["Total hit"] - df["Rigs hit"]
     
-    df = df[df["WIN"] + df["LOSE"] + df["TIE"] >= 4]
+    df = df[df["WIN"] + df["LOSE"] + df["TIE"] >= min_games]
 
     return df
 
@@ -61,5 +61,5 @@ def clean_data(idtable, statstable, cleanedStatsYear, maxFallbackWindow, activeT
 
     return result_df, df
 
-def mini_clean(idtable, statstable, tourType):
-    return internal_clean_data(idtable, statstable, tourType.startswith("watched"))
+def mini_clean(idtable, statstable, tourType, min_games=4):
+    return internal_clean_data(idtable, statstable, tourType.startswith("watched"), min_games=min_games)

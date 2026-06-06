@@ -1,0 +1,10 @@
+trueskill
+beautifulsoup4
+mpmath
+python-dateutil
+lxml
+curl-cffi
+PuLP
+pandas
+gspread
+numpy

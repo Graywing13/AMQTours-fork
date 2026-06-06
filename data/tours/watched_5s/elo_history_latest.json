@@ -1,0 +1,28 @@
+{
+	"tour_id": "t6vrr7nl",
+	"time": "2026-06-01 19:06:00+02:00",
+	"teams": {
+		"annayanami (13.59) zokie (10.65) gabetin (9.53) icefeed2 (3.60) = 37.36": "3W 3L 0D",
+		"maikasasaki (8.50) catge (10.64) tbdhater (10.00) patoche49 (4.77) = 33.90": "4W 2L 0D",
+		"mangoss (15.58) lika (13.36) legrandort (8.43) xeyz (-0.09) = 37.28": "3W 3L 0D",
+		"shadow (11.48) inta (9.39) spitzell (8.48) justaweirdo (7.90) = 37.24": "2W 4L 0D"
+	},
+	"player": {
+		"annayanami": "initial elo: 13.590, new elo: 13.555, rating change: -0.035",
+		"zokie": "initial elo: 10.647, new elo: 10.607, rating change: -0.040",
+		"gabetin": "initial elo: 9.530, new elo: 9.434, rating change: -0.096",
+		"icefeed2": "initial elo: 3.596, new elo: 3.547, rating change: -0.048",
+		"maikasasaki": "initial elo: 8.500, new elo: 9.641, rating change: 1.141",
+		"catge": "initial elo: 10.638, new elo: 11.075, rating change: 0.437",
+		"tbdhater": "initial elo: 10.000, new elo: 11.141, rating change: 1.141",
+		"patoche49": "initial elo: 4.767, new elo: 5.231, rating change: 0.464",
+		"mangoss": "initial elo: 15.585, new elo: 15.543, rating change: -0.041",
+		"lika": "initial elo: 13.361, new elo: 13.315, rating change: -0.046",
+		"legrandort": "initial elo: 8.431, new elo: 8.411, rating change: -0.020",
+		"xeyz": "initial elo: -0.092, new elo: -0.134, rating change: -0.042",
+		"shadow": "initial elo: 11.478, new elo: 11.109, rating change: -0.369",
+		"inta": "initial elo: 9.389, new elo: 8.774, rating change: -0.615",
+		"spitzell": "initial elo: 8.476, new elo: 8.101, rating change: -0.375",
+		"justaweirdo": "initial elo: 7.895, new elo: 7.582, rating change: -0.313"
+	}
+}

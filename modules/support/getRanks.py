@@ -20,6 +20,8 @@ def getRanks(RANKS_PATH, ELOS_PATH=None, ALIAS_PATH=None, returnFixup=False):
 
     with open(RANKS_PATH, 'r') as file:
         for line in file.readlines():
+            if not line.strip():
+                continue
             process_rank(line)
 
     ranks = {player: rank for player, rank in ranks.items()}
