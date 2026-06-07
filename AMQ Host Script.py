@@ -1310,7 +1310,7 @@ class AMQTourUI(tk.Tk):
         threading.Thread(target=self.recalculate_all_in_background, daemon=True).start()
 
     def recalculate_all_in_background(self):
-        tours = [tour for tour in TOURS.values() if tour.get("eloscrape") or tour.get("inhouse")]
+        tours = [tour for tour in TOURS.values() if tour.get("eloscrape") or tour.get("inhouse") or tour.get("dry_elo")]
         total = len(tours)
         try:
             for index, tour in enumerate(tours, start=1):
@@ -1325,13 +1325,22 @@ class AMQTourUI(tk.Tk):
                 self.after(0, lambda t=tour, p=base_progress: self.update_eloscrape_progress(p, f"Recalculating: {t['label']}"))
                 try:
                     self.sync_tour_from_sheet(tour)
-                    self.clear_eloscrape_local_state(tour)
-                    self.run_tour_eloscrape(
-                        tour,
-                        progress_callback,
-                        use_local_cache=False,
-                        ignore_sheet_cache=True,
-                    )
+                    if tour.get("dry_elo"):
+                        if progress_callback:
+                            progress_callback(10, "Refreshing stats and elos")
+                        from modules.support.mvpGenerator import update_dry_elos_for_tour
+
+                        update_dry_elos_for_tour(tour)
+                        if progress_callback:
+                            progress_callback(100, "Dry elo updated")
+                    else:
+                        self.clear_eloscrape_local_state(tour)
+                        self.run_tour_eloscrape(
+                            tour,
+                            progress_callback,
+                            use_local_cache=False,
+                            ignore_sheet_cache=True,
+                        )
                     completed_progress = 100 * index / total if total else 100
                     self.after(0, lambda p=completed_progress, t=tour: self.update_eloscrape_progress(p, f"Recalculating: {t['label']} done"))
                 except Exception as exc:
@@ -1407,8 +1416,21 @@ class AMQTourUI(tk.Tk):
                 progress_callback(100, "Dry elo updated")
 
     def sync_tour_from_sheet(self, tour):
+        self.sync_ids_from_sheet_if_available(tour)
         if tour.get("eloscrape"):
             self.sync_tourlist_from_sheet(tour)
+
+    def sync_ids_from_sheet_if_available(self, tour):
+        sheet_cfg = tour.get("sheet", {})
+        if not sheet_cfg.get("tab_ids"):
+            return
+        from utils import sync_ids_from_sheet
+
+        sync_ids_from_sheet(
+            tour["state_path"],
+            sheetName=sheet_cfg.get("name", "NGM Stats Export v2"),
+            tabIDs=sheet_cfg["tab_ids"],
+        )
 
     def sync_tourlist_from_sheet(self, tour):
         from modules.support.readCredentials import readCredentials
