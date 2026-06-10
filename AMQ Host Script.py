@@ -1,12 +1,9 @@
 from __future__ import annotations
 
-import importlib.util
-import csv
 import hashlib
 import json
 import re
 import shutil
-import subprocess
 import sys
 import threading
 import asyncio
@@ -23,164 +20,27 @@ if str(DATA_ROOT) not in sys.path:
     sys.path.insert(0, str(DATA_ROOT))
 REQUIREMENTS_PATH = DATA_ROOT / "requirements.txt"
 
-PACKAGE_IMPORTS = {
-    "trueskill": "trueskill",
-    "beautifulsoup4": "bs4",
-    "mpmath": "mpmath",
-    "python-dateutil": "dateutil",
-    "lxml": "lxml",
-    "curl-cffi": "curl_cffi",
-    "PuLP": "pulp",
-    "pandas": "pandas",
-    "gspread": "gspread",
-    "numpy": "numpy",
-}
+from modules.support.dependencies import ensure_dependencies
 
 
-def ensure_dependencies():
-    if not REQUIREMENTS_PATH.exists():
-        return
-    missing = [package for package, module in PACKAGE_IMPORTS.items() if importlib.util.find_spec(module) is None]
-    if missing:
-        subprocess.check_call([sys.executable, "-m", "pip", "install", "-r", str(REQUIREMENTS_PATH)])
+ensure_dependencies(REQUIREMENTS_PATH)
 
-
-ensure_dependencies()
-
-from modules.support.generateCodes import (
-    generate_codes_cl_gr,
-    generate_codes_ed_gr,
-    generate_codes_in_gr,
-    generate_codes_op_gr,
-    generate_codes_usual_gr,
-    generate_codes_watched_2009_gr,
-    generate_codes_watched_28_gr,
-    generate_codes_watched_5s_gr,
-    generate_codes_watched_ed_gr,
-    generate_codes_watched_gr,
-    generate_codes_watched_in_gr,
-    generate_codes_watched_in_no_chanting_gr,
-    generate_codes_watched_op_gr,
+from modules.support.hostConfig import (
+    CATEGORIES,
+    LINKS,
+    SETUP_TOURS,
+    load_setup_codes,
 )
-from modules.support.handleCodes import handleCodes
+from modules.support import hostHistory
+from modules.support.playerRatings import MissingRatingsError, normalize_alias_key
 from tour_config import TOURS
 
 
-LINKS = {
-    "Stats Sheet": "https://docs.google.com/spreadsheets/d/1Fm6pMyXv7qhOQkLah4yX9HNow4WaDR4HJuAVMukQl34/edit?gid=2023469160#gid=2023469160",
-    "Add Aliases": "https://docs.google.com/spreadsheets/d/1xEUK1U6FtCGE80gOk0JCRC1eLJF9ALgz4T4KuK-9vYc/edit?gid=1861712941#gid=1861712941",
-    "Add Stall Minutes": "https://docs.google.com/spreadsheets/d/1xEUK1U6FtCGE80gOk0JCRC1eLJF9ALgz4T4KuK-9vYc/edit?gid=1279191862#gid=1279191862",
-}
 UI_SETTINGS_PATH = PROJECT_ROOT / "config" / "ui_settings.json"
 SETUP_CODES_PATH = PROJECT_ROOT / "config" / "setup_codes.json"
-SETUP_TOURS = {"usual": "random", "watched": "watched"}
-
-
-def load_setup_codes():
-    try:
-        with SETUP_CODES_PATH.open(encoding="utf-8") as f:
-            return json.load(f)
-    except (OSError, json.JSONDecodeError):
-        return {}
-
-
-SETUP_CODES = load_setup_codes()
-
-CATEGORIES = {
-    "Random": [
-        ("Usual", "usual"),
-        ("OP", "random_op"),
-        ("ED", "random_ed"),
-        ("IN", "random_ins"),
-        ("OPED", "random_oped"),
-        ("Chanting", "random_chanting"),
-    ],
-    "Watched": [
-        ("Watched", "watched"),
-        ("OP", "watched_op"),
-        ("ED", "watched_ed"),
-        ("IN", "watched_ins"),
-        ("IN -Chanting", "watched_ins_no_chanting"),
-        ("-2009", "watched_x_2009"),
-    ],
-    "Speed": [
-        ("2+8", "watched_2_8"),
-        ("5", "watched_5s"),
-    ],
-    "Inhouse": [
-        ("Random", "usual_house"),
-        ("Watched", "watched_house"),
-    ],
-}
-
-CODE_GENERATORS = {
-    "usual_gr": generate_codes_usual_gr,
-    "op_gr": generate_codes_op_gr,
-    "ed_gr": generate_codes_ed_gr,
-    "in_gr": generate_codes_in_gr,
-    "cl_gr": generate_codes_cl_gr,
-    "watched_gr": generate_codes_watched_gr,
-    "watched_in_gr": generate_codes_watched_in_gr,
-    "watched_in_no_chanting_gr": generate_codes_watched_in_no_chanting_gr,
-    "watched_5s_gr": generate_codes_watched_5s_gr,
-    "watched_28_gr": generate_codes_watched_28_gr,
-    "watched_2009_gr": generate_codes_watched_2009_gr,
-    "watched_ed_gr": generate_codes_watched_ed_gr,
-    "watched_op_gr": generate_codes_watched_op_gr,
-}
+SETUP_CODES = load_setup_codes(SETUP_CODES_PATH)
 
 PLAYER_PATTERN = re.compile(r"^(.*?)\s*(?:\(([^()]*)\))?\s*$")
-
-
-class MissingRatingsError(ValueError):
-    def __init__(self, names):
-        self.names = names
-        super().__init__("Missing rating for: " + ", ".join(names))
-
-
-def guess_gr(thresholds, avg_gr):
-    if avg_gr:
-        for threshold, result in thresholds:
-            if avg_gr >= threshold:
-                return result
-    return "x"
-
-
-def player_average_gr(name, player_stats, idtable):
-    import pandas as pd
-
-    try:
-        alias_df = pd.read_csv(idtable)
-        alias_df["Player Name"] = alias_df["Player Name"].str.strip().str.lower()
-        player_id = alias_df.loc[alias_df["Player Name"] == name, "Player ID"].iloc[0]
-        avg_gr = player_stats.loc[player_stats["Player ID"] == player_id, "Guess rate"].mean()
-        if pd.isna(avg_gr):
-            avg_gr = None
-    except IndexError:
-        avg_gr = None
-    return avg_gr
-
-
-def get_guess_watched_ui(name, player_stats, idtable, oneg, twog, threeg, fourg):
-    avg_gr = player_average_gr(name, player_stats, idtable)
-    return guess_gr([(fourg, "5"), (threeg, "4"), (twog, "3"), (oneg, "2"), (-float("inf"), "1")], avg_gr)
-
-
-def get_guess_random_ui(name, player_stats, idtable, oneg, twog, threeg):
-    avg_gr = player_average_gr(name, player_stats, idtable)
-    return guess_gr([(threeg, "4"), (twog, "3"), (oneg, "2"), (-float("inf"), "1")], avg_gr)
-
-
-def get_guess_watched_28_ui(name, player_stats, idtable, zerog, oneg, twog, threeg, fourg):
-    avg_gr = player_average_gr(name, player_stats, idtable)
-    return guess_gr([(fourg, "5"), (threeg, "4"), (twog, "3"), (oneg, "2"), (zerog, "1"), (-float("inf"), "0")], avg_gr)
-
-
-GUESS_HANDLERS = {
-    "random": get_guess_random_ui,
-    "watched": get_guess_watched_ui,
-    "watched_28": get_guess_watched_28_ui,
-}
 
 
 class AMQTourUI(tk.Tk):
@@ -585,17 +445,21 @@ class AMQTourUI(tk.Tk):
 
         self.results_frame = ttk.Frame(self.update_tab)
         self.results_frame.grid(row=1, column=0, columnspan=2, sticky="ew", pady=(8, 10))
-        self.results_frame.columnconfigure(4, weight=1)
+        self.results_frame.columnconfigure(6, weight=1)
         ttk.Label(self.results_frame, text="Rounds").grid(row=0, column=0, sticky="w")
         self.inhouse_round_count = tk.StringVar(value="")
         ttk.Spinbox(self.results_frame, from_=1, to=50, width=6, textvariable=self.inhouse_round_count).grid(row=0, column=1, sticky="w", padx=(8, 14))
         ttk.Button(self.results_frame, text="Build Result Rows", command=self.build_inhouse_result_rows).grid(row=0, column=2, sticky="w", padx=(0, 8))
         self.inhouse_log_button = ttk.Button(self.results_frame, text="Log Results", style="Tool.TButton", command=self.run_log_inhouse_results)
         self.inhouse_log_button.grid(row=0, column=3, sticky="w")
+        self.inhouse_changelog_button = ttk.Button(self.results_frame, text="View Changelog", command=self.run_view_inhouse_changelog)
+        self.inhouse_changelog_button.grid(row=0, column=4, sticky="w", padx=(8, 0))
+        self.inhouse_download_button = ttk.Button(self.results_frame, text="Download", command=self.download_selected_changelog)
+        self.inhouse_download_button.grid(row=0, column=5, sticky="w", padx=(8, 0))
         self.inhouse_team_summary = ttk.Label(self.results_frame, text="", style="Subtle.TLabel")
-        self.inhouse_team_summary.grid(row=1, column=0, columnspan=5, sticky="w", pady=(8, 4))
+        self.inhouse_team_summary.grid(row=1, column=0, columnspan=7, sticky="w", pady=(8, 4))
         self.inhouse_rows_frame = ttk.Frame(self.results_frame)
-        self.inhouse_rows_frame.grid(row=2, column=0, columnspan=5, sticky="ew")
+        self.inhouse_rows_frame.grid(row=2, column=0, columnspan=7, sticky="ew")
         self.results_frame.grid_remove()
 
         self.left_panel = ttk.Frame(self.update_tab)
@@ -659,6 +523,7 @@ class AMQTourUI(tk.Tk):
         self.selected_tour_id = tour_id
         tour = TOURS[tour_id]
         self.tour_title.configure(text=tour["label"])
+        self.clear_rank_assignment()
         for key, button in self.tour_buttons.items():
             button.configure(style="Selected.TButton" if key == tour_id else "TButton")
 
@@ -819,6 +684,7 @@ class AMQTourUI(tk.Tk):
         self.players_text.edit_modified(False)
         if self.players_placeholder_active:
             return
+        self.clear_rank_assignment()
         self.after_idle(lambda: self.refresh_player_selects(show_status=False))
 
     def refresh_player_selects(self, show_status=True):
@@ -882,8 +748,11 @@ class AMQTourUI(tk.Tk):
         return pairs
 
     def manual_ratings(self):
+        current_players = {name for name, _rank in self.parse_player_entries(allow_placeholder=True)}
         ratings = {}
         for name, var in self.rank_vars.items():
+            if name not in current_players:
+                continue
             value = var.get().strip()
             if not value:
                 continue
@@ -914,6 +783,12 @@ class AMQTourUI(tk.Tk):
     def hide_rank_assignment(self):
         self.rank_assignment_frame.grid_remove()
 
+    def clear_rank_assignment(self):
+        for child in self.rank_fields.winfo_children():
+            child.destroy()
+        self.rank_vars = {}
+        self.rank_assignment_frame.grid_remove()
+
     def run_solver(self):
         if self.solver_running:
             return
@@ -930,12 +805,13 @@ class AMQTourUI(tk.Tk):
         threading.Thread(target=self.solve_in_background, args=(snapshot,), daemon=True).start()
 
     def solver_snapshot(self):
+        player_entries = self.parse_player_entries()
         return {
             "tour_id": self.selected_tour_id,
             "team_size": int(self.team_size.get()),
             "separate_t1": self.separate_t1.get(),
             "split_tour": self.split_tour.get(),
-            "player_entries": self.parse_player_entries(),
+            "player_entries": player_entries,
             "whitelist_pairs": self.whitelist_pairs(),
             "manual_ratings": self.manual_ratings(),
             "setup_code": self.current_setup_code,
@@ -982,203 +858,16 @@ class AMQTourUI(tk.Tk):
 
     def solve_selected_tour(self, snapshot):
         tour = TOURS[snapshot["tour_id"]]
-        solver_cfg = tour["solver"]
-        team_size = snapshot["team_size"]
-        if team_size <= 0:
-            raise ValueError("Team size must be at least 1.")
+        from modules.main.hostSolver import save_inhouse_snapshot, solve_selected_tour
 
-        if tour.get("dry_elo"):
-            from modules.support.mvpGenerator import update_dry_elos_for_tour
-
-            update_dry_elos_for_tour(tour)
-
-        players = self.resolve_player_ratings(tour, snapshot["player_entries"], snapshot["manual_ratings"])
-        if not players:
-            raise ValueError("Add players first.")
-        if len(players) % team_size != 0:
-            raise ValueError(f"{len(players)} players cannot be divided into teams of {team_size}.")
-
-        if solver_cfg.get("sync_ids"):
-            from utils import sync_ids_from_sheet
-
-            sync_ids_from_sheet(tour["state_path"], sheetName=tour["sheet"]["name"], tabIDs=tour["sheet"]["tab_ids"])
-
-        if snapshot["split_tour"] and tour.get("supports_inhouse"):
-            raise ValueError("Split Tour is not supported for in-house result logging yet.")
-
-        if snapshot["split_tour"] and len(players) >= 32:
-            players = sorted(players, key=lambda item: item[1], reverse=True)
-            if (len(players) / 2) % 8 == 0:
-                separator = len(players) // 2
-            else:
-                separator = max(0, len(players) // 2 - 4)
-            higher_players = players[:separator]
-            lower_players = players[separator:]
-            return (
-                "# First Tour\n"
-                + self.solve_player_group(tour, lower_players, team_size, snapshot)
-                + "\n\n# Second Tour\n"
-                + self.solve_player_group(tour, higher_players, team_size, snapshot)
-            )
-
-        return self.solve_player_group(tour, players, team_size, snapshot)
-
-    def resolve_player_ratings(self, tour, player_entries, manual_ratings):
-        from utils import get_elos
-
-        ratings = {name.lower(): float(rating) for name, rating in get_elos(tour["state_path"]).items()}
-        alias_ratings = self.build_alias_ratings(ratings)
-        players = []
-        missing = []
-        for name, pasted_rank in player_entries:
-            resolved = self.resolve_rating_name(name, ratings, alias_ratings)
-            if resolved:
-                rating_name, rating = resolved
-            elif pasted_rank is not None:
-                rating_name = name
-                rating = pasted_rank
-            elif name in manual_ratings:
-                rating_name = name
-                rating = manual_ratings[name]
-            else:
-                missing.append(name)
-                continue
-            players.append((rating_name, float(rating)))
-
-        if missing:
-            raise MissingRatingsError(missing)
-        return players
-
-    def build_alias_ratings(self, ratings):
-        alias_ratings = {}
-        aliases_path = DATA_ROOT / "aliases.txt"
-        if aliases_path.exists():
-            for line in aliases_path.read_text(encoding="utf-8").splitlines():
-                names = [name.strip().lower() for name in line.split("\t") if name.strip()]
-                resolved_name = next((name for name in names if name in ratings), None)
-                if resolved_name:
-                    for alias in names:
-                        alias_ratings[alias] = (resolved_name, ratings[resolved_name])
-
-        normalized = {}
-        for name, rating in ratings.items():
-            key = self.normalize_alias_key(name)
-            if key not in normalized:
-                normalized[key] = (name, rating)
-            else:
-                normalized[key] = None
-
-        for key, value in normalized.items():
-            if value is not None:
-                alias_ratings.setdefault(key, value)
-
-        return alias_ratings
-
-    def resolve_rating_name(self, name, ratings, alias_ratings):
-        if name in ratings:
-            return name, ratings[name]
-        if name in alias_ratings:
-            return alias_ratings[name]
-
-        normalized_name = self.normalize_alias_key(name)
-        if normalized_name in alias_ratings:
-            return alias_ratings[normalized_name]
-        return None
-
-    def normalize_alias_key(self, name):
-        return re.sub(r"[^a-z0-9]", "", name.lower())
-
-    def solve_player_group(self, tour, players, team_size, snapshot):
-        from utils import create_teams, get_blacklist, get_player_stats
-
-        solver_cfg = tour["solver"]
-        teams_number = len(players) // team_size
-        p_values = {name: rating for name, rating in players}
-        teams = create_teams(
-            tour["state_path"],
-            players,
-            team_size,
-            snapshot["whitelist_pairs"],
-            get_blacklist(),
-            snapshot["separate_t1"],
-        )
-        player_stats, idtable = get_player_stats(
-            path=tour["state_path"],
-            tabStats=solver_cfg["stats_tab"],
-            tabIDs=tour["sheet"]["tab_ids"],
-            type=solver_cfg["stats_type"],
-        )
-        final_code = handleCodes(
-            foundSolutions=teams,
-            p_values=p_values,
-            k=teams_number,
-            get_guesses=GUESS_HANDLERS[solver_cfg["guess_mode"]],
-            kwargs_guesses=self.guess_kwargs(tour, player_stats, idtable),
-            get_codes=CODE_GENERATORS[solver_cfg["code_generator"]],
-            gamemode=solver_cfg.get("gamemode"),
-            gr_based=True,
-        )
-        final_code = self.apply_setup_code(final_code, snapshot.get("setup_code", ""))
-        codes_path = Path(tour["state_path"]) / "codes.txt"
-        codes_path.write_text(final_code, encoding="utf-8")
-        if tour.get("supports_inhouse"):
-            self.save_latest_inhouse_teams(tour, teams[0], p_values, teams_number)
+        final_code, inhouse_snapshot = solve_selected_tour(tour, snapshot, DATA_ROOT / "aliases.txt")
+        if inhouse_snapshot:
+            self.latest_inhouse_teams[tour["id"]] = inhouse_snapshot
+            save_inhouse_snapshot(tour, inhouse_snapshot)
         return final_code
 
-    def save_latest_inhouse_teams(self, tour, solution, p_values, teams_number):
-        team_map = [[] for _ in range(teams_number)]
-        for name, team_index in solution.items():
-            team_map[team_index].append((name, p_values[name]))
-
-        teams = {}
-        for index, members in enumerate(team_map, start=1):
-            team_id = f"team{index}"
-            sorted_members = sorted(members, key=lambda item: item[1], reverse=True)
-            top_player = sorted_members[0][0] if sorted_members else f"Team {index}"
-            teams[team_id] = {
-                "label": top_player,
-                "display_name": " ".join(f"{name} ({rating:.3f})" for name, rating in sorted_members),
-                "players": [{"name": name, "rating": round(float(rating), 3)} for name, rating in sorted_members],
-            }
-
-        snapshot = {"tour_id": tour["id"], "inhouse_type": tour["inhouse"]["inhouse_type"], "teams": teams}
-        self.latest_inhouse_teams[tour["id"]] = snapshot
-        path = Path(tour["state_path"]) / "latest_inhouse_teams.json"
-        path.write_text(json.dumps(snapshot, indent=2), encoding="utf-8")
-
-    def apply_setup_code(self, final_code, setup_code):
-        if not setup_code:
-            return final_code
-        replacement = f"```{setup_code}```"
-        if re.search(r"```.*?```", final_code, flags=re.S):
-            return re.sub(r"```.*?```", replacement, final_code, count=1, flags=re.S)
-        return f"{replacement}\n\n{final_code}"
-
-    def guess_kwargs(self, tour, player_stats, idtable):
-        thresholds = tour["solver"]["thresholds"]
-        kwargs = {"player_stats": player_stats, "idtable": idtable}
-        if tour["solver"]["guess_mode"] == "watched_28":
-            kwargs.update({
-                "zerog": thresholds["zero"],
-                "oneg": thresholds["one"],
-                "twog": thresholds["two"],
-                "threeg": thresholds["three"],
-                "fourg": thresholds["four"],
-            })
-        elif tour["solver"]["guess_mode"] == "watched":
-            kwargs.update({
-                "oneg": thresholds["one"],
-                "twog": thresholds["two"],
-                "threeg": thresholds["three"],
-                "fourg": thresholds["four"],
-            })
-        else:
-            kwargs.update({
-                "oneg": thresholds["one"],
-                "twog": thresholds["two"],
-                "threeg": thresholds["three"],
-            })
-        return kwargs
+    def normalize_alias_key(self, name):
+        return normalize_alias_key(name)
 
     def run_manual_eloscrape(self):
         tour = TOURS[self.selected_tour_id]
@@ -1621,7 +1310,7 @@ class AMQTourUI(tk.Tk):
         self.challonge_items = []
         self.challonge_list.delete(0, "end")
         if tour.get("supports_inhouse"):
-            self.history_heading_label.configure(text="Events")
+            self.history_heading_label.configure(text="History")
             self.selected_challonge_var.set("In-house Results")
             self.refresh_inhouse_event_list(tour)
             return
@@ -1664,26 +1353,7 @@ class AMQTourUI(tk.Tk):
             self.selected_challonge_var.set("No previous tour selected")
 
     def previous_tour_rows(self, tour):
-        stats_path = Path(tour["state_path"]) / "stats.csv"
-        if not stats_path.exists():
-            return []
-        counts = {}
-        try:
-            with stats_path.open(newline="", encoding="utf-8") as f:
-                reader = csv.DictReader(f)
-                for row in reader:
-                    timestamp = (row.get("Timestamp") or "").strip()
-                    if timestamp:
-                        counts[timestamp] = counts.get(timestamp, 0) + 1
-        except OSError:
-            return []
-
-        rows = []
-        for index, (timestamp, count) in enumerate(counts.items()):
-            detail = f"{count} players"
-            rows.append((timestamp, index, timestamp, detail, timestamp))
-        rows.sort(key=lambda item: (item[0], item[1]), reverse=True)
-        return rows
+        return hostHistory.previous_tour_rows(tour)
 
     def default_update_text(self, tour):
         if tour.get("dry_elo"):
@@ -1858,24 +1528,12 @@ class AMQTourUI(tk.Tk):
             from modules.support.inhouseData import append_inhouse_event
 
             rows_written = append_inhouse_event(tour["state_path"], event)
-            self.append_local_inhouse_event(tour, event)
             self.run_tour_eloscrape(tour)
         except Exception as exc:
             details = traceback.format_exc()
             self.after(0, lambda: self.finish_log_inhouse_results(error=f"{type(exc).__name__}: {exc}\n\n{details}"))
             return
         self.after(0, lambda: self.finish_log_inhouse_results(rows_written=rows_written))
-
-    def append_local_inhouse_event(self, tour, event):
-        path = Path(tour["state_path"]) / "inhouse_events.json"
-        events = []
-        if path.exists():
-            try:
-                events = json.loads(path.read_text(encoding="utf-8"))
-            except (OSError, json.JSONDecodeError):
-                events = []
-        events.append(event)
-        path.write_text(json.dumps(events, indent=2), encoding="utf-8")
 
     def finish_log_inhouse_results(self, rows_written=0, error=None):
         self.inhouse_logging = False
@@ -1884,58 +1542,76 @@ class AMQTourUI(tk.Tk):
             self.write_update_text(error)
             self.set_status("In-house logging failed.")
             return
-        self.write_update_text(f"Logged {rows_written} result rows to inhouseData and updated elos.")
-        self.set_status("In-house results logged.")
         self.refresh_elos()
-        self.refresh_challonge_list(TOURS[self.selected_tour_id])
+        tour = TOURS[self.selected_tour_id]
+        self.refresh_challonge_list(tour)
+        try:
+            changelog_text = self.latest_changelog_text(tour)
+        except Exception as exc:
+            self.write_update_text(
+                f"Logged {rows_written} result rows to inhouseData and updated elos.\n\n"
+                f"Could not load latest changelog: {type(exc).__name__}: {exc}"
+            )
+            self.set_status("In-house results logged.")
+            return
+        self.write_update_text(f"Logged {rows_written} result rows to inhouseData and updated elos.\n\n{changelog_text}")
+        self.set_status("In-house results logged. Changelog loaded.")
+
+    def run_view_inhouse_changelog(self):
+        if self.mvp_running:
+            return
+        tour = TOURS[self.selected_tour_id]
+        self.mvp_running = True
+        self.inhouse_changelog_button.configure(state="disabled")
+        self.write_update_text("Loading changelog...")
+        self.set_status("Loading in-house changelog...")
+        selected_tour_id = self.selected_changelog_tour_id()
+        threading.Thread(target=self.inhouse_changelog_in_background, args=(tour, selected_tour_id), daemon=True).start()
+
+    def inhouse_changelog_in_background(self, tour, selected_tour_id=None):
+        try:
+            self.startup_eloscrape_done.wait()
+            self.run_tour_eloscrape(tour, use_local_cache=True)
+            changelog_text = self.selected_changelog_text(tour, selected_tour_id)
+        except Exception as exc:
+            details = traceback.format_exc()
+            self.after(0, lambda: self.finish_inhouse_changelog(error=f"{type(exc).__name__}: {exc}\n\n{details}"))
+            return
+        self.after(0, lambda: self.finish_inhouse_changelog(changelog_text=changelog_text))
+
+    def finish_inhouse_changelog(self, changelog_text=None, error=None):
+        self.mvp_running = False
+        self.inhouse_changelog_button.configure(state="normal")
+        if error:
+            self.write_update_text(error)
+            self.set_status("In-house changelog failed.")
+            return
+        self.write_update_text(changelog_text or "")
+        self.set_status("In-house changelog loaded.")
 
     def refresh_inhouse_event_list(self, tour):
-        path = Path(tour["state_path"]) / "inhouse_events.json"
-        if not path.exists():
-            return
-        try:
-            events = json.loads(path.read_text(encoding="utf-8"))
-        except (OSError, json.JSONDecodeError):
-            return
-        for index, event in enumerate(reversed(events)):
-            label = f"{event.get('time', '')[:19]}  {len(event.get('matches', []))} rounds"
+        rows = hostHistory.inhouse_history_rows(tour)
+        self.challonge_items = rows
+        for _event_time, _fallback_index, _date_label, label, _event_id in rows:
             self.challonge_list.insert("end", label)
-            self.challonge_items.append((event.get("time", ""), index, event.get("time", "")[:10], label, event.get("tour_id", "")))
+
+        if rows:
+            self.challonge_list.selection_set(0)
+            self.on_challonge_selected()
+        else:
+            self.selected_challonge_var.set("No in-house history selected")
 
     def tourlist_links(self, tour):
-        text = self._read_text(tour, "tourlist.txt", "")
-        links = []
-        for line in text.splitlines():
-            line = line.strip()
-            if line:
-                links.append(line)
-        return links
+        return hostHistory.tourlist_links(tour)
 
     def tour_history_dates(self, tour):
-        history_path = Path(tour["state_path"]) / "elo_history.json"
-        if not history_path.exists():
-            return {}
-        try:
-            with history_path.open(encoding="utf-8") as f:
-                history = json.load(f)
-        except (OSError, json.JSONDecodeError):
-            return {}
-        return {str(entry.get("tour_id", "")).lower(): str(entry.get("time", "")) for entry in history if entry.get("tour_id")}
+        return hostHistory.tour_history_dates(tour)
 
     def history_sort_value(self, value):
-        if not value:
-            return float("-inf")
-        try:
-            parsed = datetime.fromisoformat(str(value).replace("Z", "+00:00"))
-        except ValueError:
-            return float("-inf")
-        if parsed.tzinfo is None:
-            parsed = parsed.replace(tzinfo=timezone.utc)
-        return parsed.timestamp()
+        return hostHistory.history_sort_value(value)
 
     def tour_id_from_link(self, link):
-        link = link.rstrip("/")
-        return link.split("/")[-1].split("?")[0].lower()
+        return hostHistory.tour_id_from_link(link)
 
     def on_challonge_selected(self, _event=None):
         selected = self.challonge_list.curselection()
@@ -1990,8 +1666,13 @@ class AMQTourUI(tk.Tk):
             self.set_status("Update elos failed.")
             return
         self.refresh_elos()
-        self.write_update_text(self.dry_elo_report_text(tour, intro=f"Updated {updated_count} elo ratings."))
-        self.set_status("Elos updated.")
+        if tour:
+            self.refresh_challonge_list(tour)
+        changelog = self._read_text(tour, "changelog.txt", "").strip() if tour else ""
+        if not changelog:
+            changelog = "No rating changes >= 0.15."
+        self.write_update_text(f"Updated {updated_count} elo ratings.\n\n# Changelog\n{changelog}")
+        self.set_status("Elos updated. Changelog loaded.")
 
     def run_view_changelog(self):
         if self.mvp_running:
@@ -2033,7 +1714,7 @@ class AMQTourUI(tk.Tk):
         self.set_status("Changelog loaded.")
 
     def latest_changelog_path(self, tour):
-        return Path(tour["state_path"]) / "elo_history_latest.json"
+        return hostHistory.latest_changelog_path(tour)
 
     def selected_changelog_tour_id(self):
         selected = self.challonge_list.curselection()
@@ -2044,41 +1725,13 @@ class AMQTourUI(tk.Tk):
         return None
 
     def selected_changelog_entry(self, tour, selected_tour_id=None):
-        if selected_tour_id:
-            history_path = Path(tour["state_path"]) / "elo_history.json"
-            if not history_path.exists():
-                raise FileNotFoundError(f"No elo_history.json found for {tour['label']}. Run eloscrape first.")
-            try:
-                history = json.loads(history_path.read_text(encoding="utf-8"))
-            except json.JSONDecodeError as exc:
-                raise ValueError(f"Could not read elo_history.json for {tour['label']}.") from exc
-            selected_key = str(selected_tour_id).strip().lower()
-            for entry in history:
-                if str(entry.get("tour_id", "")).strip().lower() == selected_key:
-                    return entry
-            raise ValueError(f"No changelog found for selected Challonge {selected_tour_id}.")
-
-        changelog_path = self.latest_changelog_path(tour)
-        if not changelog_path.exists():
-            raise FileNotFoundError(f"No elo_history_latest.json found for {tour['label']}. Run eloscrape first.")
-        try:
-            return json.loads(changelog_path.read_text(encoding="utf-8"))
-        except json.JSONDecodeError as exc:
-            raise ValueError(f"Could not read elo_history_latest.json for {tour['label']}.") from exc
+        return hostHistory.selected_changelog_entry(tour, selected_tour_id)
 
     def selected_changelog_text(self, tour, selected_tour_id=None):
-        return json.dumps(self.selected_changelog_entry(tour, selected_tour_id), indent=2, ensure_ascii=False)
+        return hostHistory.selected_changelog_text(tour, selected_tour_id)
 
     def latest_changelog_text(self, tour):
-        changelog_path = self.latest_changelog_path(tour)
-        if not changelog_path.exists():
-            raise FileNotFoundError(f"No elo_history_latest.json found for {tour['label']}. Run eloscrape first.")
-
-        changelog_text = changelog_path.read_text(encoding="utf-8")
-        try:
-            return json.dumps(json.loads(changelog_text), indent=2, ensure_ascii=False)
-        except json.JSONDecodeError:
-            return changelog_text
+        return hostHistory.latest_changelog_text(tour)
 
     def download_selected_changelog(self):
         tour = TOURS[self.selected_tour_id]
@@ -2089,24 +1742,24 @@ class AMQTourUI(tk.Tk):
             self.write_update_text(f"{type(exc).__name__}: {exc}")
             self.set_status("No changelog file found.")
             return
-        safe_id = re.sub(r"[^A-Za-z0-9_-]+", "_", selected_tour_id or "latest").strip("_") or "latest"
-        self.download_content_to_downloads(tour, f"{safe_id}_elo_history.json", changelog_text)
+        self.download_content_to_downloads(tour, hostHistory.safe_history_filename(selected_tour_id), changelog_text)
 
     def download_dry_outputs(self):
         tour = TOURS[self.selected_tour_id]
-        missing = []
-        for filename in ("mvps.txt", "changelog.txt"):
-            if not (Path(tour["state_path"]) / filename).exists():
-                missing.append(filename)
-        if missing:
-            self.write_update_text(f"Missing {', '.join(missing)}. Run MVPs and Update Elos first.")
+        files = [
+            Path(tour["state_path"]) / "mvps.txt",
+            Path(tour["state_path"]) / "changelog.txt",
+        ]
+        existing = [path for path in files if path.exists()]
+        if not existing:
+            self.write_update_text("Missing mvps.txt and changelog.txt. Run MVPs or Update Elos first.")
             self.set_status("No file found.")
             return
-        destinations = [
-            self.download_file_to_downloads(tour, Path(tour["state_path"]) / "mvps.txt", announce=False),
-            self.download_file_to_downloads(tour, Path(tour["state_path"]) / "changelog.txt", announce=False),
-        ]
-        self.set_status("Saved MVPs and changelog.")
+        destinations = [self.download_file_to_downloads(tour, path, announce=False) for path in existing]
+        if len(existing) == 1 and existing[0].name == "changelog.txt":
+            self.set_status("Saved changelog.")
+        else:
+            self.set_status("Saved MVPs and changelog.")
         self.write_update_text("Saved files to:\n" + "\n".join(str(path) for path in destinations if path))
 
     def download_named_tour_file(self, tour, filename, missing_message):
@@ -2212,9 +1865,10 @@ class AMQTourUI(tk.Tk):
             return
 
         try:
-            with elos_path.open(encoding="utf-8") as f:
-                elos = json.load(f)
-        except json.JSONDecodeError:
+            from modules.support.readElos import load_elos
+
+            elos = load_elos(elos_path, Path(tour["state_path"]) / "ids.csv", key_format="name")
+        except (OSError, json.JSONDecodeError):
             self.set_status("Could not read elos.json.")
             return
 

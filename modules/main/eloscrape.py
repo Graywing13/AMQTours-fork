@@ -12,6 +12,12 @@ from modules.support.getAliases import *
 from modules.support.getTourlist import getTourlist
 from modules.support.readCredentials import readCredentials
 from modules.support.inhouseData import load_inhouse_tours
+from modules.support.readElos import (
+    normalize_player_id,
+    normalize_player_name,
+    parse_composite_key,
+    save_elos,
+)
 
 class EloScrape:
     def __init__(
@@ -144,6 +150,39 @@ class EloScrape:
         def start_time(tag):
             return tag.name == 'div' and tag.has_attr('class') and 'start-time' in tag['class']
 
+        def display_name_for_key(player_key, fallback=None):
+            player_key = str(player_key)
+            if player_key.startswith("name:"):
+                return normalize_player_name(player_key[5:])
+            all_names = getAliasesAllNames(aliases, player_key)
+            if all_names:
+                return normalize_player_name(all_names[0])
+            return normalize_player_name(fallback if fallback is not None else player_key)
+
+        def register_player_key(player_key, display_name=None):
+            player_key = str(player_key)
+            player_names.setdefault(player_key, display_name_for_key(player_key, display_name))
+            return player_key
+
+        def player_identity(player_name):
+            player_name = normalize_player_name(player_name)
+            player_id = normalize_player_id(getAliasesID(aliases, player_name))
+            if player_id is None:
+                return register_player_key(f"name:{player_name}", player_name)
+            return register_player_key(player_id, player_name)
+
+        def state_player_identity(player_key, state_version):
+            parsed = parse_composite_key(player_key)
+            if parsed is not None:
+                player_id, player_name = parsed
+                return register_player_key(player_id, player_name)
+            if int(state_version or 1) >= 2:
+                player_key = str(player_key)
+                if not player_key.startswith("name:"):
+                    player_key = normalize_player_id(player_key) or player_key
+                return register_player_key(player_key)
+            return player_identity(player_key)
+
         def get_players(teamstr, elos, teamid):
             player_strs = teamstr.rstrip(')').split(') ')
             players = {}
@@ -155,27 +194,17 @@ class EloScrape:
                     continue
                 player, rank = player_str.split(' (')
                 player = player.strip().lower()
-                player_id = getAliasesID(aliases, player)
                 if '[' in player:
                     player, rounds_played_str = player.split(' [')
-                    player_id = getAliasesID(aliases, player)
-                    if player not in elos and player_id is not None:
-                        all_names = getAliasesAllNames(aliases, player_id)
-                        for main_name in all_names:
-                            if main_name in elos:
-                                player = main_name
-                                break
-                    rounds_played[teamid][player] = json.loads('[' + rounds_played_str)
-                if player_id is not None:
-                    all_names = getAliasesAllNames(aliases, player_id)
-                    for main_name in all_names:
-                        if main_name in elos:
-                            player = main_name
-                            break
-                if player in elos:
-                    players[player] = elos[player]
+                    player = player.strip().lower()
+                    player_key = player_identity(player)
+                    rounds_played[teamid][player_key] = json.loads('[' + rounds_played_str)
                 else:
-                    players[player] = trueskill.Rating(mu=float(rank))
+                    player_key = player_identity(player)
+                if player_key in elos:
+                    players[player_key] = elos[player_key]
+                else:
+                    players[player_key] = trueskill.Rating(mu=float(rank))
                     
             return players, rounds_played
 
@@ -187,7 +216,7 @@ class EloScrape:
             new_team = {}
             for player, rating in team.items():
                 if player in team_rounds and round not in team_rounds[player]:
-                    print(f'deleting {player} in round {round}')
+                    print(f'deleting {player_names.get(player, player)} in round {round}')
                     continue
                 new_team[player] = rating
             return new_team
@@ -323,7 +352,8 @@ class EloScrape:
             except (OSError, json.JSONDecodeError):
                 return {}, [], challonges
 
-            if state.get("version") != 1:
+            state_version = state.get("version")
+            if state_version not in (1, 2):
                 return {}, [], challonges
 
             current_ids = [tour["tour_id"] for tour in challonges]
@@ -336,9 +366,14 @@ class EloScrape:
             ratings = {}
             for player, value in state.get("ratings", {}).items():
                 try:
-                    ratings[player] = trueskill.Rating(mu=float(value["mu"]), sigma=float(value["sigma"]))
+                    player_key = state_player_identity(player, state_version)
+                    ratings[player_key] = trueskill.Rating(mu=float(value["mu"]), sigma=float(value["sigma"]))
                 except (KeyError, TypeError, ValueError):
                     return {}, [], challonges
+
+            for player, display_name in state.get("rating_names", {}).items():
+                player_key = state_player_identity(player, state_version)
+                player_names[player_key] = normalize_player_name(display_name)
 
             history = state.get("elo_history", [])
             if not isinstance(history, list):
@@ -348,11 +383,15 @@ class EloScrape:
 
         def save_eloscrape_state(challonges, ratings, history):
             state = {
-                "version": 1,
+                "version": 2,
                 "tour_ids": [tour["tour_id"] for tour in challonges],
                 "ratings": {
                     player: {"mu": rating.mu, "sigma": rating.sigma}
                     for player, rating in ratings.items()
+                },
+                "rating_names": {
+                    player: player_names.get(player, display_name_for_key(player))
+                    for player in ratings
                 },
                 "elo_history": history,
             }
@@ -687,6 +726,7 @@ class EloScrape:
         init_timezones()
 
         aliases = getAliasesDF(self.IDTABLE)
+        player_names = {}
         current_mode = mode_key()
         substitute_cache_mode = substitute_mode_key(current_mode)
         report_progress(2, "Reading sheet cache")
@@ -852,7 +892,7 @@ class EloScrape:
                             elo_history['players'][player] = rating.mu
                             if player in team1_rounds and 1 not in team1_rounds[player]:
                                 continue
-                            teamstr += f'{player} ({rating.mu:.2f}) '
+                            teamstr += f'{player_names.get(player, player)} ({rating.mu:.2f}) '
                             team_initial_rating += rating.mu 
                         teamstr += f'= {team_initial_rating:.2f}'
                         elo_history['results'][team1_id] = {
@@ -871,7 +911,7 @@ class EloScrape:
                             elo_history['players'][player] = rating.mu
                             if player in team2_rounds and 1 not in team2_rounds[player]:
                                 continue
-                            teamstr += f'{player} ({rating.mu:.2f}) '
+                            teamstr += f'{player_names.get(player, player)} ({rating.mu:.2f}) '
                             team_initial_rating += rating.mu 
                         teamstr += f'= {team_initial_rating:.2f}'
                         elo_history['results'][team2_id] = {
@@ -908,7 +948,8 @@ class EloScrape:
                 teamstr = team_dict['teamstr']
                 elo_history['teams'][teamstr] = f"{team_dict['win']}W {team_dict['loss']}L {team_dict['draw']}D"
                 for player, rating in team.items():
-                    elo_history['player'][player] = f"initial elo: {elo_history['players'][player]:.3f}, new elo: {rating.mu:.3f}, rating change: {rating.mu - elo_history['players'][player]:.3f}"
+                    display_name = player_names.get(player, player)
+                    elo_history['player'][display_name] = f"initial elo: {elo_history['players'][player]:.3f}, new elo: {rating.mu:.3f}, rating change: {rating.mu - elo_history['players'][player]:.3f}"
                 elos.update(team)
             del elo_history['results']
             del elo_history['players']
@@ -920,9 +961,11 @@ class EloScrape:
         print(last_rounds_played)
         report_progress(94, "Saving local elo files")
         
-        with open(self.ELOS, 'w', encoding='utf-8') as f:
-            elos_print = {player: round(rating.mu, 3) for player, rating in sorted(elos.items(), key=lambda elo: elo[1], reverse=True)}
-            json.dump(elos_print, f, indent='\t')
+        elos_print = {
+            (player, player_names.get(player, display_name_for_key(player))): round(rating.mu, 3)
+            for player, rating in sorted(elos.items(), key=lambda elo: elo[1].mu, reverse=True)
+        }
+        save_elos(elos_print, self.ELOS, self.IDTABLE, key_format="composite")
         
         with open(self.ELOS_HISTORY, 'w', encoding='utf-8') as f:
             json.dump(elo_history_list, f, indent='\t')
@@ -935,22 +978,22 @@ class EloScrape:
         save_latest_elo_history(elo_history_list)
         
         tierlist = {}
-        for player, rating in elos_print.items():
+        for (_player, display_name), rating in elos_print.items():
             rating_int = int(round(rating))
             if rating_int not in tierlist:
-                tierlist[rating_int] = [player]
+                tierlist[rating_int] = [(display_name, rating)]
             else:
-                tierlist[rating_int].append(player)
+                tierlist[rating_int].append((display_name, rating))
         
         with open(self.ELOS_ADJUSTED_TL, 'w', encoding='utf-8') as f:
             tiers = sorted(list(tierlist.keys()), reverse=True)
             for tier in tiers:
-                f.write(f'{tier}: {", ".join(tierlist[tier])}\n')
+                f.write(f'{tier}: {", ".join([player for player, _rating in tierlist[tier]])}\n')
         
         with open(self.ELOS_ADJUSTED_TL_FINEGRAINED, 'w', encoding='utf-8') as f:
             tiers = sorted(list(tierlist.keys()), reverse=True)
             for tier in tiers:
-                f.write(f'{tier}: {", ".join([f"{player} ({elos_print[player]})" for player in tierlist[tier]])}\n')
+                f.write(f'{tier}: {", ".join([f"{player} ({rating})" for player, rating in tierlist[tier]])}\n')
 
         if saveToSheet:
             report_progress(97, "Saving elos to sheet")

@@ -7,6 +7,7 @@ from modules.support.readCredentials import readCredentials
 from modules.support.getAliases import getAliasesDF, getAliasesID
 from modules.support.getRanks import getRanks
 from modules.support.LPProblem import LPProblem
+from modules.support.readElos import normalize_player_id
 
 PROJECT_ROOT = Path(__file__).resolve().parent
 
@@ -117,6 +118,7 @@ def get_elos(folder):
     id_to_all_names = aliases.groupby("Player ID")["Player Name"].apply(list).to_dict()
     for player_id, names in id_to_all_names.items():
         for name in names:
-            if player_id in ranks:
-                players_ids[name] = ranks[player_id]
+            key = normalize_player_id(player_id)
+            if key in ranks:
+                players_ids[name] = ranks[key]
     return players_ids

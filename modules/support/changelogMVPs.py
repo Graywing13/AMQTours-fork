@@ -1,13 +1,53 @@
+from modules.support.readElos import normalize_player_id, normalize_player_name, parse_composite_key
+
+
+def _elo_records(elos):
+    records = []
+    for key, value in elos.items():
+        parsed = parse_composite_key(key)
+        if parsed is None:
+            player_id = None
+            player_name = normalize_player_name(key)
+        else:
+            player_id, player_name = parsed
+        try:
+            elo = float(value)
+        except (TypeError, ValueError):
+            continue
+        records.append({"id": normalize_player_id(player_id), "name": player_name, "elo": elo})
+    return records
+
+
+def _old_lookup(old_elos):
+    by_id = {}
+    by_name = {}
+    for record in _elo_records(old_elos):
+        if record["id"]:
+            by_id[record["id"]] = record
+        by_name[record["name"]] = record
+    return by_id, by_name
+
+
 def makeChangelog(rank_dict, old_elos, changelog_path):
-    elo_diff = {
-        player: {
-            "initial rank": round(float(old_elos[player]), 3),
-            "new rank": round(float(rank_dict[player]), 3),
-            "rating_change": round(float(rank_dict[player]) - float(old_elos[player]), 3),
+    old_by_id, old_by_name = _old_lookup(old_elos)
+    elo_diff = {}
+    for new_record in _elo_records(rank_dict):
+        old_record = None
+        if new_record["id"]:
+            old_record = old_by_id.get(new_record["id"])
+        if old_record is None:
+            old_record = old_by_name.get(new_record["name"])
+        if old_record is None:
+            continue
+
+        diff = round(new_record["elo"] - old_record["elo"], 3)
+        if abs(diff) < 0.15:
+            continue
+        elo_diff[new_record["name"]] = {
+            "initial rank": round(old_record["elo"], 3),
+            "new rank": round(new_record["elo"], 3),
+            "rating_change": diff,
         }
-        for player in old_elos
-        if player in rank_dict and abs(float(rank_dict[player]) - float(old_elos[player])) >= 0.15
-    }
 
     elo_diff_str = "\n".join(
         f"{player}, old rank: {data['initial rank']}, new rank: {data['new rank']}, diff: {data['rating_change']}"
@@ -19,15 +59,19 @@ def makeChangelog(rank_dict, old_elos, changelog_path):
 
 
 def format_mvps(last_tour_dict, old_old_elos):
+    old_by_id, old_by_name = _old_lookup(old_old_elos)
     diff = {}
-    for player, new_elo in last_tour_dict.items():
-        old_elo = old_old_elos.get(player)
-        if old_elo is None:
-            old_elo = new_elo
-        diff[player] = {
+    for record in _elo_records(last_tour_dict):
+        old_record = None
+        if record["id"]:
+            old_record = old_by_id.get(record["id"])
+        if old_record is None:
+            old_record = old_by_name.get(record["name"])
+        old_elo = old_record["elo"] if old_record else record["elo"]
+        diff[record["name"]] = {
             "old": round(float(old_elo), 3),
-            "new": round(float(new_elo), 3),
-            "diff": round(float(new_elo) - float(old_elo), 3),
+            "new": round(record["elo"], 3),
+            "diff": round(record["elo"] - float(old_elo), 3),
         }
 
     sorted_diff = sorted(diff.items(), key=lambda item: item[1]["diff"], reverse=True)

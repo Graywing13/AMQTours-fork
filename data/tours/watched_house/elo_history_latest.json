@@ -1,0 +1,18 @@
+{
+	"tour_id": "watched_house_20260609_155637",
+	"time": "2026-06-09 15:56:37.664022+00:00",
+	"teams": {
+		"uebok (16.94) potassiumf (9.01) kyuuuu (4.96) beokros (3.04) = 33.95": "0W 1L 0D",
+		"furlain (14.14) xeyz (13.88) beta_peak (13.41) aryssiel (-6.94) = 34.49": "1W 0L 0D"
+	},
+	"player": {
+		"uebok": "initial elo: 16.943, new elo: 14.038, rating change: -2.905",
+		"potassiumf": "initial elo: 9.012, new elo: 6.509, rating change: -2.503",
+		"kyuuuu": "initial elo: 4.960, new elo: 3.446, rating change: -1.513",
+		"beokros": "initial elo: 3.040, new elo: 1.527, rating change: -1.513",
+		"furlain": "initial elo: 14.144, new elo: 16.169, rating change: 2.025",
+		"xeyz": "initial elo: 13.878, new elo: 16.782, rating change: 2.905",
+		"beta_peak": "initial elo: 13.411, new elo: 15.914, rating change: 2.503",
+		"aryssiel": "initial elo: -6.943, new elo: -4.038, rating change: 2.905"
+	}
+}

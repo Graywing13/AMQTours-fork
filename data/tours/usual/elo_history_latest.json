@@ -1,28 +1,28 @@
 {
-	"tour_id": "do4evvo4",
-	"time": "2026-06-05 02:00:00-05:00",
+	"tour_id": "68tok6v7",
+	"time": "2026-06-09 23:30:00+02:00",
 	"teams": {
-		"mami (12.44) mangoss (8.79) chaabdu92 (7.34) spartric (4.17) = 32.74": "2W 4L 0D",
-		"poolnoodle (17.52) lakumix (7.52) zokie (5.45) catge (2.16) = 32.65": "2W 4L 0D",
-		"yahallonyanpasu (16.72) _nadeshiko (8.20) tugia (5.35) gabetin (2.80) = 33.06": "4W 2L 0D",
-		"asleep (15.37) zozo (7.67) kirox (5.92) nekko_khayal (4.07) = 33.04": "4W 2L 0D"
+		"md22 (10.57) naizuri (5.55) fiftypercentweeb (4.92) oshino_bu (3.73) = 24.78": "4W 2L 0D",
+		"milar (12.77) annayanami (5.35) okitanobu (3.36) unborned (3.30) = 24.78": "2W 4L 0D",
+		"lakumix (6.39) flato (6.67) yasashiikumo (6.39) porte (3.65) = 23.09": "4W 2L 0D",
+		"civiltwlight (16.30) fumiii (6.01) xeyz (2.29) tateyamaayano (-0.19) = 24.41": "2W 4L 0D"
 	},
 	"player": {
-		"mami": "initial elo: 12.436, new elo: 12.258, rating change: -0.178",
-		"mangoss": "initial elo: 8.794, new elo: 8.557, rating change: -0.237",
-		"chaabdu92": "initial elo: 7.344, new elo: 7.149, rating change: -0.195",
-		"spartric": "initial elo: 4.170, new elo: 3.990, rating change: -0.180",
-		"poolnoodle": "initial elo: 17.524, new elo: 17.331, rating change: -0.193",
-		"lakumix": "initial elo: 7.517, new elo: 7.341, rating change: -0.175",
-		"zokie": "initial elo: 5.451, new elo: 5.265, rating change: -0.187",
-		"catge": "initial elo: 2.156, new elo: 1.948, rating change: -0.208",
-		"yahallonyanpasu": "initial elo: 16.718, new elo: 16.895, rating change: 0.177",
-		"_nadeshiko": "initial elo: 8.197, new elo: 8.389, rating change: 0.192",
-		"tugia": "initial elo: 5.349, new elo: 5.528, rating change: 0.178",
-		"gabetin": "initial elo: 2.798, new elo: 3.001, rating change: 0.203",
-		"asleep": "initial elo: 15.367, new elo: 15.557, rating change: 0.190",
-		"zozo": "initial elo: 7.673, new elo: 7.865, rating change: 0.192",
-		"kirox": "initial elo: 5.922, new elo: 6.106, rating change: 0.183",
-		"nekko_khayal": "initial elo: 4.075, new elo: 4.274, rating change: 0.199"
+		"md22": "initial elo: 10.575, new elo: 10.746, rating change: 0.171",
+		"naizuri": "initial elo: 5.555, new elo: 5.738, rating change: 0.183",
+		"fiftypercentweeb": "initial elo: 4.923, new elo: 5.104, rating change: 0.180",
+		"oshino_bu": "initial elo: 3.731, new elo: 3.910, rating change: 0.180",
+		"milar": "initial elo: 12.771, new elo: 12.581, rating change: -0.190",
+		"annayanami": "initial elo: 5.349, new elo: 5.159, rating change: -0.190",
+		"okitanobu": "initial elo: 3.359, new elo: 3.170, rating change: -0.189",
+		"unborned": "initial elo: 3.305, new elo: 3.101, rating change: -0.203",
+		"lakumix": "initial elo: 6.387, new elo: 6.593, rating change: 0.206",
+		"flato": "initial elo: 6.667, new elo: 6.905, rating change: 0.238",
+		"yasashiikumo": "initial elo: 6.389, new elo: 6.597, rating change: 0.208",
+		"porte": "initial elo: 3.647, new elo: 3.864, rating change: 0.218",
+		"civiltwlight": "initial elo: 16.303, new elo: 16.101, rating change: -0.202",
+		"fumiii": "initial elo: 6.013, new elo: 5.820, rating change: -0.193",
+		"xeyz": "initial elo: 2.291, new elo: 2.070, rating change: -0.221",
+		"tateyamaayano": "initial elo: -0.194, new elo: -0.432, rating change: -0.239"
 	}
 }

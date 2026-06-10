@@ -10,6 +10,7 @@ from datetime import datetime
 from modules.support.changelogMVPs import format_mvps, makeChangelog
 from modules.support.cleanData import clean_data, mini_clean
 from modules.support.computeRanks import compute_ranks
+from modules.support.readElos import load_elos, rank_dict_from_frame, save_elos
 from modules.support.trim import get_normalization_spec, get_tiers
 
 
@@ -75,7 +76,7 @@ def generate_mvps_for_tour(tour: dict, selected_tour_id: str | None = None) -> s
         selected_stats_timestamp,
     )
     if old_elos:
-        (state_path / "mvp_current_elos.json").write_text(json.dumps(old_elos, indent=4), encoding="utf-8")
+        save_elos(old_elos, state_path / "mvp_current_elos.json", key_format="composite")
 
     last_tour_ranks = compute_ranks(
         last_tour,
@@ -91,7 +92,7 @@ def generate_mvps_for_tour(tour: dict, selected_tour_id: str | None = None) -> s
         isWatched=stats_type.startswith("watched"),
         isMVP=True,
     )
-    last_tour_dict = dict(zip(last_tour_ranks["PlayerName"], last_tour_ranks["ELO"]))
+    last_tour_dict = rank_dict_from_frame(last_tour_ranks)
     output = format_mvps(last_tour_dict, old_elos)
     (state_path / "mvps.txt").write_text(output, encoding="utf-8")
     selected_rank_dict = ranks_through_timestamp(
@@ -147,12 +148,11 @@ def update_dry_elos_for_tour(tour: dict) -> dict[str, float]:
     old_elos = {}
     if elos_path.exists():
         try:
-            with elos_path.open(encoding="utf-8") as f:
-                old_elos = json.load(f)
+            old_elos = load_elos(elos_path, idtable, key_format="composite")
         except (OSError, json.JSONDecodeError):
             old_elos = {}
     if old_elos:
-        (state_path / "mvp_current_elos.json").write_text(json.dumps(old_elos, indent=4), encoding="utf-8")
+        save_elos(old_elos, state_path / "mvp_current_elos.json", key_format="composite")
 
     tier_cfg = tour.get("tiermaker", {})
     alpha = tier_cfg.get("alpha", 3.75)
@@ -190,8 +190,8 @@ def update_dry_elos_for_tour(tour: dict) -> dict[str, float]:
         wrpath=state_path / "stats_prewinrate.csv",
     )
     final_ranks.to_csv(state_path / "stats_postnormalized.csv", index=False, encoding="utf-8")
-    rank_dict = {name: round(float(elo), 3) for name, elo in zip(final_ranks["PlayerName"], final_ranks["ELO"])}
-    elos_path.write_text(json.dumps(rank_dict, indent=4), encoding="utf-8")
+    rank_dict = rank_dict_from_frame(final_ranks)
+    save_elos(rank_dict, elos_path, key_format="composite")
     makeChangelog(rank_dict, old_elos, state_path / "changelog.txt")
 
     sheet_cfg = tour.get("sheet", {})
@@ -214,8 +214,7 @@ def old_elos_for_mvp(state_path: Path) -> dict[str, float]:
         if not path.exists():
             continue
         try:
-            with path.open(encoding="utf-8") as f:
-                return {player: float(elo) for player, elo in json.load(f).items()}
+            return load_elos(path, state_path / "ids.csv", key_format="composite")
         except (OSError, ValueError, json.JSONDecodeError):
             continue
     return {}
@@ -429,8 +428,7 @@ def old_ranks_for_mvp(
     saved_elos = {}
     if elos_path.exists():
         try:
-            with elos_path.open(encoding="utf-8") as f:
-                saved_elos = {player: float(elo) for player, elo in json.load(f).items()}
+            saved_elos = load_elos(elos_path, idtable, key_format="composite")
         except (OSError, ValueError, json.JSONDecodeError):
             saved_elos = {}
     current_stats = mini_clean(str(idtable), str(statstable), stats_type)
@@ -462,7 +460,7 @@ def old_ranks_for_mvp(
         isWatched=stats_type.startswith("watched"),
         isMVP=False,
     )
-    return dict(zip(baseline_ranks["PlayerName"], baseline_ranks["ELO"]))
+    return rank_dict_from_frame(baseline_ranks)
 
 
 def ranks_through_timestamp(
@@ -507,4 +505,4 @@ def ranks_through_timestamp(
         isWatched=stats_type.startswith("watched"),
         isMVP=False,
     )
-    return dict(zip(selected_ranks["PlayerName"], selected_ranks["ELO"]))
+    return rank_dict_from_frame(selected_ranks)

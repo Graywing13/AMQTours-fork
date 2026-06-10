@@ -2,6 +2,7 @@ from itertools import combinations
 import json
 import os
 import pandas as pd
+from modules.support.readElos import load_elos, normalize_player_id
 
 def getAliases(ALIAS_PATH):
     """Deprecated function"""
@@ -23,8 +24,7 @@ def getAliasesDF(idtable):
         elos_path = os.path.join(directory, "elos.json")
         aliases_path = os.path.join(os.path.dirname(os.path.dirname(directory)), "aliases.txt")
         if os.path.exists(elos_path):
-            with open(elos_path, encoding="utf-8") as f:
-                elo_names = [name.strip().lower() for name in json.load(f)]
+            elo_names = list(load_elos(elos_path, key_format="name"))
             name_to_id = {name: idx for idx, name in enumerate(elo_names, 1)}
             rows = [{"Player Name": name, "Player ID": player_id} for name, player_id in name_to_id.items()]
             seen_names = set(elo_names)
@@ -51,12 +51,16 @@ def getAliasesID(idtable, player_key):
     return alias_to_id.get(player_key.strip().lower())
 
 def getAliasesFirstName(idtable, player_id):
+    idtable["Player ID"] = idtable["Player ID"].map(normalize_player_id)
+    player_id = normalize_player_id(player_id)
     id_to_primary_name = idtable.groupby("Player ID")["Player Name"].first().to_dict()
 
     return id_to_primary_name.get(player_id)
 
 def getAliasesAllNames(idtable, player_id):
     idtable["Player Name"] = idtable["Player Name"].astype(str).str.strip().str.lower()
+    idtable["Player ID"] = idtable["Player ID"].map(normalize_player_id)
+    player_id = normalize_player_id(player_id)
     id_to_all_names = idtable.groupby("Player ID")["Player Name"].apply(list).to_dict()
     
     return id_to_all_names.get(player_id, [])

@@ -30,8 +30,7 @@
 		"yajfx27w",
 		"wua8fhkz",
 		"tnmhrm8c",
-		"lwpl4k59",
-		"t6vrr7nl"
+		"lwpl4k59"
 	],
 	"ratings": {
 		"shiinamahiru": {
@@ -43,12 +42,12 @@
 			"sigma": 3.293555854522548
 		},
 		"zokie": {
-			"mu": 10.60691450927877,
-			"sigma": 2.4254328984493654
+			"mu": 10.646510492338468,
+			"sigma": 2.4796855286489556
 		},
 		"justaweirdo": {
-			"mu": 7.581877975433453,
-			"sigma": 2.2621192303135356
+			"mu": 7.895153304072302,
+			"sigma": 2.3031365339763274
 		},
 		"progenitor": {
 			"mu": 13.12115025261072,
@@ -71,28 +70,28 @@
 			"sigma": 2.8608579455572833
 		},
 		"legrandort": {
-			"mu": 8.410752402437316,
-			"sigma": 2.0121347578262347
+			"mu": 8.430943919742006,
+			"sigma": 2.036347237645218
 		},
 		"chommy": {
 			"mu": 11.409629360251797,
 			"sigma": 2.740695294754428
 		},
 		"xeyz": {
-			"mu": -0.13395176503873515,
-			"sigma": 2.9307390907786472
+			"mu": -0.09227838742518876,
+			"sigma": 3.0393624805209507
 		},
 		"lika": {
-			"mu": 13.314937912065805,
-			"sigma": 3.090348827104436
+			"mu": 13.360947437977867,
+			"sigma": 3.2207589459007067
 		},
 		"shadow": {
-			"mu": 11.10933348066682,
-			"sigma": 2.4396521437972987
+			"mu": 11.477859102690896,
+			"sigma": 2.495116021846519
 		},
 		"patoche49": {
-			"mu": 5.23104986755464,
-			"sigma": 2.506838986621357
+			"mu": 4.766956984637649,
+			"sigma": 2.567811328422769
 		},
 		"anicomi": {
 			"mu": 9.761577506444416,
@@ -131,16 +130,16 @@
 			"sigma": 2.874515740785084
 		},
 		"annayanami": {
-			"mu": 13.55479591064513,
-			"sigma": 2.301673614083473
+			"mu": 13.590083777591326,
+			"sigma": 2.345749874705232
 		},
 		"yashadox": {
 			"mu": 4.143810729156116,
 			"sigma": 3.557537151616246
 		},
 		"inta": {
-			"mu": 8.77415207891274,
-			"sigma": 3.0807659836662937
+			"mu": 9.389366686301663,
+			"sigma": 3.208872804084529
 		},
 		"unborned": {
 			"mu": 2.18400589235108,
@@ -199,8 +198,8 @@
 			"sigma": 3.5062298988053584
 		},
 		"spitzell": {
-			"mu": 8.101343998085863,
-			"sigma": 2.4585103688215866
+			"mu": 8.47604994045023,
+			"sigma": 2.5156355086269815
 		},
 		"jakemonkey": {
 			"mu": 14.553722500710721,
@@ -239,8 +238,8 @@
 			"sigma": 3.5974887363791477
 		},
 		"catge": {
-			"mu": 11.074596627587916,
-			"sigma": 2.4368963301991093
+			"mu": 10.637901249939137,
+			"sigma": 2.4916381028264887
 		},
 		"omaisfraco": {
 			"mu": 11.071529908578297,
@@ -291,8 +290,8 @@
 			"sigma": 3.8143487738748316
 		},
 		"icefeed2": {
-			"mu": 3.5474601995659993,
-			"sigma": 2.6525224384661956
+			"mu": 3.595788836370709,
+			"sigma": 2.728306014845642
 		},
 		"zarelyyyx": {
 			"mu": 8.712715551474528,
@@ -347,8 +346,8 @@
 			"sigma": 3.443503753096169
 		},
 		"mangoss": {
-			"mu": 15.54343521835571,
-			"sigma": 2.912220700246721
+			"mu": 15.58461496662054,
+			"sigma": 3.018477130131093
 		},
 		"thjalago": {
 			"mu": 5.472447928444765,
@@ -487,8 +486,8 @@
 			"sigma": 3.7703049067466763
 		},
 		"gabetin": {
-			"mu": 9.43367180702155,
-			"sigma": 3.553303272625643
+			"mu": 9.529540414921907,
+			"sigma": 3.7612798262042317
 		},
 		"renzou": {
 			"mu": 9.538726250830255,
@@ -529,14 +528,6 @@
 		"arpia97": {
 			"mu": 4.043182501775478,
 			"sigma": 3.766692101604108
-		},
-		"maikasasaki": {
-			"mu": 9.641247623613717,
-			"sigma": 3.7522109074488252
-		},
-		"tbdhater": {
-			"mu": 11.141247623613719,
-			"sigma": 3.7522109074488252
 		}
 	},
 	"elo_history": [
@@ -1411,34 +1402,6 @@
 				"ss_r_white_pony": "initial elo: 11.543, new elo: 8.389, rating change: -3.154",
 				"justaweirdo": "initial elo: 9.181, new elo: 7.895, rating change: -1.286",
 				"chrislefko": "initial elo: 5.664, new elo: 2.799, rating change: -2.865"
-			}
-		},
-		{
-			"tour_id": "t6vrr7nl",
-			"time": "2026-06-01 19:06:00+02:00",
-			"teams": {
-				"annayanami (13.59) zokie (10.65) gabetin (9.53) icefeed2 (3.60) = 37.36": "3W 3L 0D",
-				"maikasasaki (8.50) catge (10.64) tbdhater (10.00) patoche49 (4.77) = 33.90": "4W 2L 0D",
-				"mangoss (15.58) lika (13.36) legrandort (8.43) xeyz (-0.09) = 37.28": "3W 3L 0D",
-				"shadow (11.48) inta (9.39) spitzell (8.48) justaweirdo (7.90) = 37.24": "2W 4L 0D"
-			},
-			"player": {
-				"annayanami": "initial elo: 13.590, new elo: 13.555, rating change: -0.035",
-				"zokie": "initial elo: 10.647, new elo: 10.607, rating change: -0.040",
-				"gabetin": "initial elo: 9.530, new elo: 9.434, rating change: -0.096",
-				"icefeed2": "initial elo: 3.596, new elo: 3.547, rating change: -0.048",
-				"maikasasaki": "initial elo: 8.500, new elo: 9.641, rating change: 1.141",
-				"catge": "initial elo: 10.638, new elo: 11.075, rating change: 0.437",
-				"tbdhater": "initial elo: 10.000, new elo: 11.141, rating change: 1.141",
-				"patoche49": "initial elo: 4.767, new elo: 5.231, rating change: 0.464",
-				"mangoss": "initial elo: 15.585, new elo: 15.543, rating change: -0.041",
-				"lika": "initial elo: 13.361, new elo: 13.315, rating change: -0.046",
-				"legrandort": "initial elo: 8.431, new elo: 8.411, rating change: -0.020",
-				"xeyz": "initial elo: -0.092, new elo: -0.134, rating change: -0.042",
-				"shadow": "initial elo: 11.478, new elo: 11.109, rating change: -0.369",
-				"inta": "initial elo: 9.389, new elo: 8.774, rating change: -0.615",
-				"spitzell": "initial elo: 8.476, new elo: 8.101, rating change: -0.375",
-				"justaweirdo": "initial elo: 7.895, new elo: 7.582, rating change: -0.313"
 			}
 		}
 	]

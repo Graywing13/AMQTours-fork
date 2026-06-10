@@ -109,32 +109,7 @@
 		"org3ezu0",
 		"498cf704",
 		"pzmul3pp",
-		"1k3h2aj1",
-		"gese29oc",
-		"xeu5hi5v",
-		"ftsnqhwp",
-		"bj9x3tp5",
-		"3eqa6uha",
-		"247u37ol",
-		"9xfx1i4x",
-		"gax0eeas",
-		"3y7ctl4g",
-		"ozaxl99p",
-		"upvk95xj",
-		"v56vzod9",
-		"9vrxtj1q",
-		"wu3gx91r",
-		"u95gg9pq",
-		"8s8z4vp1",
-		"fncqj6wc",
-		"saog6m2t",
-		"vcnrabf",
-		"arnn1s58",
-		"w3xqh23m",
-		"ei7etas0",
-		"5fwpgfqu",
-		"78r6cq4r",
-		"hfhde650"
+		"1k3h2aj1"
 	],
 	"ratings": {
 		"mageflamefreeze": {
@@ -150,56 +125,56 @@
 			"sigma": 2.6457258124673118
 		},
 		"hihi": {
-			"mu": 12.241576358984513,
-			"sigma": 2.679419532092373
+			"mu": 11.428056267386761,
+			"sigma": 2.7359123948858346
 		},
 		"pleasety": {
 			"mu": 8.248714428458094,
 			"sigma": 2.6928040252485284
 		},
 		"hubcioskubcio": {
-			"mu": 5.676571176574426,
-			"sigma": 2.6421287686394885
+			"mu": 6.8642659042873975,
+			"sigma": 2.6851624698482373
 		},
 		"uy5gf": {
-			"mu": 11.273784532194913,
-			"sigma": 2.6304326309364163
+			"mu": 10.944343235348446,
+			"sigma": 2.6422985520391924
 		},
 		"thaleko": {
-			"mu": 20.487405874868355,
-			"sigma": 2.6934385849327525
+			"mu": 15.863511900571513,
+			"sigma": 2.630044782930907
 		},
 		"seismic": {
 			"mu": 8.600901466668104,
 			"sigma": 2.708483307311323
 		},
 		"legrandort": {
-			"mu": 7.50705907316169,
-			"sigma": 2.6710981301207544
+			"mu": 10.133156354437235,
+			"sigma": 2.6911317079047747
 		},
 		"bommie": {
-			"mu": 6.375450986494805,
-			"sigma": 2.6805980054871426
+			"mu": 6.957897587204847,
+			"sigma": 2.6452360339113175
 		},
 		"md22": {
 			"mu": 8.072978718090502,
 			"sigma": 2.655276493800843
 		},
 		"jakemonkey": {
-			"mu": 13.318122860283088,
-			"sigma": 2.6843781385342234
+			"mu": 14.833126584643304,
+			"sigma": 2.673790647729825
 		},
 		"mythandroid": {
-			"mu": 3.304608069669189,
-			"sigma": 2.6471119775738834
+			"mu": 4.907142701531668,
+			"sigma": 2.652616858141929
 		},
 		"neoburnz": {
-			"mu": 15.7957002936799,
-			"sigma": 2.6488870820224992
+			"mu": 16.092790920305834,
+			"sigma": 2.667096365989657
 		},
 		"yashadox": {
-			"mu": 3.006244956970402,
-			"sigma": 2.6883902545667278
+			"mu": 4.155783016207465,
+			"sigma": 2.658892790752122
 		},
 		"fuj": {
 			"mu": 10.306386132612893,
@@ -210,40 +185,40 @@
 			"sigma": 2.939200695195334
 		},
 		"torradinhas": {
-			"mu": 11.84504270959714,
-			"sigma": 2.82093711647779
+			"mu": 11.213055184736891,
+			"sigma": 2.939200695195334
 		},
 		"kirox": {
 			"mu": 8.50938707313186,
 			"sigma": 2.892308688825565
 		},
 		"anotherwish": {
-			"mu": 6.02290559225615,
-			"sigma": 2.6928019361224282
+			"mu": 4.92135315846068,
+			"sigma": 2.66481643249495
 		},
 		"bamboo": {
 			"mu": 10.178701954285865,
 			"sigma": 2.8416702250235653
 		},
 		"zental": {
-			"mu": 11.44851424804916,
-			"sigma": 2.673837299778443
+			"mu": 10.193988957796622,
+			"sigma": 2.7202521299645364
 		},
 		"tsui": {
-			"mu": 15.588257791851838,
-			"sigma": 2.6206302359724694
+			"mu": 14.990153044735932,
+			"sigma": 2.6762913731918263
 		},
 		"julialess64": {
-			"mu": 10.211605448295115,
-			"sigma": 2.677733844125784
+			"mu": 9.942881399185307,
+			"sigma": 2.676044895719255
 		},
 		"wolbachia": {
 			"mu": 11.346652342722571,
 			"sigma": 2.74284527527994
 		},
 		"hejsan": {
-			"mu": 12.540279232057316,
-			"sigma": 2.7470945513524963
+			"mu": 13.950001649040171,
+			"sigma": 2.884952443707433
 		},
 		"lelpop": {
 			"mu": 8.929184124147582,
@@ -258,40 +233,40 @@
 			"sigma": 2.792362815532229
 		},
 		"maki04": {
-			"mu": 15.654512095930503,
-			"sigma": 2.622884844629136
+			"mu": 11.57355880993985,
+			"sigma": 2.7078013151591938
 		},
 		"fortnayt": {
-			"mu": 18.302078135163477,
-			"sigma": 2.6107220200030117
+			"mu": 19.023019326371944,
+			"sigma": 2.6606832567202727
 		},
 		"iamasiannoob": {
-			"mu": 7.269187983872139,
-			"sigma": 2.6429012891150077
+			"mu": 4.724538958251278,
+			"sigma": 2.640929159630224
 		},
 		"vuhrculls": {
 			"mu": 7.81739903714762,
 			"sigma": 2.666572174911639
 		},
 		"janoxx": {
-			"mu": 11.999528863785796,
-			"sigma": 2.6165301137525905
+			"mu": 13.698213477909194,
+			"sigma": 2.6542079747367993
 		},
 		"shelterrin": {
-			"mu": 6.819535136659575,
-			"sigma": 2.7668813646042385
+			"mu": 9.136874318354115,
+			"sigma": 2.7627952279907597
 		},
 		"floth": {
 			"mu": 14.73118593136165,
 			"sigma": 2.6606095719641676
 		},
 		"shiinamahiru": {
-			"mu": 14.61712417751276,
-			"sigma": 2.6946427831192974
+			"mu": 17.573700549179645,
+			"sigma": 2.652018955517852
 		},
 		"mayottatoki": {
-			"mu": 7.602118325101734,
-			"sigma": 2.7245626550410584
+			"mu": 8.256078002291783,
+			"sigma": 2.7758890410258963
 		},
 		"c_clearlybored": {
 			"mu": 9.4525500195828,
@@ -302,52 +277,52 @@
 			"sigma": 2.7219197948996796
 		},
 		"mahzrunner": {
-			"mu": 9.719347488011595,
-			"sigma": 2.6721820607593285
+			"mu": 8.677781286919668,
+			"sigma": 2.6791277276652283
 		},
 		"9lives": {
 			"mu": 7.780812918126725,
 			"sigma": 2.952166416503529
 		},
 		"chrislefko": {
-			"mu": 10.004262081323859,
-			"sigma": 2.639881853831363
+			"mu": 6.816066364134256,
+			"sigma": 2.667357189310337
 		},
 		"justaweirdo": {
 			"mu": 2.313442291879652,
 			"sigma": 2.6552401864333
 		},
 		"emdiel": {
-			"mu": 15.269988673058563,
-			"sigma": 2.622072074734911
+			"mu": 15.208231307122908,
+			"sigma": 2.6227500635209946
 		},
 		"mami": {
-			"mu": 17.08680317200273,
-			"sigma": 2.6302280194610708
+			"mu": 16.687956860196266,
+			"sigma": 2.6413534815147877
 		},
 		"dking20": {
-			"mu": 9.480193479523273,
-			"sigma": 2.6923823626508074
+			"mu": 10.15215544402996,
+			"sigma": 2.733450352286109
 		},
 		"mika_tw": {
 			"mu": 8.200271859499594,
 			"sigma": 2.64554619543804
 		},
 		"fumiii": {
-			"mu": 11.269333166062486,
-			"sigma": 2.6487495750681473
+			"mu": 12.574779587133305,
+			"sigma": 2.7112651899578966
 		},
 		"progenitor": {
-			"mu": 16.132519669377956,
-			"sigma": 2.642349765553311
+			"mu": 15.215620736789825,
+			"sigma": 2.6769217000318077
 		},
 		"animerod": {
 			"mu": 7.771653226305633,
 			"sigma": 2.8349015024821274
 		},
 		"apurplenose": {
-			"mu": 14.579865237365008,
-			"sigma": 2.638696964144869
+			"mu": 14.837382081012892,
+			"sigma": 2.645724718013276
 		},
 		"dounutbeater": {
 			"mu": 11.814204475956489,
@@ -358,8 +333,8 @@
 			"sigma": 2.6550163929691046
 		},
 		"chemist": {
-			"mu": 11.131116844298733,
-			"sigma": 2.6144017713736627
+			"mu": 11.376161302712324,
+			"sigma": 2.6265094813702508
 		},
 		"renzou": {
 			"mu": 14.688587151451886,
@@ -370,8 +345,8 @@
 			"sigma": 2.6598544631636876
 		},
 		"yasashiikumo": {
-			"mu": 14.453128609856275,
-			"sigma": 2.6339126266469775
+			"mu": 15.498158592411466,
+			"sigma": 2.676915921556155
 		},
 		"bigsmo": {
 			"mu": 5.841547483607525,
@@ -386,8 +361,8 @@
 			"sigma": 2.7748836150850313
 		},
 		"ss_r_white_pony": {
-			"mu": 12.209888139071422,
-			"sigma": 2.652522205084895
+			"mu": 10.484706217357418,
+			"sigma": 2.6565190964169014
 		},
 		"vortex": {
 			"mu": 8.770808020611073,
@@ -438,24 +413,24 @@
 			"sigma": 2.6352868057001144
 		},
 		"atsui": {
-			"mu": 10.295397881933486,
-			"sigma": 2.6567321015860346
+			"mu": 10.893568592034377,
+			"sigma": 2.702072808675014
 		},
 		"bop": {
 			"mu": 11.472988151786494,
 			"sigma": 2.846869818212584
 		},
 		"skychael": {
-			"mu": -1.0920121176076285,
-			"sigma": 2.6498381289535478
+			"mu": 1.0784609460209853,
+			"sigma": 2.6664389174182306
 		},
 		"monkeygangleader": {
 			"mu": 12.17886853242528,
 			"sigma": 2.7651434838470283
 		},
 		"fujimasakura": {
-			"mu": 10.268658634488256,
-			"sigma": 2.7216286764662723
+			"mu": 10.64663175804461,
+			"sigma": 2.7680427439149398
 		},
 		"neumann": {
 			"mu": 19.731756330888768,
@@ -470,12 +445,12 @@
 			"sigma": 2.8019503715000305
 		},
 		"moltenashes": {
-			"mu": 9.50792058646891,
-			"sigma": 2.644337395889346
+			"mu": 10.123598639487629,
+			"sigma": 2.6703857441383407
 		},
 		"nephirea": {
-			"mu": 16.822761481531288,
-			"sigma": 2.660886244957164
+			"mu": 16.14340734371999,
+			"sigma": 2.643279638544903
 		},
 		"kaededayo": {
 			"mu": 12.691794951453094,
@@ -486,28 +461,28 @@
 			"sigma": 2.6545327559537197
 		},
 		"patoche49": {
-			"mu": 12.971534504975718,
-			"sigma": 2.605729615511643
+			"mu": 13.041655139395447,
+			"sigma": 2.6625519217218896
 		},
 		"shadow": {
-			"mu": 9.778817804437058,
-			"sigma": 2.650283021697204
+			"mu": 8.642037021671854,
+			"sigma": 2.657116935904295
 		},
 		"yunnn": {
-			"mu": 8.238442186742972,
-			"sigma": 2.7488363358577685
+			"mu": 8.851207930929892,
+			"sigma": 2.9121241301566605
 		},
 		"oolli": {
-			"mu": 6.012037229176995,
-			"sigma": 2.6371822961755282
+			"mu": 7.462808799429524,
+			"sigma": 2.6299476814973706
 		},
 		"python": {
 			"mu": 8.192733900638633,
 			"sigma": 2.8923314048790414
 		},
 		"comete": {
-			"mu": 7.539649729636797,
-			"sigma": 2.732494441923218
+			"mu": 9.12257028941743,
+			"sigma": 2.736588105202083
 		},
 		"theyingster": {
 			"mu": 12.396037204326314,
@@ -546,8 +521,8 @@
 			"sigma": 2.875551380090174
 		},
 		"anonimus_opinion": {
-			"mu": 7.191878661036806,
-			"sigma": 2.73869044751635
+			"mu": 5.721755167459449,
+			"sigma": 2.759886821543652
 		},
 		"mangalodon": {
 			"mu": 8.166973858241736,
@@ -562,8 +537,8 @@
 			"sigma": 2.755616579706648
 		},
 		"shiroganelily": {
-			"mu": 14.185322410140095,
-			"sigma": 2.6123877089980683
+			"mu": 13.959681523576581,
+			"sigma": 2.617098901748793
 		},
 		"thjalago": {
 			"mu": 13.0540418141076,
@@ -582,32 +557,32 @@
 			"sigma": 2.8241330358916166
 		},
 		"xeyz": {
-			"mu": -3.880584405011758,
-			"sigma": 2.634201045636261
+			"mu": -3.2633521283228215,
+			"sigma": 2.644804545937147
 		},
 		"tapumomo": {
-			"mu": 12.592806016897022,
-			"sigma": 2.6240455700481946
+			"mu": 15.696368333977508,
+			"sigma": 2.6444138355451474
 		},
 		"alkios": {
 			"mu": 8.435630244240864,
 			"sigma": 2.761525467263663
 		},
 		"math1234": {
-			"mu": 12.365164927607006,
-			"sigma": 2.7665192373241525
+			"mu": 11.0933668456682,
+			"sigma": 2.7999053132098615
 		},
 		"tskr": {
 			"mu": 8.483821026928474,
 			"sigma": 2.7845060175103398
 		},
 		"ksante4700hp": {
-			"mu": 13.808171623051752,
-			"sigma": 2.664864704177542
+			"mu": 14.552199408192147,
+			"sigma": 2.6588611255418284
 		},
 		"2skr": {
-			"mu": 3.6557492748909097,
-			"sigma": 2.619214922429503
+			"mu": 4.287730354267726,
+			"sigma": 2.640436000498036
 		},
 		"hadarios": {
 			"mu": 8.25098433127493,
@@ -626,8 +601,8 @@
 			"sigma": 2.8970378884685934
 		},
 		"catge": {
-			"mu": 9.863856710136021,
-			"sigma": 2.64480721168912
+			"mu": 12.601781024615413,
+			"sigma": 2.69045146490842
 		},
 		"pengvinen": {
 			"mu": 9.377334485570533,
@@ -642,8 +617,8 @@
 			"sigma": 2.8962955076553323
 		},
 		"miiarad": {
-			"mu": 8.738841275911213,
-			"sigma": 2.73280887653372
+			"mu": 7.022989245986069,
+			"sigma": 2.7403981659548946
 		},
 		"auriel": {
 			"mu": 10.363964298892995,
@@ -654,16 +629,16 @@
 			"sigma": 2.8031650263107917
 		},
 		"tateyama_ayano": {
-			"mu": 6.489756623254342,
-			"sigma": 2.652179324536499
+			"mu": 9.010470346527342,
+			"sigma": 2.719989487445765
 		},
 		"oshino_bu": {
 			"mu": 6.669576798101485,
 			"sigma": 2.78398732871974
 		},
 		"sssthnoob": {
-			"mu": 12.591132481092862,
-			"sigma": 2.6123561981953873
+			"mu": 8.870611675890565,
+			"sigma": 2.646909789510464
 		},
 		"cania": {
 			"mu": 10.228925623688921,
@@ -682,12 +657,12 @@
 			"sigma": 2.889143994234327
 		},
 		"chommy": {
-			"mu": 10.829745965243129,
-			"sigma": 2.650096630405391
+			"mu": 11.75767442508006,
+			"sigma": 2.673629945304834
 		},
 		"hmsuis": {
-			"mu": 14.304800627057668,
-			"sigma": 2.6510905047192064
+			"mu": 14.339896806412455,
+			"sigma": 2.6746594621887416
 		},
 		"i_dont_like_loli": {
 			"mu": 11.707481981719235,
@@ -698,24 +673,24 @@
 			"sigma": 2.810860224700813
 		},
 		"ruuka": {
-			"mu": 8.301376985192984,
-			"sigma": 2.8175584988016635
+			"mu": 7.513407363455453,
+			"sigma": 2.945752292847738
 		},
 		"potassiumf": {
-			"mu": 5.761283906523184,
-			"sigma": 2.6421822502752024
+			"mu": 6.053547125794685,
+			"sigma": 2.665641722131381
 		},
 		"florenz": {
 			"mu": 9.984024182749787,
 			"sigma": 2.8695912432019646
 		},
 		"naizuri": {
-			"mu": 10.736794519244732,
-			"sigma": 2.6905288260713722
+			"mu": 9.989537270656587,
+			"sigma": 2.7403069652572305
 		},
 		"chaabdu92": {
-			"mu": 12.973708606240988,
-			"sigma": 2.647585826498471
+			"mu": 10.855269091373248,
+			"sigma": 2.6477693103050277
 		},
 		"stunar": {
 			"mu": 12.780181185400469,
@@ -726,16 +701,16 @@
 			"sigma": 2.652112537615074
 		},
 		"porte": {
-			"mu": 12.033071668338682,
-			"sigma": 2.6548557621476077
+			"mu": 14.07546626935586,
+			"sigma": 2.6408440874882393
 		},
 		"qwecocacola": {
-			"mu": 6.519046955413733,
-			"sigma": 2.639710740421459
+			"mu": 6.7052115983519505,
+			"sigma": 2.664985308700292
 		},
 		"deafness": {
-			"mu": 13.96490432159331,
-			"sigma": 2.6415595709427038
+			"mu": 13.483751208968645,
+			"sigma": 2.702024128949969
 		},
 		"asleep": {
 			"mu": 9.529501724908695,
@@ -758,8 +733,8 @@
 			"sigma": 2.9238817715857364
 		},
 		"spitzell": {
-			"mu": 13.763757010239964,
-			"sigma": 2.639386329811191
+			"mu": 9.284883566493725,
+			"sigma": 2.6912825941772587
 		},
 		"jamalamadingdong": {
 			"mu": 8.231826899735786,
@@ -770,8 +745,8 @@
 			"sigma": 2.701324585378203
 		},
 		"arpia97": {
-			"mu": 2.6287066674151656,
-			"sigma": 2.7185082808531047
+			"mu": 2.8460008318564536,
+			"sigma": 2.798952280438569
 		},
 		"neptune": {
 			"mu": 13.110787357709443,
@@ -802,20 +777,20 @@
 			"sigma": 2.7340086334472526
 		},
 		"cipherkai": {
-			"mu": 9.163863473041125,
-			"sigma": 2.6731468203149342
+			"mu": 10.207050870443883,
+			"sigma": 2.6837083142173634
 		},
 		"icefeed2": {
-			"mu": 9.429824524939688,
-			"sigma": 2.6242522912921937
+			"mu": 7.33767636589268,
+			"sigma": 2.658565111215767
 		},
 		"goko8765": {
 			"mu": 8.549038491084213,
 			"sigma": 2.793482894794038
 		},
 		"kyuuuu": {
-			"mu": 1.646831128730315,
-			"sigma": 2.658849171285287
+			"mu": 4.767760195346887,
+			"sigma": 2.643924347857158
 		},
 		"claydoll1091": {
 			"mu": 12.677894779275523,
@@ -826,16 +801,16 @@
 			"sigma": 2.6825199030960722
 		},
 		"spartric": {
-			"mu": 6.72089485566842,
-			"sigma": 2.6407225922663686
+			"mu": 7.290548433594308,
+			"sigma": 2.6579875757833253
 		},
 		"jabro": {
 			"mu": 8.553492353686416,
 			"sigma": 2.8851551797077764
 		},
 		"beautiful": {
-			"mu": 8.49247822992557,
-			"sigma": 2.707973509638976
+			"mu": 10.13562289459396,
+			"sigma": 2.7977232168800605
 		},
 		"eryth": {
 			"mu": 10.780695478347344,
@@ -862,16 +837,16 @@
 			"sigma": 2.966306189569471
 		},
 		"zokie": {
-			"mu": 8.4882754449087,
-			"sigma": 2.605621807813432
+			"mu": 7.68640579638714,
+			"sigma": 2.6443474698518585
 		},
 		"eljuanchi": {
-			"mu": 4.294841926656814,
-			"sigma": 2.6453375656378433
+			"mu": 6.202718340800493,
+			"sigma": 2.661299536078271
 		},
 		"annayanami": {
-			"mu": 12.973776662871192,
-			"sigma": 2.6298739442544243
+			"mu": 8.887622327214563,
+			"sigma": 2.6712308283923427
 		},
 		"bella": {
 			"mu": 9.2736675381028,
@@ -882,24 +857,24 @@
 			"sigma": 2.8473220591379325
 		},
 		"foopypoopy": {
-			"mu": 3.124053286009556,
-			"sigma": 2.7216439553573606
+			"mu": 4.3774704493169345,
+			"sigma": 2.79568163725899
 		},
 		"lika": {
-			"mu": 19.502903361686215,
-			"sigma": 2.640721951651864
+			"mu": 16.474378589849454,
+			"sigma": 2.659250386834766
 		},
 		"keysha18": {
-			"mu": 3.2725854151713127,
-			"sigma": 2.6782263269093174
+			"mu": 4.111653883842405,
+			"sigma": 2.6957947983495387
 		},
 		"liljakatsuragi": {
-			"mu": 8.29536210343342,
-			"sigma": 2.6993146178884992
+			"mu": 10.03601282439899,
+			"sigma": 2.7235848879346167
 		},
 		"ideja": {
-			"mu": 15.257400407511174,
-			"sigma": 2.670924122074508
+			"mu": 15.204465720609381,
+			"sigma": 2.68156821338203
 		},
 		"inta": {
 			"mu": 7.8953640959757525,
@@ -914,12 +889,12 @@
 			"sigma": 2.6837843611988754
 		},
 		"haruurara": {
-			"mu": 8.18435133983327,
-			"sigma": 2.687697836185118
+			"mu": 7.914602501835671,
+			"sigma": 2.6912037491453913
 		},
 		"lordgrond": {
-			"mu": 6.560052762839054,
-			"sigma": 2.7256365297820957
+			"mu": 5.863687966548431,
+			"sigma": 2.791546954939074
 		},
 		"darkwarriory": {
 			"mu": 10.235017460483421,
@@ -930,8 +905,8 @@
 			"sigma": 2.814402211902395
 		},
 		"isekaijoucho": {
-			"mu": 10.085952055078467,
-			"sigma": 2.633383894229357
+			"mu": 9.393487637982146,
+			"sigma": 2.641157863780043
 		},
 		"kryuell": {
 			"mu": 9.67242602876528,
@@ -942,36 +917,36 @@
 			"sigma": 2.8810560148996665
 		},
 		"onai": {
-			"mu": 10.75232465117,
-			"sigma": 2.6477820044961518
+			"mu": 11.28070545931476,
+			"sigma": 2.69945623080887
 		},
 		"feynox_": {
 			"mu": 7.333416072261568,
 			"sigma": 2.6837430012036316
 		},
 		"hotpot": {
-			"mu": 3.1921624856850443,
-			"sigma": 2.699227429667877
+			"mu": 4.727950163511774,
+			"sigma": 2.6961352573789674
 		},
 		"loirinzz": {
-			"mu": 11.480528192140438,
-			"sigma": 2.668901229323814
+			"mu": 11.152906356084511,
+			"sigma": 2.71698447114904
 		},
 		"zarelyyyx": {
-			"mu": 6.952355253884002,
-			"sigma": 2.673458131848799
+			"mu": 6.783111217885941,
+			"sigma": 2.655424214131862
 		},
 		"dav1d1": {
-			"mu": 6.180706057305897,
-			"sigma": 2.6527156958199916
+			"mu": 6.331549882332294,
+			"sigma": 2.64381928754048
 		},
 		"narva_": {
 			"mu": 8.314497581706355,
 			"sigma": 2.9023771848750735
 		},
 		"kaorimaeda": {
-			"mu": 13.636503417355962,
-			"sigma": 2.6382572657412275
+			"mu": 11.74887700829484,
+			"sigma": 2.6765068713324736
 		},
 		"misherudesu": {
 			"mu": 10.673742624299116,
@@ -998,12 +973,12 @@
 			"sigma": 2.9042294455749262
 		},
 		"mangoss": {
-			"mu": 12.900586623199981,
-			"sigma": 2.6194430607778494
+			"mu": 9.721546129067253,
+			"sigma": 2.6868000236738987
 		},
 		"heleos": {
-			"mu": 8.131103108382957,
-			"sigma": 2.664334611642402
+			"mu": 9.76239386745205,
+			"sigma": 2.720541387112069
 		},
 		"loomi": {
 			"mu": 10.853128290574459,
@@ -1018,40 +993,40 @@
 			"sigma": 2.899336406302017
 		},
 		"brandon_k": {
-			"mu": 6.248978741111783,
-			"sigma": 2.8478277784391777
+			"mu": 8.602174531971801,
+			"sigma": 2.874174821633298
 		},
 		"harges": {
 			"mu": 9.432156491826856,
 			"sigma": 2.901364552752183
 		},
 		"whales6978": {
-			"mu": 8.056412857034127,
-			"sigma": 2.7975740820025994
+			"mu": 9.432156491826856,
+			"sigma": 2.901364552752183
 		},
 		"luna": {
-			"mu": 9.93478456433055,
-			"sigma": 2.6327168578608373
+			"mu": 8.684690790641028,
+			"sigma": 2.733818210597667
 		},
 		"janeremover": {
 			"mu": 6.351136397484918,
 			"sigma": 2.8671215428287304
 		},
 		"unborned": {
-			"mu": 9.500246761670756,
-			"sigma": 2.855620697648735
+			"mu": 11.249156740157067,
+			"sigma": 2.9244602130537767
 		},
 		"fayeurs": {
-			"mu": 19.463496960882125,
-			"sigma": 2.7194778591044706
+			"mu": 17.151305165913428,
+			"sigma": 2.726325729870825
 		},
 		"nicole": {
-			"mu": 14.918707271937784,
-			"sigma": 2.664794152329383
+			"mu": 15.492989478093723,
+			"sigma": 2.6929355909827324
 		},
 		"hakohoka": {
-			"mu": 5.993762132788533,
-			"sigma": 2.637523358941139
+			"mu": 8.933290919476397,
+			"sigma": 2.6690935594933856
 		},
 		"beanman87": {
 			"mu": 10.30425272056095,
@@ -1062,64 +1037,24 @@
 			"sigma": 2.8984088495751648
 		},
 		"zomg": {
-			"mu": 6.496198786186776,
-			"sigma": 2.743349361728365
+			"mu": 9.190965076579769,
+			"sigma": 2.7730181633840094
 		},
 		"ryoutavn": {
-			"mu": 12.166512721845846,
-			"sigma": 2.640887757013288
+			"mu": 9.077518504519508,
+			"sigma": 2.880107999007195
 		},
 		"zozo": {
-			"mu": 11.495367301184384,
-			"sigma": 2.845378263646108
+			"mu": 9.077518504519508,
+			"sigma": 2.880107999007195
 		},
 		"nunuchu42": {
 			"mu": 9.363320174044965,
 			"sigma": 2.872862129040272
 		},
 		"paperyoshi10": {
-			"mu": 10.068089310367384,
-			"sigma": 2.7282267337007013
-		},
-		"tugia": {
-			"mu": 9.900336377932572,
-			"sigma": 2.876923203369374
-		},
-		"gabetin": {
-			"mu": 10.775771216917889,
-			"sigma": 2.6344948095074807
-		},
-		"vr0003": {
-			"mu": 9.385588898602547,
-			"sigma": 2.869947077208223
-		},
-		"maikasasaki": {
-			"mu": 12.905738220810193,
-			"sigma": 2.680752965089031
-		},
-		"furlain": {
-			"mu": 11.76178340236635,
-			"sigma": 2.729185837293074
-		},
-		"redeyes": {
-			"mu": 9.05250552297035,
-			"sigma": 2.840190747909128
-		},
-		"jaimeywea": {
-			"mu": 8.240112718541253,
-			"sigma": 2.8642452734127404
-		},
-		"metak": {
-			"mu": 8.758281562869694,
-			"sigma": 2.7845323171956977
-		},
-		"akechianna": {
-			"mu": 11.177159080870874,
-			"sigma": 2.8666188485840496
-		},
-		"sabetin": {
-			"mu": 10.578371644531952,
-			"sigma": 2.873821524310939
+			"mu": 11.190975834468258,
+			"sigma": 2.872388872223332
 		}
 	},
 	"elo_history": [
@@ -4585,750 +4520,6 @@
 				"annayanami": "initial elo: 9.413, new elo: 8.888, rating change: -0.525",
 				"luna": "initial elo: 9.234, new elo: 8.685, rating change: -0.549",
 				"zokie": "initial elo: 8.202, new elo: 7.686, rating change: -0.515"
-			}
-		},
-		{
-			"tour_id": "gese29oc",
-			"time": "2026-04-07 16:30:00+03:00",
-			"teams": {
-				"yasashiikumo (15.50) ideja (15.20) zokie (7.69) dav1d1 (6.33) = 44.72": "4W 2L 0D",
-				"progenitor (15.22) tugia (10.00) heleos (9.76) mangoss (9.72) = 44.70": "2W 4L 0D",
-				"janoxx (13.70) patoche49 (13.04) chommy (11.76) eljuanchi (6.20) = 44.70": "3W 3L 0D",
-				"tsui (14.99) kaorimaeda (11.75) chemist (11.38) qwecocacola (6.71) = 44.82": "3W 3L 0D"
-			},
-			"player": {
-				"yasashiikumo": "initial elo: 15.498, new elo: 15.550, rating change: 0.052",
-				"ideja": "initial elo: 15.204, new elo: 15.257, rating change: 0.053",
-				"zokie": "initial elo: 7.686, new elo: 7.730, rating change: 0.044",
-				"dav1d1": "initial elo: 6.332, new elo: 6.375, rating change: 0.044",
-				"progenitor": "initial elo: 15.216, new elo: 15.197, rating change: -0.018",
-				"tugia": "initial elo: 10.000, new elo: 9.900, rating change: -0.100",
-				"heleos": "initial elo: 9.762, new elo: 9.734, rating change: -0.028",
-				"mangoss": "initial elo: 9.722, new elo: 9.701, rating change: -0.020",
-				"janoxx": "initial elo: 13.698, new elo: 13.853, rating change: 0.155",
-				"patoche49": "initial elo: 13.042, new elo: 13.197, rating change: 0.155",
-				"chommy": "initial elo: 11.758, new elo: 11.913, rating change: 0.155",
-				"eljuanchi": "initial elo: 6.203, new elo: 6.358, rating change: 0.155",
-				"tsui": "initial elo: 14.990, new elo: 14.804, rating change: -0.187",
-				"kaorimaeda": "initial elo: 11.749, new elo: 11.562, rating change: -0.187",
-				"chemist": "initial elo: 11.376, new elo: 11.192, rating change: -0.184",
-				"qwecocacola": "initial elo: 6.705, new elo: 6.519, rating change: -0.186"
-			}
-		},
-		{
-			"tour_id": "xeu5hi5v",
-			"time": "2026-04-08 18:30:00+03:00",
-			"teams": {
-				"legrandort (10.13) heleos (9.73) hubcioskubcio (6.86) 2skr (4.29) = 31.02": "3W 3L 0D",
-				"janoxx (13.85) dav1d1 (6.38) eljuanchi (6.36) foopypoopy (4.38) = 30.96": "0W 6L 0D",
-				"catge (12.60) chommy (11.91) mangoss (9.70) xeyz (-3.26) = 30.95": "4W 2L 0D",
-				"annayanami (8.89) zokie (7.73) spartric (7.29) miiarad (7.02) = 30.93": "5W 1L 0D"
-			},
-			"player": {
-				"legrandort": "initial elo: 10.133, new elo: 10.385, rating change: 0.252",
-				"heleos": "initial elo: 9.734, new elo: 9.987, rating change: 0.252",
-				"hubcioskubcio": "initial elo: 6.864, new elo: 7.115, rating change: 0.251",
-				"2skr": "initial elo: 4.288, new elo: 4.534, rating change: 0.246",
-				"janoxx": "initial elo: 13.853, new elo: 11.833, rating change: -2.020",
-				"dav1d1": "initial elo: 6.375, new elo: 4.338, rating change: -2.038",
-				"eljuanchi": "initial elo: 6.358, new elo: 4.332, rating change: -2.026",
-				"foopypoopy": "initial elo: 4.377, new elo: 2.140, rating change: -2.237",
-				"catge": "initial elo: 12.602, new elo: 12.757, rating change: 0.155",
-				"chommy": "initial elo: 11.913, new elo: 12.056, rating change: 0.143",
-				"mangoss": "initial elo: 9.701, new elo: 9.853, rating change: 0.152",
-				"xeyz": "initial elo: -3.263, new elo: -3.120, rating change: 0.143",
-				"annayanami": "initial elo: 8.888, new elo: 10.538, rating change: 1.650",
-				"zokie": "initial elo: 7.730, new elo: 9.358, rating change: 1.627",
-				"spartric": "initial elo: 7.291, new elo: 8.929, rating change: 1.638",
-				"miiarad": "initial elo: 7.023, new elo: 8.739, rating change: 1.716"
-			}
-		},
-		{
-			"tour_id": "ftsnqhwp",
-			"time": "2026-04-12 18:30:00+03:00",
-			"teams": {
-				"lika (16.47) hejsan (13.95) luna (8.68) 2skr (4.53) = 43.64": "2W 3L 1D",
-				"thaleko (15.86) patoche49 (13.20) zental (10.19) dav1d1 (4.34) = 43.59": "5W 1L 0D",
-				"janoxx (11.83) kaorimaeda (11.56) cipherkai (10.21) mangoss (9.85) = 43.45": "2W 4L 0D",
-				"tsui (14.80) catge (12.76) chommy (12.06) keysha18 (4.11) = 43.73": "2W 3L 1D"
-			},
-			"player": {
-				"lika": "initial elo: 16.474, new elo: 16.478, rating change: 0.004",
-				"hejsan": "initial elo: 13.950, new elo: 13.916, rating change: -0.034",
-				"luna": "initial elo: 8.685, new elo: 8.677, rating change: -0.008",
-				"2skr": "initial elo: 4.534, new elo: 4.540, rating change: 0.006",
-				"thaleko": "initial elo: 15.864, new elo: 16.737, rating change: 0.874",
-				"patoche49": "initial elo: 13.197, new elo: 14.076, rating change: 0.879",
-				"zental": "initial elo: 10.194, new elo: 11.132, rating change: 0.938",
-				"dav1d1": "initial elo: 4.338, new elo: 5.258, rating change: 0.920",
-				"janoxx": "initial elo: 11.833, new elo: 10.789, rating change: -1.044",
-				"kaorimaeda": "initial elo: 11.562, new elo: 10.538, rating change: -1.025",
-				"cipherkai": "initial elo: 10.207, new elo: 9.164, rating change: -1.043",
-				"mangoss": "initial elo: 9.853, new elo: 8.814, rating change: -1.039",
-				"tsui": "initial elo: 14.804, new elo: 14.913, rating change: 0.109",
-				"catge": "initial elo: 12.757, new elo: 12.863, rating change: 0.106",
-				"chommy": "initial elo: 12.056, new elo: 12.165, rating change: 0.109",
-				"keysha18": "initial elo: 4.112, new elo: 4.217, rating change: 0.105"
-			}
-		},
-		{
-			"tour_id": "bj9x3tp5",
-			"time": "2026-04-13 18:00:00+03:00",
-			"teams": {
-				"chommy (12.16) janoxx (10.79) mangoss (8.81) luna (8.68) = 40.44": "3W 3L 0D",
-				"lika (16.48) catge (12.86) heleos (9.99) skychael (1.08) = 40.41": "2W 4L 0D",
-				"neoburnz (16.09) tsui (14.91) mythandroid (4.91) eljuanchi (4.33) = 40.24": "3W 3L 0D",
-				"patoche49 (14.08) legrandort (10.38) sssthnoob (8.87) hubcioskubcio (7.12) = 40.45": "4W 2L 0D"
-			},
-			"player": {
-				"chommy": "initial elo: 12.165, new elo: 12.410, rating change: 0.245",
-				"janoxx": "initial elo: 10.789, new elo: 11.039, rating change: 0.250",
-				"mangoss": "initial elo: 8.814, new elo: 9.063, rating change: 0.249",
-				"luna": "initial elo: 8.677, new elo: 8.927, rating change: 0.251",
-				"lika": "initial elo: 16.478, new elo: 15.328, rating change: -1.150",
-				"catge": "initial elo: 12.863, new elo: 11.719, rating change: -1.144",
-				"heleos": "initial elo: 9.987, new elo: 8.814, rating change: -1.173",
-				"skychael": "initial elo: 1.078, new elo: -0.086, rating change: -1.165",
-				"neoburnz": "initial elo: 16.093, new elo: 16.224, rating change: 0.132",
-				"tsui": "initial elo: 14.913, new elo: 15.042, rating change: 0.129",
-				"mythandroid": "initial elo: 4.907, new elo: 5.038, rating change: 0.131",
-				"eljuanchi": "initial elo: 4.332, new elo: 4.464, rating change: 0.133",
-				"patoche49": "initial elo: 14.076, new elo: 14.843, rating change: 0.768",
-				"legrandort": "initial elo: 10.385, new elo: 11.161, rating change: 0.776",
-				"sssthnoob": "initial elo: 8.871, new elo: 9.634, rating change: 0.763",
-				"hubcioskubcio": "initial elo: 7.115, new elo: 7.889, rating change: 0.774"
-			}
-		},
-		{
-			"tour_id": "3eqa6uha",
-			"time": "2026-04-18 19:28:00+02:00",
-			"teams": {
-				"shiroganelily (13.96) spitzell (9.28) ryoutavn (9.08) 2skr (4.54) = 36.86": "3W 3L 0D",
-				"catge (11.72) fujimasakura (10.65) sssthnoob (9.63) mythandroid (5.04) = 37.04": "3W 3L 0D",
-				"jakemonkey (14.83) spartric (8.93) shadow (8.64) hotpot (4.73) = 37.13": "1W 5L 0D",
-				"chommy (12.41) maki04 (11.57) heleos (8.81) keysha18 (4.22) = 37.01": "5W 1L 0D"
-			},
-			"player": {
-				"shiroganelily": "initial elo: 13.960, new elo: 14.577, rating change: 0.617",
-				"spitzell": "initial elo: 9.285, new elo: 9.915, rating change: 0.630",
-				"ryoutavn": "initial elo: 9.078, new elo: 9.738, rating change: 0.661",
-				"2skr": "initial elo: 4.540, new elo: 5.160, rating change: 0.620",
-				"catge": "initial elo: 11.719, new elo: 11.357, rating change: -0.362",
-				"fujimasakura": "initial elo: 10.647, new elo: 10.269, rating change: -0.378",
-				"sssthnoob": "initial elo: 9.634, new elo: 9.272, rating change: -0.362",
-				"mythandroid": "initial elo: 5.038, new elo: 4.676, rating change: -0.362",
-				"jakemonkey": "initial elo: 14.833, new elo: 13.318, rating change: -1.515",
-				"spartric": "initial elo: 8.929, new elo: 7.410, rating change: -1.519",
-				"shadow": "initial elo: 8.642, new elo: 7.142, rating change: -1.500",
-				"hotpot": "initial elo: 4.728, new elo: 3.192, rating change: -1.536",
-				"chommy": "initial elo: 12.410, new elo: 13.575, rating change: 1.165",
-				"maki04": "initial elo: 11.574, new elo: 12.832, rating change: 1.258",
-				"heleos": "initial elo: 8.814, new elo: 10.040, rating change: 1.227",
-				"keysha18": "initial elo: 4.217, new elo: 5.414, rating change: 1.197"
-			}
-		},
-		{
-			"tour_id": "247u37ol",
-			"time": "2026-04-21 17:30:00+03:00",
-			"teams": {
-				"tsui (15.04) chommy (13.58) kaorimaeda (10.54) foopypoopy (2.14) = 41.30": "1W 4L 0D",
-				"loirinzz (11.15) math1234 (11.09) spitzell (9.92) sssthnoob (9.27) = 41.43": "4W 1L 0D",
-				"tapumomo (15.70) hejsan (13.92) icefeed2 (7.34) eljuanchi (4.46) = 41.41": "1W 4L 0D",
-				"fayeurs (17.15) ryoutavn (9.74) mangoss (9.06) keysha18 (5.41) = 41.37": "5W 0L 0D",
-				"yasashiikumo (15.55) nicole (15.49) deafness (13.48) xeyz (-3.12) = 41.41": "2W 3L 0D",
-				"catge (11.36) heleos (10.04) gabetin (10.00) ksante4700hp (14.55) = 45.95": "2W 3L 0D"
-			},
-			"player": {
-				"tsui": "initial elo: 15.042, new elo: 14.309, rating change: -0.733",
-				"chommy": "initial elo: 13.575, new elo: 12.837, rating change: -0.738",
-				"kaorimaeda": "initial elo: 10.538, new elo: 9.780, rating change: -0.758",
-				"foopypoopy": "initial elo: 2.140, new elo: 1.291, rating change: -0.849",
-				"loirinzz": "initial elo: 11.153, new elo: 12.354, rating change: 1.202",
-				"math1234": "initial elo: 11.093, new elo: 12.365, rating change: 1.272",
-				"spitzell": "initial elo: 9.915, new elo: 11.075, rating change: 1.160",
-				"sssthnoob": "initial elo: 9.272, new elo: 10.406, rating change: 1.134",
-				"tapumomo": "initial elo: 15.696, new elo: 14.433, rating change: -1.263",
-				"hejsan": "initial elo: 13.916, new elo: 12.540, rating change: -1.376",
-				"icefeed2": "initial elo: 7.338, new elo: 6.063, rating change: -1.275",
-				"eljuanchi": "initial elo: 4.464, new elo: 3.188, rating change: -1.277",
-				"fayeurs": "initial elo: 17.151, new elo: 19.463, rating change: 2.312",
-				"ryoutavn": "initial elo: 9.738, new elo: 12.138, rating change: 2.399",
-				"mangoss": "initial elo: 9.063, new elo: 11.241, rating change: 2.178",
-				"keysha18": "initial elo: 5.414, new elo: 7.606, rating change: 2.192",
-				"yasashiikumo": "initial elo: 15.550, new elo: 14.982, rating change: -0.568",
-				"nicole": "initial elo: 15.493, new elo: 14.919, rating change: -0.574",
-				"deafness": "initial elo: 13.484, new elo: 12.907, rating change: -0.577",
-				"xeyz": "initial elo: -3.120, new elo: -3.684, rating change: -0.564",
-				"catge": "initial elo: 11.357, new elo: 10.624, rating change: -0.732",
-				"heleos": "initial elo: 10.040, new elo: 9.293, rating change: -0.748",
-				"gabetin": "initial elo: 10.000, new elo: 9.063, rating change: -0.937",
-				"ksante4700hp": "initial elo: 14.552, new elo: 13.808, rating change: -0.744"
-			}
-		},
-		{
-			"tour_id": "9xfx1i4x",
-			"time": "2026-04-25 10:00:00-05:00",
-			"teams": {
-				"progenitor (15.20) ryoutavn (12.14) keysha18 (7.61) spartric (7.41) = 42.35": "2W 4L 0D",
-				"patoche49 (14.84) catge (10.62) dking20 (10.15) icefeed2 (6.06) = 41.68": "2W 4L 0D",
-				"porte (14.08) uy5gf (10.94) sssthnoob (10.41) chrislefko (6.82) = 42.24": "4W 2L 0D",
-				"thaleko (16.74) spitzell (11.08) gabetin (9.06) mythandroid (4.68) = 41.55": "4W 2L 0D"
-			},
-			"player": {
-				"progenitor": "initial elo: 15.197, new elo: 14.043, rating change: -1.154",
-				"ryoutavn": "initial elo: 12.138, new elo: 10.935, rating change: -1.203",
-				"keysha18": "initial elo: 7.606, new elo: 6.458, rating change: -1.148",
-				"spartric": "initial elo: 7.410, new elo: 6.247, rating change: -1.163",
-				"patoche49": "initial elo: 14.843, new elo: 14.210, rating change: -0.634",
-				"catge": "initial elo: 10.624, new elo: 9.987, rating change: -0.638",
-				"dking20": "initial elo: 10.152, new elo: 9.480, rating change: -0.672",
-				"icefeed2": "initial elo: 6.063, new elo: 5.420, rating change: -0.643",
-				"porte": "initial elo: 14.075, new elo: 14.867, rating change: 0.791",
-				"uy5gf": "initial elo: 10.944, new elo: 11.736, rating change: 0.792",
-				"sssthnoob": "initial elo: 10.406, new elo: 11.202, rating change: 0.795",
-				"chrislefko": "initial elo: 6.816, new elo: 7.618, rating change: 0.802",
-				"thaleko": "initial elo: 16.737, new elo: 17.718, rating change: 0.981",
-				"spitzell": "initial elo: 11.075, new elo: 12.068, rating change: 0.992",
-				"gabetin": "initial elo: 9.063, new elo: 10.176, rating change: 1.113",
-				"mythandroid": "initial elo: 4.676, new elo: 5.650, rating change: 0.974"
-			}
-		},
-		{
-			"tour_id": "gax0eeas",
-			"time": "2026-04-27 15:30:00+03:00",
-			"teams": {
-				"lika (15.33) mangoss (11.24) hihi (11.43) chrislefko (7.62) anonimus_opinion (5.72) = 51.34": "5W 1L 0D",
-				"tapumomo (14.43) catge (9.99) zokie (9.36) spartric (6.25) = 40.02": "3W 3L 0D",
-				"chommy (12.84) ryoutavn (10.94) kaorimaeda (9.78) keysha18 (6.46) = 40.01": "3W 3L 0D",
-				"deafness (12.91) legrandort (11.16) gabetin (10.18) mythandroid (5.65) = 39.89": "1W 5L 0D"
-			},
-			"player": {
-				"lika": "initial elo: 15.328, new elo: 16.694, rating change: 1.366",
-				"mangoss": "initial elo: 11.241, new elo: 11.518, rating change: 0.277",
-				"hihi": "initial elo: 11.428, new elo: 12.590, rating change: 1.162",
-				"chrislefko": "initial elo: 7.618, new elo: 8.988, rating change: 1.370",
-				"anonimus_opinion": "initial elo: 5.722, new elo: 7.192, rating change: 1.470",
-				"tapumomo": "initial elo: 14.433, new elo: 13.972, rating change: -0.461",
-				"catge": "initial elo: 9.987, new elo: 9.528, rating change: -0.459",
-				"zokie": "initial elo: 9.358, new elo: 8.894, rating change: -0.464",
-				"spartric": "initial elo: 6.247, new elo: 5.783, rating change: -0.464",
-				"chommy": "initial elo: 12.837, new elo: 12.935, rating change: 0.098",
-				"ryoutavn": "initial elo: 10.935, new elo: 11.038, rating change: 0.103",
-				"kaorimaeda": "initial elo: 9.780, new elo: 9.879, rating change: 0.099",
-				"keysha18": "initial elo: 6.458, new elo: 6.557, rating change: 0.099",
-				"deafness": "initial elo: 12.907, new elo: 11.911, rating change: -0.996",
-				"legrandort": "initial elo: 11.161, new elo: 10.179, rating change: -0.982",
-				"gabetin": "initial elo: 10.176, new elo: 9.082, rating change: -1.094",
-				"mythandroid": "initial elo: 5.650, new elo: 4.684, rating change: -0.966"
-			}
-		},
-		{
-			"tour_id": "3y7ctl4g",
-			"time": "2026-04-29 17:30:00+03:00",
-			"teams": {
-				"nephirea (16.14) chommy (12.93) keysha18 (6.56) spartric (5.78) = 41.42": "4W 1L 0D",
-				"lika (16.69) spitzell (12.07) hubcioskubcio (7.89) kyuuuu (4.77) = 41.42": "1W 4L 0D",
-				"yasashiikumo (14.98) vr0003 (10.00) catge (9.53) bommie (6.96) = 41.47": "2W 3L 0D",
-				"porte (14.87) patoche49 (14.21) shadow (7.14) dav1d1 (5.26) = 41.48": "2W 3L 0D",
-				"deafness (11.91) uy5gf (11.74) gabetin (9.08) mahzrunner (8.68) = 41.41": "4W 1L 0D",
-				"chemist (11.19) ryoutavn (11.04) legrandort (10.18) hakohoka (8.93) = 41.34": "2W 3L 0D"
-			},
-			"player": {
-				"nephirea": "initial elo: 16.143, new elo: 17.464, rating change: 1.321",
-				"chommy": "initial elo: 12.935, new elo: 14.248, rating change: 1.313",
-				"keysha18": "initial elo: 6.557, new elo: 7.878, rating change: 1.321",
-				"spartric": "initial elo: 5.783, new elo: 7.098, rating change: 1.315",
-				"lika": "initial elo: 16.694, new elo: 15.257, rating change: -1.437",
-				"spitzell": "initial elo: 12.068, new elo: 10.637, rating change: -1.430",
-				"hubcioskubcio": "initial elo: 7.889, new elo: 6.463, rating change: -1.427",
-				"kyuuuu": "initial elo: 4.768, new elo: 3.346, rating change: -1.422",
-				"yasashiikumo": "initial elo: 14.982, new elo: 14.453, rating change: -0.529",
-				"vr0003": "initial elo: 10.000, new elo: 9.386, rating change: -0.614",
-				"catge": "initial elo: 9.528, new elo: 9.006, rating change: -0.522",
-				"bommie": "initial elo: 6.958, new elo: 6.429, rating change: -0.529",
-				"porte": "initial elo: 14.867, new elo: 14.557, rating change: -0.310",
-				"patoche49": "initial elo: 14.210, new elo: 13.899, rating change: -0.310",
-				"shadow": "initial elo: 7.142, new elo: 6.820, rating change: -0.322",
-				"dav1d1": "initial elo: 5.258, new elo: 4.930, rating change: -0.328",
-				"deafness": "initial elo: 11.911, new elo: 12.950, rating change: 1.039",
-				"uy5gf": "initial elo: 11.736, new elo: 12.743, rating change: 1.007",
-				"gabetin": "initial elo: 9.082, new elo: 10.184, rating change: 1.102",
-				"mahzrunner": "initial elo: 8.678, new elo: 9.719, rating change: 1.042",
-				"chemist": "initial elo: 11.192, new elo: 11.131, rating change: -0.061",
-				"ryoutavn": "initial elo: 11.038, new elo: 10.964, rating change: -0.074",
-				"legrandort": "initial elo: 10.179, new elo: 10.109, rating change: -0.070",
-				"hakohoka": "initial elo: 8.933, new elo: 8.862, rating change: -0.071"
-			}
-		},
-		{
-			"tour_id": "ozaxl99p",
-			"time": "2026-04-30 11:59:00+02:00",
-			"teams": {
-				"legrandort (10.11) julialess64 (9.94) haruurara (7.91) bommie (6.43) = 34.40": "3W 3L 0D",
-				"mangoss (11.52) spitzell (10.64) hakohoka (8.86) kyuuuu (3.35) = 34.36": "2W 4L 0D",
-				"liljakatsuragi (10.04) tateyama_ayano (9.01) keysha18 (7.88) oolli (7.46) = 34.39": "1W 5L 0D",
-				"lika (15.26) zozo (9.08) icefeed2 (5.42) mythandroid (4.68) = 34.44": "6W 0L 0D"
-			},
-			"player": {
-				"legrandort": "initial elo: 10.109, new elo: 10.376, rating change: 0.267",
-				"julialess64": "initial elo: 9.943, new elo: 10.212, rating change: 0.269",
-				"haruurara": "initial elo: 7.915, new elo: 8.184, rating change: 0.270",
-				"bommie": "initial elo: 6.429, new elo: 6.695, rating change: 0.266",
-				"mangoss": "initial elo: 11.518, new elo: 10.846, rating change: -0.672",
-				"spitzell": "initial elo: 10.637, new elo: 9.970, rating change: -0.668",
-				"hakohoka": "initial elo: 8.862, new elo: 8.190, rating change: -0.672",
-				"kyuuuu": "initial elo: 3.346, new elo: 2.681, rating change: -0.665",
-				"liljakatsuragi": "initial elo: 10.036, new elo: 8.295, rating change: -1.741",
-				"tateyama_ayano": "initial elo: 9.010, new elo: 7.273, rating change: -1.737",
-				"keysha18": "initial elo: 7.878, new elo: 6.222, rating change: -1.656",
-				"oolli": "initial elo: 7.463, new elo: 5.813, rating change: -1.650",
-				"lika": "initial elo: 15.257, new elo: 17.353, rating change: 2.096",
-				"zozo": "initial elo: 9.078, new elo: 11.495, rating change: 2.418",
-				"icefeed2": "initial elo: 5.420, new elo: 7.517, rating change: 2.097",
-				"mythandroid": "initial elo: 4.684, new elo: 6.784, rating change: 2.100"
-			}
-		},
-		{
-			"tour_id": "upvk95xj",
-			"time": "2026-05-06 12:54:00+02:00",
-			"teams": {
-				"shiinamahiru (17.57) maikasasaki (10.00) shadow (6.82) hakohoka (8.19) = 42.58": "4W 2L 0D",
-				"lika (17.35) mangoss (10.85) gabetin (10.18) oolli (5.81) = 44.20": "4W 2L 0D",
-				"fortnayt (19.02) emdiel (15.21) spartric (7.10) skychael (-0.09) = 41.24": "3W 3L 0D",
-				"porte (14.56) unborned (11.25) comete (9.12) mythandroid (6.78) = 41.71": "1W 5L 0D"
-			},
-			"player": {
-				"shiinamahiru": "initial elo: 17.574, new elo: 18.218, rating change: 0.645",
-				"maikasasaki": "initial elo: 10.000, new elo: 10.796, rating change: 0.796",
-				"shadow": "initial elo: 6.820, new elo: 7.472, rating change: 0.652",
-				"hakohoka": "initial elo: 8.190, new elo: 8.839, rating change: 0.649",
-				"lika": "initial elo: 17.353, new elo: 18.142, rating change: 0.789",
-				"mangoss": "initial elo: 10.846, new elo: 11.628, rating change: 0.781",
-				"gabetin": "initial elo: 10.184, new elo: 10.986, rating change: 0.801",
-				"oolli": "initial elo: 5.813, new elo: 6.588, rating change: 0.775",
-				"fortnayt": "initial elo: 19.023, new elo: 19.089, rating change: 0.066",
-				"emdiel": "initial elo: 15.208, new elo: 15.270, rating change: 0.062",
-				"spartric": "initial elo: 7.098, new elo: 7.160, rating change: 0.063",
-				"skychael": "initial elo: -0.086, new elo: -0.020, rating change: 0.066",
-				"porte": "initial elo: 14.557, new elo: 13.057, rating change: -1.499",
-				"unborned": "initial elo: 11.249, new elo: 9.500, rating change: -1.749",
-				"comete": "initial elo: 9.123, new elo: 7.540, rating change: -1.583",
-				"mythandroid": "initial elo: 6.784, new elo: 5.242, rating change: -1.542"
-			}
-		},
-		{
-			"tour_id": "v56vzod9",
-			"time": "2026-05-07 11:00:00+03:00",
-			"teams": {
-				"hmsuis (14.34) patoche49 (13.90) shiroganelily (14.58) oolli (6.59) kyuuuu (2.68) = 52.09": "3W 3L 0D",
-				"paperyoshi10 (11.19) moltenashes (10.12) hakohoka (8.84) zokie (8.89) shadow (7.47) = 46.52": "2W 3L 1D",
-				"chommy (14.25) spitzell (9.97) tateyama_ayano (7.27) keysha18 (6.22) = 37.71": "1W 4L 1D",
-				"lika (18.14) ss_r_white_pony (10.48) icefeed2 (7.52) catge (9.01) foopypoopy (1.29) = 46.44": "5W 1L 0D"
-			},
-			"player": {
-				"hmsuis": "initial elo: 14.340, new elo: 13.942, rating change: -0.397",
-				"patoche49": "initial elo: 13.899, new elo: 13.903, rating change: 0.004",
-				"shiroganelily": "initial elo: 14.577, new elo: 14.185, rating change: -0.392",
-				"oolli": "initial elo: 6.588, new elo: 6.195, rating change: -0.393",
-				"kyuuuu": "initial elo: 2.681, new elo: 2.287, rating change: -0.394",
-				"paperyoshi10": "initial elo: 11.191, new elo: 10.513, rating change: -0.678",
-				"moltenashes": "initial elo: 10.124, new elo: 9.508, rating change: -0.616",
-				"hakohoka": "initial elo: 8.839, new elo: 8.230, rating change: -0.609",
-				"zokie": "initial elo: 8.894, new elo: 8.526, rating change: -0.367",
-				"shadow": "initial elo: 7.472, new elo: 7.227, rating change: -0.246",
-				"chommy": "initial elo: 14.248, new elo: 13.565, rating change: -0.683",
-				"spitzell": "initial elo: 9.970, new elo: 9.275, rating change: -0.695",
-				"tateyama_ayano": "initial elo: 7.273, new elo: 6.556, rating change: -0.717",
-				"keysha18": "initial elo: 6.222, new elo: 5.533, rating change: -0.689",
-				"lika": "initial elo: 18.142, new elo: 19.884, rating change: 1.742",
-				"ss_r_white_pony": "initial elo: 10.485, new elo: 12.210, rating change: 1.725",
-				"icefeed2": "initial elo: 7.517, new elo: 8.793, rating change: 1.276",
-				"catge": "initial elo: 9.006, new elo: 9.462, rating change: 0.456",
-				"foopypoopy": "initial elo: 1.291, new elo: 3.124, rating change: 1.833"
-			}
-		},
-		{
-			"tour_id": "9vrxtj1q",
-			"time": "2026-05-08 16:00:00+03:00",
-			"teams": {
-				"loirinzz (12.35) atsui (10.89) catge (9.46) whales6978 (9.43) = 42.14": "2W 4L 0D",
-				"porte (13.06) annayanami (10.54) furlain (10.00) zokie (8.53) = 42.12": "3W 3L 0D",
-				"patoche49 (13.90) beautiful (10.14) kaorimaeda (9.88) hakohoka (8.23) = 42.15": "3W 3L 0D",
-				"tsui (14.31) chommy (13.57) zarelyyyx (6.78) eljuanchi (3.19) = 37.84": "4W 2L 0D"
-			},
-			"player": {
-				"loirinzz": "initial elo: 12.354, new elo: 11.111, rating change: -1.243",
-				"atsui": "initial elo: 10.894, new elo: 9.655, rating change: -1.239",
-				"catge": "initial elo: 9.462, new elo: 8.282, rating change: -1.181",
-				"whales6978": "initial elo: 9.432, new elo: 8.056, rating change: -1.376",
-				"porte": "initial elo: 13.057, new elo: 13.357, rating change: 0.299",
-				"annayanami": "initial elo: 10.538, new elo: 10.838, rating change: 0.300",
-				"furlain": "initial elo: 10.000, new elo: 10.311, rating change: 0.311",
-				"zokie": "initial elo: 8.526, new elo: 8.824, rating change: 0.298",
-				"patoche49": "initial elo: 13.903, new elo: 13.508, rating change: -0.396",
-				"beautiful": "initial elo: 10.136, new elo: 9.701, rating change: -0.435",
-				"kaorimaeda": "initial elo: 9.879, new elo: 9.481, rating change: -0.398",
-				"hakohoka": "initial elo: 8.230, new elo: 7.836, rating change: -0.394",
-				"tsui": "initial elo: 14.309, new elo: 15.588, rating change: 1.279",
-				"chommy": "initial elo: 13.565, new elo: 14.826, rating change: 1.261",
-				"zarelyyyx": "initial elo: 6.783, new elo: 8.084, rating change: 1.301",
-				"eljuanchi": "initial elo: 3.188, new elo: 4.496, rating change: 1.308"
-			}
-		},
-		{
-			"tour_id": "wu3gx91r",
-			"time": "2026-05-09 13:30:00+03:00",
-			"teams": {
-				"progenitor (14.04) furlain (10.31) spitzell (9.27) anotherwish (4.92) = 38.55": "5W 1L 0D",
-				"nephirea (17.46) porte (13.36) mythandroid (5.24) kyuuuu (2.29) = 38.35": "2W 4L 0D",
-				"chommy (14.83) shelterrin (9.14) hakohoka (7.84) bommie (6.69) = 38.49": "0W 6L 0D",
-				"lika (19.88) chrislefko (8.99) dav1d1 (4.93) iamasiannoob (4.72) = 38.53": "5W 1L 0D"
-			},
-			"player": {
-				"progenitor": "initial elo: 14.043, new elo: 15.140, rating change: 1.097",
-				"furlain": "initial elo: 10.311, new elo: 11.554, rating change: 1.243",
-				"spitzell": "initial elo: 9.275, new elo: 10.344, rating change: 1.070",
-				"anotherwish": "initial elo: 4.921, new elo: 6.023, rating change: 1.102",
-				"nephirea": "initial elo: 17.464, new elo: 16.823, rating change: -0.642",
-				"porte": "initial elo: 13.357, new elo: 12.715, rating change: -0.642",
-				"mythandroid": "initial elo: 5.242, new elo: 4.573, rating change: -0.669",
-				"kyuuuu": "initial elo: 2.287, new elo: 1.647, rating change: -0.640",
-				"chommy": "initial elo: 14.826, new elo: 12.726, rating change: -2.101",
-				"shelterrin": "initial elo: 9.137, new elo: 6.820, rating change: -2.317",
-				"hakohoka": "initial elo: 7.836, new elo: 5.709, rating change: -2.127",
-				"bommie": "initial elo: 6.695, new elo: 4.537, rating change: -2.158",
-				"lika": "initial elo: 19.884, new elo: 21.602, rating change: 1.718",
-				"chrislefko": "initial elo: 8.988, new elo: 10.708, rating change: 1.720",
-				"dav1d1": "initial elo: 4.930, new elo: 6.668, rating change: 1.738",
-				"iamasiannoob": "initial elo: 4.725, new elo: 6.420, rating change: 1.695"
-			}
-		},
-		{
-			"tour_id": "u95gg9pq",
-			"time": "2026-05-10 16:30:00+02:00",
-			"teams": {
-				"lika (21.60) janoxx (11.04) dav1d1 (6.67) lordgrond (5.86) = 45.17": "3W 2L 0D",
-				"deafness (12.95) furlain (11.55) sssthnoob (11.20) kaorimaeda (9.48) = 45.19": "3W 1L 1D",
-				"porte (12.71) onai (11.28) annayanami (10.84) spitzell (10.34) = 45.18": "2W 3L 0D",
-				"progenitor (15.14) maki04 (12.83) luna (8.93) catge (8.28) = 45.18": "3W 2L 0D",
-				"apurplenose (14.84) patoche49 (13.51) mangoss (11.63) 2skr (5.16) = 45.13": "2W 3L 0D",
-				"fortnayt (19.09) legrandort (10.38) redeyes (10.00) hakohoka (5.71) = 45.17": "1W 3L 1D"
-			},
-			"player": {
-				"lika": "initial elo: 21.602, new elo: 22.260, rating change: 0.658",
-				"janoxx": "initial elo: 11.039, new elo: 11.686, rating change: 0.648",
-				"dav1d1": "initial elo: 6.668, new elo: 7.330, rating change: 0.662",
-				"lordgrond": "initial elo: 5.864, new elo: 6.560, rating change: 0.696",
-				"deafness": "initial elo: 12.950, new elo: 13.120, rating change: 0.170",
-				"furlain": "initial elo: 11.554, new elo: 11.762, rating change: 0.207",
-				"sssthnoob": "initial elo: 11.202, new elo: 11.363, rating change: 0.162",
-				"kaorimaeda": "initial elo: 9.481, new elo: 9.642, rating change: 0.161",
-				"porte": "initial elo: 12.715, new elo: 12.565, rating change: -0.150",
-				"onai": "initial elo: 11.281, new elo: 11.124, rating change: -0.157",
-				"annayanami": "initial elo: 10.838, new elo: 10.691, rating change: -0.148",
-				"spitzell": "initial elo: 10.344, new elo: 10.194, rating change: -0.151",
-				"progenitor": "initial elo: 15.140, new elo: 15.540, rating change: 0.400",
-				"maki04": "initial elo: 12.832, new elo: 13.233, rating change: 0.401",
-				"luna": "initial elo: 8.927, new elo: 9.318, rating change: 0.390",
-				"catge": "initial elo: 8.282, new elo: 8.666, rating change: 0.384",
-				"apurplenose": "initial elo: 14.837, new elo: 14.580, rating change: -0.258",
-				"patoche49": "initial elo: 13.508, new elo: 13.253, rating change: -0.255",
-				"mangoss": "initial elo: 11.628, new elo: 11.369, rating change: -0.259",
-				"2skr": "initial elo: 5.160, new elo: 4.905, rating change: -0.255",
-				"fortnayt": "initial elo: 19.089, new elo: 18.302, rating change: -0.787",
-				"legrandort": "initial elo: 10.376, new elo: 9.583, rating change: -0.793",
-				"redeyes": "initial elo: 10.000, new elo: 9.053, rating change: -0.947",
-				"hakohoka": "initial elo: 5.709, new elo: 4.910, rating change: -0.799"
-			}
-		},
-		{
-			"tour_id": "8s8z4vp1",
-			"time": "2026-05-11 17:30:00+03:00",
-			"teams": {
-				"lika (22.26) catge (8.67) bommie (4.54) eljuanchi (4.50) = 39.96": "3W 2L 0D",
-				"fumiii (12.57) porte (12.57) zomg (9.19) 2skr (4.91) = 39.24": "1W 4L 0D",
-				"gabetin (10.99) atsui (9.65) legrandort (9.58) icefeed2 (8.79) = 39.02": "2W 3L 0D",
-				"patoche49 (13.25) annayanami (10.69) spitzell (10.19) hakohoka (4.91) = 39.05": "4W 1L 0D",
-				"chommy (12.73) beautiful (9.70) heleos (9.29) dav1d1 (7.33) = 39.05": "1W 4L 0D",
-				"maki04 (13.23) chaabdu92 (10.86) kaorimaeda (9.64) keysha18 (5.53) = 39.26": "4W 1L 0D"
-			},
-			"player": {
-				"lika": "initial elo: 22.260, new elo: 22.626, rating change: 0.365",
-				"catge": "initial elo: 8.666, new elo: 9.023, rating change: 0.358",
-				"bommie": "initial elo: 4.537, new elo: 4.911, rating change: 0.375",
-				"eljuanchi": "initial elo: 4.496, new elo: 4.861, rating change: 0.365",
-				"fumiii": "initial elo: 12.575, new elo: 11.147, rating change: -1.428",
-				"porte": "initial elo: 12.565, new elo: 11.188, rating change: -1.377",
-				"zomg": "initial elo: 9.191, new elo: 7.713, rating change: -1.478",
-				"2skr": "initial elo: 4.905, new elo: 3.547, rating change: -1.358",
-				"gabetin": "initial elo: 10.986, new elo: 10.766, rating change: -0.220",
-				"atsui": "initial elo: 9.655, new elo: 9.439, rating change: -0.216",
-				"legrandort": "initial elo: 9.583, new elo: 9.374, rating change: -0.208",
-				"icefeed2": "initial elo: 8.793, new elo: 8.577, rating change: -0.216",
-				"patoche49": "initial elo: 13.253, new elo: 14.336, rating change: 1.083",
-				"annayanami": "initial elo: 10.691, new elo: 11.783, rating change: 1.092",
-				"spitzell": "initial elo: 10.194, new elo: 11.294, rating change: 1.100",
-				"hakohoka": "initial elo: 4.910, new elo: 5.994, rating change: 1.084",
-				"chommy": "initial elo: 12.726, new elo: 11.570, rating change: -1.155",
-				"beautiful": "initial elo: 9.701, new elo: 8.492, rating change: -1.209",
-				"heleos": "initial elo: 9.293, new elo: 8.131, rating change: -1.162",
-				"dav1d1": "initial elo: 7.330, new elo: 6.181, rating change: -1.150",
-				"maki04": "initial elo: 13.233, new elo: 14.507, rating change: 1.275",
-				"chaabdu92": "initial elo: 10.855, new elo: 12.124, rating change: 1.269",
-				"kaorimaeda": "initial elo: 9.642, new elo: 10.885, rating change: 1.243",
-				"keysha18": "initial elo: 5.533, new elo: 6.778, rating change: 1.245"
-			}
-		},
-		{
-			"tour_id": "fncqj6wc",
-			"time": "2026-05-12 19:30:00+09:00",
-			"teams": {
-				"lika (22.63) shadow (7.23) potassiumf (6.05) 2skr (3.55) = 39.45": "2W 4L 0D",
-				"patoche49 (14.34) spitzell (11.29) porte (11.19) arpia97 (2.85) = 39.66": "3W 3L 0D",
-				"deafness (13.12) chaabdu92 (12.12) atsui (9.44) bommie (4.91) = 39.59": "4W 2L 0D",
-				"hihi (12.59) mangoss (11.37) zokie (8.82) keysha18 (6.78) = 39.56": "3W 3L 0D"
-			},
-			"player": {
-				"lika": "initial elo: 22.626, new elo: 22.342, rating change: -0.284",
-				"shadow": "initial elo: 7.227, new elo: 6.946, rating change: -0.281",
-				"potassiumf": "initial elo: 6.054, new elo: 5.761, rating change: -0.292",
-				"2skr": "initial elo: 3.547, new elo: 3.263, rating change: -0.284",
-				"patoche49": "initial elo: 14.336, new elo: 14.129, rating change: -0.207",
-				"spitzell": "initial elo: 11.294, new elo: 11.086, rating change: -0.208",
-				"porte": "initial elo: 11.188, new elo: 10.980, rating change: -0.208",
-				"arpia97": "initial elo: 2.846, new elo: 2.629, rating change: -0.217",
-				"deafness": "initial elo: 13.120, new elo: 13.965, rating change: 0.845",
-				"chaabdu92": "initial elo: 12.124, new elo: 12.974, rating change: 0.850",
-				"atsui": "initial elo: 9.439, new elo: 10.295, rating change: 0.857",
-				"bommie": "initial elo: 4.911, new elo: 5.773, rating change: 0.862",
-				"hihi": "initial elo: 12.590, new elo: 12.242, rating change: -0.348",
-				"mangoss": "initial elo: 11.369, new elo: 11.030, rating change: -0.339",
-				"zokie": "initial elo: 8.824, new elo: 8.488, rating change: -0.336",
-				"keysha18": "initial elo: 6.778, new elo: 6.441, rating change: -0.336"
-			}
-		},
-		{
-			"tour_id": "saog6m2t",
-			"time": "2026-05-14 17:54:00+09:00",
-			"teams": {
-				"lika (22.34) zarelyyyx (8.08) zomg (7.71) yashadox (4.16) = 42.29": "1W 5L 0D",
-				"neoburnz (16.22) paperyoshi10 (10.51) yunnn (8.85) tateyama_ayano (6.56) = 42.14": "3W 3L 0D",
-				"thaleko (17.72) spitzell (11.09) shadow (6.95) keysha18 (6.44) = 42.19": "6W 0L 0D",
-				"patoche49 (14.13) gabetin (10.77) jaimeywea (9.00) mayottatoki (8.26) = 42.15": "2W 4L 0D"
-			},
-			"player": {
-				"lika": "initial elo: 22.342, new elo: 21.220, rating change: -1.122",
-				"zarelyyyx": "initial elo: 8.084, new elo: 6.952, rating change: -1.132",
-				"zomg": "initial elo: 7.713, new elo: 6.496, rating change: -1.217",
-				"yashadox": "initial elo: 4.156, new elo: 3.006, rating change: -1.150",
-				"neoburnz": "initial elo: 16.224, new elo: 15.796, rating change: -0.429",
-				"paperyoshi10": "initial elo: 10.513, new elo: 10.068, rating change: -0.445",
-				"yunnn": "initial elo: 8.851, new elo: 8.389, rating change: -0.462",
-				"tateyama_ayano": "initial elo: 6.556, new elo: 6.127, rating change: -0.429",
-				"thaleko": "initial elo: 17.718, new elo: 19.878, rating change: 2.160",
-				"spitzell": "initial elo: 11.086, new elo: 13.229, rating change: 2.144",
-				"shadow": "initial elo: 6.946, new elo: 9.075, rating change: 2.130",
-				"keysha18": "initial elo: 6.441, new elo: 8.556, rating change: 2.115",
-				"patoche49": "initial elo: 14.129, new elo: 13.546, rating change: -0.584",
-				"gabetin": "initial elo: 10.766, new elo: 10.156, rating change: -0.610",
-				"jaimeywea": "initial elo: 9.000, new elo: 8.240, rating change: -0.760",
-				"mayottatoki": "initial elo: 8.256, new elo: 7.602, rating change: -0.654"
-			}
-		},
-		{
-			"tour_id": "vcnrabf",
-			"time": "2026-05-15 11:17:00+02:00",
-			"teams": {
-				"lika (21.22) yunnn (8.39) iamasiannoob (6.42) mythandroid (4.57) = 40.60": "2W 4L 0D",
-				"hmsuis (13.94) loirinzz (11.11) gabetin (10.16) tateyama_ayano (6.13) = 41.34": "3W 3L 0D",
-				"thaleko (19.88) spitzell (13.23) icefeed2 (8.58) bommie (5.77) = 47.46": "5W 1L 0D",
-				"patoche49 (13.55) sssthnoob (11.36) metak (10.00) keysha18 (8.56) = 43.46": "2W 4L 0D"
-			},
-			"player": {
-				"lika": "initial elo: 21.220, new elo: 21.083, rating change: -0.138",
-				"yunnn": "initial elo: 8.389, new elo: 8.238, rating change: -0.151",
-				"iamasiannoob": "initial elo: 6.420, new elo: 6.283, rating change: -0.137",
-				"mythandroid": "initial elo: 4.573, new elo: 4.432, rating change: -0.141",
-				"hmsuis": "initial elo: 13.942, new elo: 14.305, rating change: 0.362",
-				"loirinzz": "initial elo: 11.111, new elo: 11.481, rating change: 0.369",
-				"gabetin": "initial elo: 10.156, new elo: 10.522, rating change: 0.365",
-				"tateyama_ayano": "initial elo: 6.127, new elo: 6.490, rating change: 0.363",
-				"thaleko": "initial elo: 19.878, new elo: 20.487, rating change: 0.609",
-				"spitzell": "initial elo: 13.229, new elo: 13.836, rating change: 0.606",
-				"icefeed2": "initial elo: 8.577, new elo: 9.178, rating change: 0.601",
-				"bommie": "initial elo: 5.773, new elo: 6.375, rating change: 0.602",
-				"patoche49": "initial elo: 13.546, new elo: 12.744, rating change: -0.802",
-				"sssthnoob": "initial elo: 11.363, new elo: 10.566, rating change: -0.798",
-				"metak": "initial elo: 10.000, new elo: 9.000, rating change: -1.000",
-				"keysha18": "initial elo: 8.556, new elo: 7.735, rating change: -0.821"
-			}
-		},
-		{
-			"tour_id": "arnn1s58",
-			"time": "2026-05-16 13:00:00+02:00",
-			"teams": {
-				"janoxx (11.69) zental (11.13) porte (10.98) catge (9.02) = 42.82": "3W 3L 0D",
-				"lika (21.08) akechianna (10.00) iamasiannoob (6.28) eljuanchi (4.86) = 42.23": "4W 2L 0D",
-				"uy5gf (12.74) kaorimaeda (10.88) chrislefko (10.71) keysha18 (7.74) = 42.07": "2W 4L 0D",
-				"patoche49 (12.74) spitzell (13.84) fumiii (11.15) mythandroid (4.43) = 42.16": "3W 3L 0D"
-			},
-			"player": {
-				"janoxx": "initial elo: 11.686, new elo: 12.000, rating change: 0.313",
-				"zental": "initial elo: 11.132, new elo: 11.449, rating change: 0.316",
-				"porte": "initial elo: 10.980, new elo: 11.294, rating change: 0.314",
-				"catge": "initial elo: 9.023, new elo: 9.336, rating change: 0.313",
-				"lika": "initial elo: 21.083, new elo: 22.072, rating change: 0.989",
-				"akechianna": "initial elo: 10.000, new elo: 11.177, rating change: 1.177",
-				"iamasiannoob": "initial elo: 6.283, new elo: 7.269, rating change: 0.986",
-				"eljuanchi": "initial elo: 4.861, new elo: 5.842, rating change: 0.981",
-				"uy5gf": "initial elo: 12.743, new elo: 12.051, rating change: -0.691",
-				"kaorimaeda": "initial elo: 10.885, new elo: 10.201, rating change: -0.684",
-				"chrislefko": "initial elo: 10.708, new elo: 10.004, rating change: -0.704",
-				"keysha18": "initial elo: 7.735, new elo: 7.038, rating change: -0.698",
-				"patoche49": "initial elo: 12.744, new elo: 12.144, rating change: -0.600",
-				"spitzell": "initial elo: 13.836, new elo: 13.226, rating change: -0.609",
-				"fumiii": "initial elo: 11.147, new elo: 10.536, rating change: -0.611",
-				"mythandroid": "initial elo: 4.432, new elo: 3.825, rating change: -0.607"
-			}
-		},
-		{
-			"tour_id": "w3xqh23m",
-			"time": "2026-05-21 18:00:00+03:00",
-			"teams": {
-				"patoche49 (12.14) chommy (11.57) sssthnoob (10.57) icefeed2 (9.18) = 43.46": "3W 3L 0D",
-				"lika (22.07) gabetin (10.52) keysha18 (7.04) mythandroid (3.82) = 43.46": "3W 3L 0D",
-				"mami (16.69) spitzell (13.23) kaorimaeda (10.20) 2skr (3.26) = 43.38": "4W 2L 0D",
-				"tapumomo (13.97) onai (11.12) catge (9.34) metak (9.00) = 43.43": "2W 4L 0D"
-			},
-			"player": {
-				"patoche49": "initial elo: 12.144, new elo: 12.253, rating change: 0.109",
-				"chommy": "initial elo: 11.570, new elo: 11.681, rating change: 0.110",
-				"sssthnoob": "initial elo: 10.566, new elo: 10.675, rating change: 0.109",
-				"icefeed2": "initial elo: 9.178, new elo: 9.289, rating change: 0.111",
-				"lika": "initial elo: 22.072, new elo: 21.736, rating change: -0.335",
-				"gabetin": "initial elo: 10.522, new elo: 10.186, rating change: -0.336",
-				"keysha18": "initial elo: 7.038, new elo: 6.704, rating change: -0.334",
-				"mythandroid": "initial elo: 3.825, new elo: 3.488, rating change: -0.336",
-				"mami": "initial elo: 16.688, new elo: 17.087, rating change: 0.399",
-				"spitzell": "initial elo: 13.226, new elo: 13.635, rating change: 0.409",
-				"kaorimaeda": "initial elo: 10.201, new elo: 10.587, rating change: 0.387",
-				"2skr": "initial elo: 3.263, new elo: 3.656, rating change: 0.393",
-				"tapumomo": "initial elo: 13.972, new elo: 13.814, rating change: -0.159",
-				"onai": "initial elo: 11.124, new elo: 10.949, rating change: -0.174",
-				"catge": "initial elo: 9.336, new elo: 9.182, rating change: -0.154",
-				"metak": "initial elo: 9.000, new elo: 8.758, rating change: -0.242"
-			}
-		},
-		{
-			"tour_id": "ei7etas0",
-			"time": "2026-05-22 17:30:00+03:00",
-			"teams": {
-				"lika (21.74) uy5gf (12.05) keysha18 (6.70) hubcioskubcio (6.46) = 46.95": "2W 4L 0D",
-				"spitzell (13.63) annayanami (11.78) ryoutavn (10.96) kaorimaeda (10.59) = 46.97": "4W 1L 1D",
-				"maki04 (14.51) mangoss (11.03) maikasasaki (10.80) sssthnoob (10.67) = 47.01": "4W 1L 1D",
-				"shiinamahiru (18.22) chommy (11.68) porte (11.29) eljuanchi (5.84) = 47.04": "1W 5L 0D"
-			},
-			"player": {
-				"lika": "initial elo: 21.736, new elo: 20.952, rating change: -0.785",
-				"uy5gf": "initial elo: 12.051, new elo: 11.274, rating change: -0.778",
-				"keysha18": "initial elo: 6.704, new elo: 5.924, rating change: -0.780",
-				"hubcioskubcio": "initial elo: 6.463, new elo: 5.677, rating change: -0.786",
-				"spitzell": "initial elo: 13.635, new elo: 14.827, rating change: 1.192",
-				"annayanami": "initial elo: 11.783, new elo: 12.974, rating change: 1.191",
-				"ryoutavn": "initial elo: 10.964, new elo: 12.167, rating change: 1.203",
-				"kaorimaeda": "initial elo: 10.587, new elo: 11.753, rating change: 1.166",
-				"maki04": "initial elo: 14.507, new elo: 15.655, rating change: 1.147",
-				"mangoss": "initial elo: 11.030, new elo: 12.158, rating change: 1.128",
-				"maikasasaki": "initial elo: 10.796, new elo: 12.088, rating change: 1.292",
-				"sssthnoob": "initial elo: 10.675, new elo: 11.791, rating change: 1.116",
-				"shiinamahiru": "initial elo: 18.218, new elo: 16.666, rating change: -1.552",
-				"chommy": "initial elo: 11.681, new elo: 10.146, rating change: -1.535",
-				"porte": "initial elo: 11.294, new elo: 9.761, rating change: -1.533",
-				"eljuanchi": "initial elo: 5.842, new elo: 4.295, rating change: -1.547"
-			}
-		},
-		{
-			"tour_id": "5fwpgfqu",
-			"time": "2026-05-26 17:00:00+03:00",
-			"teams": {
-				"mangoss (12.16) maikasasaki (12.09) legrandort (9.37) icefeed2 (9.29) = 42.91": "4W 2L 0D",
-				"progenitor (15.54) torradinhas (11.21) gabetin (10.19) keysha18 (5.92) = 42.86": "3W 3L 0D",
-				"sssthnoob (11.79) kaorimaeda (11.75) chommy (10.15) catge (9.18) = 42.87": "3W 3L 0D",
-				"lika (20.95) spitzell (14.83) spartric (7.16) skychael (-0.02) = 42.92": "2W 4L 0D"
-			},
-			"player": {
-				"mangoss": "initial elo: 12.158, new elo: 12.291, rating change: 0.133",
-				"maikasasaki": "initial elo: 12.088, new elo: 12.260, rating change: 0.172",
-				"legrandort": "initial elo: 9.374, new elo: 9.512, rating change: 0.137",
-				"icefeed2": "initial elo: 9.289, new elo: 9.430, rating change: 0.141",
-				"progenitor": "initial elo: 15.540, new elo: 16.133, rating change: 0.592",
-				"torradinhas": "initial elo: 11.213, new elo: 11.845, rating change: 0.632",
-				"gabetin": "initial elo: 10.186, new elo: 10.776, rating change: 0.590",
-				"keysha18": "initial elo: 5.924, new elo: 6.513, rating change: 0.589",
-				"sssthnoob": "initial elo: 11.791, new elo: 12.113, rating change: 0.322",
-				"kaorimaeda": "initial elo: 11.753, new elo: 12.077, rating change: 0.324",
-				"chommy": "initial elo: 10.146, new elo: 10.473, rating change: 0.327",
-				"catge": "initial elo: 9.182, new elo: 9.507, rating change: 0.325",
-				"lika": "initial elo: 20.952, new elo: 19.883, rating change: -1.068",
-				"spitzell": "initial elo: 14.827, new elo: 13.764, rating change: -1.063",
-				"spartric": "initial elo: 7.160, new elo: 6.099, rating change: -1.061",
-				"skychael": "initial elo: -0.020, new elo: -1.092, rating change: -1.072"
-			}
-		},
-		{
-			"tour_id": "78r6cq4r",
-			"time": "2026-06-03 13:00:00+02:00",
-			"teams": {
-				"lika (19.88) sabetin (10.78) oolli (6.20) mythandroid (3.49) = 40.34": "3W 3L 0D",
-				"sssthnoob (12.11) porte (9.76) isekaijoucho (9.39) shadow (9.08) = 40.34": "4W 2L 0D",
-				"patoche49 (12.25) fumiii (10.54) naizuri (9.99) ruuka (7.51) = 40.29": "3W 3L 0D",
-				"tapumomo (13.81) chommy (10.47) catge (9.51) keysha18 (6.51) = 40.31": "2W 4L 0D"
-			},
-			"player": {
-				"lika": "initial elo: 19.883, new elo: 19.700, rating change: -0.184",
-				"sabetin": "initial elo: 10.776, new elo: 10.578, rating change: -0.198",
-				"oolli": "initial elo: 6.195, new elo: 6.012, rating change: -0.183",
-				"mythandroid": "initial elo: 3.488, new elo: 3.305, rating change: -0.184",
-				"sssthnoob": "initial elo: 12.113, new elo: 12.787, rating change: 0.674",
-				"porte": "initial elo: 9.761, new elo: 10.451, rating change: 0.690",
-				"isekaijoucho": "initial elo: 9.393, new elo: 10.086, rating change: 0.692",
-				"shadow": "initial elo: 9.075, new elo: 9.779, rating change: 0.703",
-				"patoche49": "initial elo: 12.253, new elo: 12.972, rating change: 0.718",
-				"fumiii": "initial elo: 10.536, new elo: 11.269, rating change: 0.733",
-				"naizuri": "initial elo: 9.990, new elo: 10.737, rating change: 0.747",
-				"ruuka": "initial elo: 7.513, new elo: 8.301, rating change: 0.788",
-				"tapumomo": "initial elo: 13.814, new elo: 12.593, rating change: -1.221",
-				"chommy": "initial elo: 10.473, new elo: 9.254, rating change: -1.219",
-				"catge": "initial elo: 9.507, new elo: 8.295, rating change: -1.212",
-				"keysha18": "initial elo: 6.513, new elo: 5.290, rating change: -1.222"
-			}
-		},
-		{
-			"tour_id": "hfhde650",
-			"time": "2026-06-04 17:30:00+03:00",
-			"teams": {
-				"mangoss (12.29) maikasasaki (12.26) luna (9.32) spartric (6.10) = 39.97": "4W 2L 0D",
-				"kaorimaeda (12.08) porte (10.45) chommy (9.25) catge (8.30) = 40.08": "5W 1L 0D",
-				"lika (19.70) sssthnoob (12.79) onai (10.95) xeyz (-3.68) = 39.75": "3W 3L 0D",
-				"shiinamahiru (16.67) legrandort (9.51) brandon_k (8.60) keysha18 (5.29) = 40.07": "0W 6L 0D"
-			},
-			"player": {
-				"mangoss": "initial elo: 12.291, new elo: 12.901, rating change: 0.609",
-				"maikasasaki": "initial elo: 12.260, new elo: 12.906, rating change: 0.646",
-				"luna": "initial elo: 9.318, new elo: 9.935, rating change: 0.617",
-				"spartric": "initial elo: 6.099, new elo: 6.721, rating change: 0.622",
-				"kaorimaeda": "initial elo: 12.077, new elo: 13.637, rating change: 1.560",
-				"porte": "initial elo: 10.451, new elo: 12.033, rating change: 1.582",
-				"chommy": "initial elo: 9.254, new elo: 10.830, rating change: 1.576",
-				"catge": "initial elo: 8.295, new elo: 9.864, rating change: 1.569",
-				"lika": "initial elo: 19.700, new elo: 19.503, rating change: -0.197",
-				"sssthnoob": "initial elo: 12.787, new elo: 12.591, rating change: -0.196",
-				"onai": "initial elo: 10.949, new elo: 10.752, rating change: -0.197",
-				"xeyz": "initial elo: -3.684, new elo: -3.881, rating change: -0.197",
-				"shiinamahiru": "initial elo: 16.666, new elo: 14.617, rating change: -2.049",
-				"legrandort": "initial elo: 9.512, new elo: 7.507, rating change: -2.004",
-				"brandon_k": "initial elo: 8.602, new elo: 6.249, rating change: -2.353",
-				"keysha18": "initial elo: 5.290, new elo: 3.273, rating change: -2.018"
 			}
 		}
 	]

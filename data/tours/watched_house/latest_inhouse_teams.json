@@ -1,0 +1,50 @@
+{
+  "tour_id": "watched_house",
+  "inhouse_type": "watched",
+  "teams": {
+    "team1": {
+      "label": "uebok",
+      "display_name": "uebok (16.943) potassiumf (9.012) kyuuuu (4.960) beokros (3.040)",
+      "players": [
+        {
+          "name": "uebok",
+          "rating": 16.943
+        },
+        {
+          "name": "potassiumf",
+          "rating": 9.012
+        },
+        {
+          "name": "kyuuuu",
+          "rating": 4.96
+        },
+        {
+          "name": "beokros",
+          "rating": 3.04
+        }
+      ]
+    },
+    "team2": {
+      "label": "furlain",
+      "display_name": "furlain (14.144) xeyz (13.878) beta_peak (13.411) aryssiel (-6.943)",
+      "players": [
+        {
+          "name": "furlain",
+          "rating": 14.144
+        },
+        {
+          "name": "xeyz",
+          "rating": 13.878
+        },
+        {
+          "name": "beta_peak",
+          "rating": 13.411
+        },
+        {
+          "name": "aryssiel",
+          "rating": -6.943
+        }
+      ]
+    }
+  }
+}
