@@ -145,7 +145,7 @@ def generate_codes_watched_in_no_chanting_gr(gamemode, txtvar):
     txtvar += "\n<YOURCHALLONGEURLHERE>\n"
     match gamemode:
         case "40":
-            txtvar += "h0g0z211111001130z000010010000000z11111111101100k051o000000f11100k012r02i0a46533a11002s01111111111100190111002s01a111111111102a111111111050017pr11hg1ka03-11111--```\n"
+            txtvar += "```h0g0z211111001130z000010010000000z11111111101100k051o000000f11100k012r02i0a46533a11002s01111111111100190111002s01a111111111102a111111111050017pr11hg1ka03-11111--```\n"
     txtvar += """Distribution of guesses:
 ≥28% = 5 guesses
 18% - 28% = 4 guesses
