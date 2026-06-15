@@ -88,5 +88,59 @@
 			"beta_peak": "initial elo: 13.411, new elo: 15.914, rating change: 2.503",
 			"aryssiel": "initial elo: -6.943, new elo: -4.038, rating change: 2.905"
 		}
+	},
+	{
+		"tour_id": "watched_house_20260612_031844",
+		"time": "2026-06-12 03:18:44.744869+00:00",
+		"teams": {
+			"catge (15.22) arpia97 (15.00) caramel36 (15.00) liljakatsuragi (9.00) = 54.22": "0W 1L 0D",
+			"i_dont_like_loli (20.00) redeyes (18.00) cm02 (12.59) dking20 (3.00) = 53.59": "1W 0L 0D"
+		},
+		"player": {
+			"catge": "initial elo: 15.219, new elo: 13.326, rating change: -1.893",
+			"arpia97": "initial elo: 15.000, new elo: 13.797, rating change: -1.203",
+			"caramel36": "initial elo: 15.000, new elo: 13.797, rating change: -1.203",
+			"liljakatsuragi": "initial elo: 9.000, new elo: 7.797, rating change: -1.203",
+			"i_dont_like_loli": "initial elo: 20.000, new elo: 21.203, rating change: 1.203",
+			"redeyes": "initial elo: 18.000, new elo: 19.203, rating change: 1.203",
+			"cm02": "initial elo: 12.587, new elo: 15.719, rating change: 3.132",
+			"dking20": "initial elo: 3.000, new elo: 4.203, rating change: 1.203"
+		}
+	},
+	{
+		"tour_id": "watched_house_20260612_033300",
+		"time": "2026-06-12 03:33:00.434638+00:00",
+		"teams": {
+			"redeyes (19.20) arpia97 (13.80) caramel36 (13.80) liljakatsuragi (7.80) = 54.59": "1W 0L 0D",
+			"i_dont_like_loli (21.20) cm02 (15.72) catge (13.33) dking20 (4.20) = 54.45": "0W 1L 0D"
+		},
+		"player": {
+			"redeyes": "initial elo: 19.203, new elo: 20.879, rating change: 1.676",
+			"arpia97": "initial elo: 13.797, new elo: 15.473, rating change: 1.676",
+			"caramel36": "initial elo: 13.797, new elo: 15.473, rating change: 1.676",
+			"liljakatsuragi": "initial elo: 7.797, new elo: 9.473, rating change: 1.676",
+			"i_dont_like_loli": "initial elo: 21.203, new elo: 19.527, rating change: -1.676",
+			"cm02": "initial elo: 15.719, new elo: 12.540, rating change: -3.179",
+			"catge": "initial elo: 13.326, new elo: 11.092, rating change: -2.234",
+			"dking20": "initial elo: 4.203, new elo: 2.527, rating change: -1.676"
+		}
+	},
+	{
+		"tour_id": "watched_house_20260612_034445",
+		"time": "2026-06-12 03:44:45.077098+00:00",
+		"teams": {
+			"redeyes (20.88) cm02 (12.54) catge (11.09) liljakatsuragi (9.47) = 53.98": "1W 0L 0D",
+			"i_dont_like_loli (19.53) arpia97 (15.47) caramel36 (15.47) dking20 (2.53) = 53.00": "0W 1L 0D"
+		},
+		"player": {
+			"redeyes": "initial elo: 20.879, new elo: 22.918, rating change: 2.039",
+			"cm02": "initial elo: 12.540, new elo: 15.774, rating change: 3.233",
+			"catge": "initial elo: 11.092, new elo: 13.586, rating change: 2.494",
+			"liljakatsuragi": "initial elo: 9.473, new elo: 11.512, rating change: 2.039",
+			"i_dont_like_loli": "initial elo: 19.527, new elo: 17.488, rating change: -2.039",
+			"arpia97": "initial elo: 15.473, new elo: 13.434, rating change: -2.039",
+			"caramel36": "initial elo: 15.473, new elo: 13.434, rating change: -2.039",
+			"dking20": "initial elo: 2.527, new elo: 0.488, rating change: -2.039"
+		}
 	}
 ]

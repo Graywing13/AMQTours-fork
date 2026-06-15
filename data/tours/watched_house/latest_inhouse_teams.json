@@ -3,46 +3,46 @@
   "inhouse_type": "watched",
   "teams": {
     "team1": {
-      "label": "uebok",
-      "display_name": "uebok (16.943) potassiumf (9.012) kyuuuu (4.960) beokros (3.040)",
+      "label": "redeyes",
+      "display_name": "redeyes (20.879) cm02 (12.540) catge (11.092) liljakatsuragi (9.473)",
       "players": [
         {
-          "name": "uebok",
-          "rating": 16.943
+          "name": "redeyes",
+          "rating": 20.879
         },
         {
-          "name": "potassiumf",
-          "rating": 9.012
+          "name": "cm02",
+          "rating": 12.54
         },
         {
-          "name": "kyuuuu",
-          "rating": 4.96
+          "name": "catge",
+          "rating": 11.092
         },
         {
-          "name": "beokros",
-          "rating": 3.04
+          "name": "liljakatsuragi",
+          "rating": 9.473
         }
       ]
     },
     "team2": {
-      "label": "furlain",
-      "display_name": "furlain (14.144) xeyz (13.878) beta_peak (13.411) aryssiel (-6.943)",
+      "label": "i_dont_like_loli",
+      "display_name": "i_dont_like_loli (19.527) arpia97 (15.473) caramel36 (15.473) dking20 (2.527)",
       "players": [
         {
-          "name": "furlain",
-          "rating": 14.144
+          "name": "i_dont_like_loli",
+          "rating": 19.527
         },
         {
-          "name": "xeyz",
-          "rating": 13.878
+          "name": "arpia97",
+          "rating": 15.473
         },
         {
-          "name": "beta_peak",
-          "rating": 13.411
+          "name": "caramel36",
+          "rating": 15.473
         },
         {
-          "name": "aryssiel",
-          "rating": -6.943
+          "name": "dking20",
+          "rating": 2.527
         }
       ]
     }

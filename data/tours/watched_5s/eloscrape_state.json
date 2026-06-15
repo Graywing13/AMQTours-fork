@@ -1,5 +1,5 @@
 {
-	"version": 1,
+	"version": 2,
 	"tour_ids": [
 		"rbh0x13b",
 		"7vlwrjd2",
@@ -30,505 +30,642 @@
 		"yajfx27w",
 		"wua8fhkz",
 		"tnmhrm8c",
-		"lwpl4k59"
+		"lwpl4k59",
+		"t6vrr7nl"
 	],
 	"ratings": {
-		"shiinamahiru": {
+		"82": {
 			"mu": 14.315808437731091,
 			"sigma": 2.871760083146559
 		},
-		"kabigon": {
+		"351": {
 			"mu": 15.289423473874402,
 			"sigma": 3.293555854522548
 		},
-		"zokie": {
-			"mu": 10.646510492338468,
-			"sigma": 2.4796855286489556
+		"413": {
+			"mu": 10.60691450927877,
+			"sigma": 2.4254328984493654
 		},
-		"justaweirdo": {
-			"mu": 7.895153304072302,
-			"sigma": 2.3031365339763274
+		"171": {
+			"mu": 7.581877975433453,
+			"sigma": 2.2621192303135356
 		},
-		"progenitor": {
+		"238": {
 			"mu": 13.12115025261072,
 			"sigma": 3.0303441604875956
 		},
-		"swapin": {
+		"325": {
 			"mu": 11.215646200766939,
 			"sigma": 3.7778210920421587
 		},
-		"lakumix": {
+		"286": {
 			"mu": 10.59161290713252,
 			"sigma": 3.614833160734654
 		},
-		"vuhrculls": {
+		"223": {
 			"mu": 7.715646200766937,
 			"sigma": 3.7778210920421587
 		},
-		"fortnayt": {
+		"28": {
 			"mu": 16.24315437076043,
 			"sigma": 2.8608579455572833
 		},
-		"legrandort": {
-			"mu": 8.430943919742006,
-			"sigma": 2.036347237645218
+		"159": {
+			"mu": 8.410752402437316,
+			"sigma": 2.0121347578262347
 		},
-		"chommy": {
+		"357": {
 			"mu": 11.409629360251797,
 			"sigma": 2.740695294754428
 		},
-		"xeyz": {
-			"mu": -0.09227838742518876,
-			"sigma": 3.0393624805209507
+		"335": {
+			"mu": -0.13395176503873515,
+			"sigma": 2.9307390907786472
 		},
-		"lika": {
-			"mu": 13.360947437977867,
-			"sigma": 3.2207589459007067
+		"58": {
+			"mu": 13.314937912065805,
+			"sigma": 3.090348827104436
 		},
-		"shadow": {
-			"mu": 11.477859102690896,
-			"sigma": 2.495116021846519
+		"247": {
+			"mu": 11.10933348066682,
+			"sigma": 2.4396521437972987
 		},
-		"patoche49": {
-			"mu": 4.766956984637649,
-			"sigma": 2.567811328422769
+		"259": {
+			"mu": 5.23104986755464,
+			"sigma": 2.506838986621357
 		},
-		"anicomi": {
+		"405": {
 			"mu": 9.761577506444416,
 			"sigma": 2.393982912699109
 		},
-		"julialess64": {
+		"79": {
 			"mu": 11.635677137712042,
 			"sigma": 3.7746183611098085
 		},
-		"time2hack": {
+		"415": {
 			"mu": 9.135677137712042,
 			"sigma": 3.7746183611098085
 		},
-		"keysha18": {
+		"419": {
 			"mu": 6.561284419185143,
 			"sigma": 2.222678377877806
 		},
-		"poolnoodle": {
+		"21": {
 			"mu": 14.543862443549061,
 			"sigma": 3.2470805760826966
 		},
-		"dking20": {
+		"67": {
 			"mu": 9.387438749144525,
 			"sigma": 3.387503541220731
 		},
-		"comete": {
+		"98": {
 			"mu": 12.516871736493025,
 			"sigma": 3.349936177275242
 		},
-		"anoru_": {
+		"45": {
 			"mu": 14.907458926275151,
 			"sigma": 3.773250844262765
 		},
-		"janoxx": {
+		"121": {
 			"mu": 7.800043552099134,
 			"sigma": 2.874515740785084
 		},
-		"annayanami": {
-			"mu": 13.590083777591326,
-			"sigma": 2.345749874705232
+		"403": {
+			"mu": 13.55479591064513,
+			"sigma": 2.301673614083473
 		},
-		"yashadox": {
+		"169": {
 			"mu": 4.143810729156116,
 			"sigma": 3.557537151616246
 		},
-		"inta": {
-			"mu": 9.389366686301663,
-			"sigma": 3.208872804084529
+		"343": {
+			"mu": 8.77415207891274,
+			"sigma": 3.0807659836662937
 		},
-		"unborned": {
+		"155": {
 			"mu": 2.18400589235108,
 			"sigma": 3.600318964961616
 		},
-		"eljuanchi": {
+		"399": {
 			"mu": 2.243923376442105,
 			"sigma": 2.818949541885425
 		},
-		"kaededayo": {
+		"307": {
 			"mu": 16.152911413414536,
 			"sigma": 3.393482945864079
 		},
-		"provenance": {
+		"289": {
 			"mu": 13.301653397308693,
 			"sigma": 3.4469730238369545
 		},
-		"fayeurs": {
+		"411": {
 			"mu": 19.966462231838996,
 			"sigma": 3.7732916164698014
 		},
-		"lordgrond": {
+		"395": {
 			"mu": 3.387190481932958,
 			"sigma": 3.0544366753179157
 		},
-		"foopypoopy": {
+		"410": {
 			"mu": 5.369553469235552,
 			"sigma": 2.899610993510912
 		},
-		"pile": {
+		"81": {
 			"mu": 8.99053230214829,
 			"sigma": 3.6998965431731805
 		},
-		"miiarad": {
+		"285": {
 			"mu": 11.38759259953834,
 			"sigma": 3.329855998366682
 		},
-		"iamasiannoob": {
+		"164": {
 			"mu": 6.533291825074632,
 			"sigma": 3.70024390736125
 		},
-		"civiltwlight": {
+		"268": {
 			"mu": 11.811001369713145,
 			"sigma": 3.2806204277870834
 		},
-		"oolli": {
+		"172": {
 			"mu": 5.8035109085667385,
 			"sigma": 3.4610530445958227
 		},
-		"haruurara": {
+		"430": {
 			"mu": 12.457594135645646,
 			"sigma": 3.1690299814036096
 		},
-		"seismic": {
+		"117": {
 			"mu": 12.417084526854282,
 			"sigma": 3.5062298988053584
 		},
-		"spitzell": {
-			"mu": 8.47604994045023,
-			"sigma": 2.5156355086269815
+		"176": {
+			"mu": 8.101343998085863,
+			"sigma": 2.4585103688215866
 		},
-		"jakemonkey": {
+		"134": {
 			"mu": 14.553722500710721,
 			"sigma": 3.320050104717579
 		},
-		"tapumomo": {
+		"146": {
 			"mu": 14.160925106399464,
 			"sigma": 2.9968956618844924
 		},
-		"anatharax": {
+		"404": {
 			"mu": 3.9671697974648574,
 			"sigma": 3.4690075125020874
 		},
-		"zental": {
+		"156": {
 			"mu": 13.968253071769483,
 			"sigma": 3.812346858862407
 		},
-		"80s": {
+		"25": {
 			"mu": 13.961078434902769,
 			"sigma": 3.641781716336968
 		},
-		"amel": {
+		"434": {
 			"mu": 3.155569099071813,
 			"sigma": 3.3578099211392294
 		},
-		"kaorimaeda": {
+		"12": {
 			"mu": 18.875565357016715,
 			"sigma": 3.4633137561099185
 		},
-		"vigard": {
+		"433": {
 			"mu": 11.000816243780205,
 			"sigma": 2.8930367595667366
 		},
-		"neoburnz": {
+		"59": {
 			"mu": 14.40845665836011,
 			"sigma": 3.5974887363791477
 		},
-		"catge": {
-			"mu": 10.637901249939137,
-			"sigma": 2.4916381028264887
+		"322": {
+			"mu": 11.074596627587916,
+			"sigma": 2.4368963301991093
 		},
-		"omaisfraco": {
+		"449": {
 			"mu": 11.071529908578297,
 			"sigma": 3.4952303060389665
 		},
-		"isekaijoucho": {
+		"356": {
 			"mu": 5.0121561081848265,
 			"sigma": 3.319549327989813
 		},
-		"knotanymore": {
+		"244": {
 			"mu": 8.89216939774346,
 			"sigma": 3.8109093289780036
 		},
-		"heleos": {
+		"348": {
 			"mu": 12.524990412615638,
 			"sigma": 2.947959733568808
 		},
-		"gdadem": {
+		"465": {
 			"mu": 0.23684303710593693,
 			"sigma": 3.6451612020080573
 		},
-		"cipherkai": {
+		"379": {
 			"mu": 13.369958108884088,
 			"sigma": 3.171330551388302
 		},
-		"dav1d1": {
+		"441": {
 			"mu": 9.401986053310734,
 			"sigma": 2.546485449590988
 		},
-		"wiwmek": {
+		"363": {
 			"mu": 1.5599134266444803,
 			"sigma": 3.8088377130911506
 		},
-		"maki04": {
+		"113": {
 			"mu": 12.080751253414288,
 			"sigma": 3.471179148669669
 		},
-		"loirinzz": {
+		"443": {
 			"mu": 6.964651821992148,
 			"sigma": 3.4713509590362057
 		},
-		"chemist": {
+		"277": {
 			"mu": 11.54844611506708,
 			"sigma": 3.600616268554665
 		},
-		"claydoll1091": {
+		"37": {
 			"mu": 7.345763841909817,
 			"sigma": 3.8143487738748316
 		},
-		"icefeed2": {
-			"mu": 3.595788836370709,
-			"sigma": 2.728306014845642
+		"269": {
+			"mu": 3.5474601995659993,
+			"sigma": 2.6525224384661956
 		},
-		"zarelyyyx": {
+		"450": {
 			"mu": 8.712715551474528,
 			"sigma": 2.6949761620282926
 		},
-		"shiratoriamaha": {
+		"390": {
 			"mu": 11.117207150721848,
 			"sigma": 3.805538298955203
 		},
-		"uy5gf": {
+		"148": {
 			"mu": 9.952010188352787,
 			"sigma": 3.607676168547115
 		},
-		"hotpot": {
+		"446": {
 			"mu": 7.547467310027953,
 			"sigma": 3.58142405084166
 		},
-		"raku51": {
+		"448": {
 			"mu": 10.325456759359088,
 			"sigma": 3.7791122264533916
 		},
-		"neumann": {
+		"221": {
 			"mu": 13.93677999345791,
 			"sigma": 3.152704059045236
 		},
-		"2skr": {
+		"334": {
 			"mu": 4.071831474386506,
 			"sigma": 3.5827779838333313
 		},
-		"typonoob": {
+		"438": {
 			"mu": 8.957200390528065,
 			"sigma": 3.4542419836564604
 		},
-		"benevelante": {
+		"139": {
 			"mu": 6.140325904734607,
 			"sigma": 3.611053169471554
 		},
-		"ryoutavn": {
+		"453": {
 			"mu": 7.911260360081129,
 			"sigma": 3.572658064668371
 		},
-		"kar72": {
+		"20": {
 			"mu": 12.017266672265414,
 			"sigma": 3.5721212002524307
 		},
-		"md22": {
+		"250": {
 			"mu": 5.507719993133947,
 			"sigma": 3.779864409659683
 		},
-		"thaleko": {
+		"52": {
 			"mu": 21.337215381646285,
 			"sigma": 3.443503753096169
 		},
-		"mangoss": {
-			"mu": 15.58461496662054,
-			"sigma": 3.018477130131093
+		"358": {
+			"mu": 15.54343521835571,
+			"sigma": 2.912220700246721
 		},
-		"thjalago": {
+		"147": {
 			"mu": 5.472447928444765,
 			"sigma": 3.591923353329961
 		},
-		"darkwarriory": {
+		"436": {
 			"mu": 3.982099583918958,
 			"sigma": 3.7745938048486765
 		},
-		"bommie": {
+		"150": {
 			"mu": 7.745204755251513,
 			"sigma": 3.5844444682093752
 		},
-		"konsumenci": {
+		"123": {
 			"mu": 4.653402983436821,
 			"sigma": 3.7785891534890967
 		},
-		"pratasz": {
+		"95": {
 			"mu": 9.026046538226165,
 			"sigma": 3.7742656756792736
 		},
-		"yoshiapelao": {
+		"53": {
 			"mu": 12.879207855178748,
 			"sigma": 3.518196794057712
 		},
-		"spartric": {
+		"401": {
 			"mu": 6.222315450895157,
 			"sigma": 2.8791217298946066
 		},
-		"bamboo": {
+		"66": {
 			"mu": 13.890334825064077,
 			"sigma": 3.568725450146225
 		},
-		"mahirushiina": {
+		"70": {
 			"mu": 10.290688095790093,
 			"sigma": 3.6450582519896964
 		},
-		"feynox_": {
+		"445": {
 			"mu": 7.510405958940209,
 			"sigma": 3.180843640278707
 		},
-		"rorf": {
+		"201": {
 			"mu": 11.725147946247661,
 			"sigma": 3.724571244693509
 		},
-		"stunar": {
+		"7": {
 			"mu": 20.927939547093413,
 			"sigma": 3.5789768412843546
 		},
-		"nunuchu42": {
+		"429": {
 			"mu": 0.24842446727435533,
 			"sigma": 3.767698646017491
 		},
-		"loomi": {
+		"437": {
 			"mu": 7.1104643037971,
 			"sigma": 3.61403585502872
 		},
-		"beanman87": {
+		"32": {
 			"mu": 16.819847532486115,
 			"sigma": 3.770486429010387
 		},
-		"watashiii": {
+		"4": {
 			"mu": 17.861870998064454,
 			"sigma": 3.2823920312737647
 		},
-		"nephirea": {
+		"318": {
 			"mu": 11.196697357037472,
 			"sigma": 3.435195076098508
 		},
-		"okitanobu": {
+		"416": {
 			"mu": 5.884114421983448,
 			"sigma": 3.7644913294049513
 		},
-		"mahzrunner": {
+		"143": {
 			"mu": 9.416099375754484,
 			"sigma": 3.764596059421255
 		},
-		"neptune": {
+		"77": {
 			"mu": 13.460871273398576,
 			"sigma": 3.324019488807005
 		},
-		"akatsukikirika": {
+		"451": {
 			"mu": 7.463481672259311,
 			"sigma": 3.8060569713112553
 		},
-		"chata": {
+		"51": {
 			"mu": 10.382965863035366,
 			"sigma": 3.810586734678031
 		},
-		"komari": {
+		"394": {
 			"mu": 12.072665988091927,
 			"sigma": 3.600700910722954
 		},
-		"peeku": {
+		"129": {
 			"mu": 13.122107188517823,
 			"sigma": 3.7990608925601133
 		},
-		"shiku": {
+		"382": {
 			"mu": 5.341155311140446,
 			"sigma": 3.8141034304497947
 		},
-		"hyo": {
+		"317": {
 			"mu": 3.841155311140446,
 			"sigma": 3.8141034304497947
 		},
-		"liljakatsuragi": {
+		"144": {
 			"mu": 12.65993485808148,
 			"sigma": 3.809258345584614
 		},
-		"chrislefko": {
+		"133": {
 			"mu": 2.7990306225589277,
 			"sigma": 3.3624807857644097
 		},
-		"_nadeshiko": {
+		"330": {
 			"mu": 8.959550251498115,
 			"sigma": 3.7642704408616554
 		},
-		"tsui": {
+		"33": {
 			"mu": 14.526959861370583,
 			"sigma": 3.590815184437896
 		},
-		"nmapper": {
+		"479": {
 			"mu": 7.968904015108193,
 			"sigma": 3.805726684833772
 		},
-		"mami": {
+		"274": {
 			"mu": 11.468741679667769,
 			"sigma": 3.6127492752618813
 		},
-		"qwecocacola": {
+		"376": {
 			"mu": 10.896610729434009,
 			"sigma": 3.334280524405166
 		},
-		"yurimeguri": {
+		"34": {
 			"mu": 16.597886195345467,
 			"sigma": 3.7703049067466763
 		},
-		"gabetin": {
-			"mu": 9.529540414921907,
-			"sigma": 3.7612798262042317
+		"463": {
+			"mu": 9.43367180702155,
+			"sigma": 3.553303272625643
 		},
-		"renzou": {
+		"47": {
 			"mu": 9.538726250830255,
 			"sigma": 3.789278890565296
 		},
-		"redeyes": {
+		"191": {
 			"mu": 5.038726250830255,
 			"sigma": 3.789278890565296
 		},
-		"asleep": {
+		"26": {
 			"mu": 10.519423073442537,
 			"sigma": 3.770666087486867
 		},
-		"zozo": {
+		"149": {
 			"mu": 10.416166740035212,
 			"sigma": 3.569697869538855
 		},
-		"hakohoka": {
+		"462": {
 			"mu": 0.739834138531355,
 			"sigma": 3.680571330427856
 		},
-		"atsui": {
+		"1": {
 			"mu": 10.515952990324406,
 			"sigma": 3.875635946627761
 		},
-		"aitsukinakuru": {
+		"366": {
 			"mu": 10.515952990324406,
 			"sigma": 3.875635946627761
 		},
-		"zomg": {
+		"489": {
 			"mu": 5.565786880691409,
 			"sigma": 3.7605030731511206
 		},
-		"ss_r_white_pony": {
+		"291": {
 			"mu": 8.389118209744566,
 			"sigma": 3.5143464779944633
 		},
-		"arpia97": {
+		"368": {
 			"mu": 4.043182501775478,
 			"sigma": 3.766692101604108
+		},
+		"505": {
+			"mu": 9.641247623613717,
+			"sigma": 3.7522109074488252
+		},
+		"205": {
+			"mu": 11.141247623613719,
+			"sigma": 3.7522109074488252
 		}
+	},
+	"rating_names": {
+		"82": "shiinamahiru",
+		"351": "kabigon",
+		"413": "zokie",
+		"171": "justaweirdo",
+		"238": "progenitor",
+		"325": "swapin",
+		"286": "lakumix",
+		"223": "vuhrculls",
+		"28": "fortnayt",
+		"159": "legrandort",
+		"357": "chommy",
+		"335": "xeyz",
+		"58": "lika",
+		"247": "shadow",
+		"259": "patoche49",
+		"405": "anicomi",
+		"79": "julialess64",
+		"415": "time2hack",
+		"419": "keysha18",
+		"21": "poolnoodle",
+		"67": "dking20",
+		"98": "comete",
+		"45": "noru",
+		"121": "janoxx",
+		"403": "annayanami",
+		"169": "yashadox",
+		"343": "inta",
+		"155": "unborned",
+		"399": "eljuanchi",
+		"307": "kaededayo",
+		"289": "provenance",
+		"411": "fayeurs",
+		"395": "lordgrond",
+		"410": "foopypoopy",
+		"81": "pile",
+		"285": "miiarad",
+		"164": "iamasiannoob",
+		"268": "civiltwlight",
+		"172": "oolli",
+		"430": "haruurara",
+		"117": "seismic",
+		"176": "spitzell",
+		"134": "jakemonkey",
+		"146": "tapumomo",
+		"404": "anatharax",
+		"156": "zental",
+		"25": "80s",
+		"434": "amel",
+		"12": "kaorimaeda",
+		"433": "vigard",
+		"59": "neoburnz",
+		"322": "catge",
+		"449": "omaisfraco",
+		"356": "isekaijoucho",
+		"244": "knotanymore",
+		"348": "heleos",
+		"465": "gdadem",
+		"379": "cipherkai",
+		"441": "dav1d1",
+		"363": "wiwmek",
+		"113": "maki04",
+		"443": "loirinzz",
+		"277": "chemist",
+		"37": "claydoll1091",
+		"269": "icefeed2",
+		"450": "zarelyyyx",
+		"390": "shiratoriamaha",
+		"148": "uy5gf",
+		"446": "hotpot",
+		"448": "raku51",
+		"221": "neumann",
+		"334": "2skr",
+		"438": "typonoob",
+		"139": "benevelante",
+		"453": "ryoutavn",
+		"20": "kar72",
+		"250": "md22",
+		"52": "thaleko",
+		"358": "mangoss",
+		"147": "thjalago",
+		"436": "darkwarriory",
+		"150": "bommie",
+		"123": "konsumenci",
+		"95": "pratasz",
+		"53": "yoshiopeninger",
+		"401": "spartric",
+		"66": "bamboo",
+		"70": "mahirushiina",
+		"445": "feynox_",
+		"201": "rorf",
+		"7": "stunar",
+		"429": "nunuchu42",
+		"437": "loomi",
+		"32": "zippy",
+		"4": "watashiii",
+		"318": "nephirea",
+		"416": "okitanobu",
+		"143": "mahzrunner",
+		"77": "neptune",
+		"451": "akatsukikirika",
+		"51": "chata",
+		"394": "komari",
+		"129": "peeku",
+		"382": "shiku",
+		"317": "hyonoka",
+		"144": "liljakatsuragi",
+		"133": "chrislefko",
+		"330": "_nadeshiko",
+		"33": "tsui",
+		"479": "nmapper",
+		"274": "mami",
+		"376": "qwecocacola",
+		"34": "yurimeguri",
+		"463": "gabetin",
+		"47": "renzou",
+		"191": "redeyes",
+		"26": "asleep",
+		"149": "zozo",
+		"462": "hakohoka",
+		"1": "atsui",
+		"366": "aitsukinakuru",
+		"489": "zomg",
+		"291": "ss_r_white_pony",
+		"368": "arpia97",
+		"505": "maikasasaki",
+		"205": "sssthnoob"
 	},
 	"elo_history": [
 		{
@@ -565,7 +702,7 @@
 			"teams": {
 				"julialess64 (12.50) legrandort (10.36) time2hack (10.00) keysha18 (8.50) = 41.36": "2W 4L 0D",
 				"poolnoodle (17.00) dking20 (10.50) comete (10.50) xeyz (2.86) = 40.86": "3W 3L 0D",
-				"anoru_ (14.00) janoxx (9.00) zokie (9.45) justaweirdo (7.45) = 39.91": "4W 2L 0D",
+				"noru (14.00) janoxx (9.00) zokie (9.45) justaweirdo (7.45) = 39.91": "4W 2L 0D",
 				"kabigon (14.95) annayanami (12.00) chommy (9.86) anicomi (3.97) yashadox (3.40) = 44.18": "3W 3L 0D"
 			},
 			"player": {
@@ -577,7 +714,7 @@
 				"dking20": "initial elo: 10.500, new elo: 10.665, rating change: 0.165",
 				"comete": "initial elo: 10.500, new elo: 10.665, rating change: 0.165",
 				"xeyz": "initial elo: 2.857, new elo: 3.011, rating change: 0.154",
-				"anoru_": "initial elo: 14.000, new elo: 14.907, rating change: 0.907",
+				"noru": "initial elo: 14.000, new elo: 14.907, rating change: 0.907",
 				"janoxx": "initial elo: 9.000, new elo: 9.907, rating change: 0.907",
 				"zokie": "initial elo: 9.455, new elo: 10.265, rating change: 0.811",
 				"justaweirdo": "initial elo: 7.455, new elo: 8.265, rating change: 0.811",
@@ -928,7 +1065,7 @@
 			"teams": {
 				"spitzell (10.21) justaweirdo (7.21) zarelyyyx (5.72) = 23.15": "3W 3L 0D",
 				"heleos (9.58) legrandort (9.15) keysha18 (4.91) = 23.65": "5W 1L 0D",
-				"yoshiapelao (12.00) foopypoopy (5.09) lordgrond (4.40) = 21.50": "2W 4L 0D",
+				"yoshiopeninger (12.00) foopypoopy (5.09) lordgrond (4.40) = 21.50": "2W 4L 0D",
 				"shadow (9.77) spartric (7.50) icefeed2 (3.89) = 21.16": "2W 4L 0D"
 			},
 			"player": {
@@ -938,7 +1075,7 @@
 				"heleos": "initial elo: 9.583, new elo: 11.069, rating change: 1.486",
 				"legrandort": "initial elo: 9.151, new elo: 9.987, rating change: 0.836",
 				"keysha18": "initial elo: 4.911, new elo: 5.930, rating change: 1.019",
-				"yoshiapelao": "initial elo: 12.000, new elo: 11.309, rating change: -0.691",
+				"yoshiopeninger": "initial elo: 12.000, new elo: 11.309, rating change: -0.691",
 				"foopypoopy": "initial elo: 5.094, new elo: 4.613, rating change: -0.481",
 				"lordgrond": "initial elo: 4.405, new elo: 3.900, rating change: -0.504",
 				"shadow": "initial elo: 9.766, new elo: 9.187, rating change: -0.579",
@@ -1010,7 +1147,7 @@
 				"stunar (17.50) zokie (9.22) justaweirdo (7.49) eljuanchi (2.80) = 37.01": "4W 2L 0D",
 				"annayanami (13.44) spitzell (10.61) legrandort (8.86) nunuchu42 (2.00) = 34.92": "1W 5L 0D",
 				"provenance (12.62) heleos (11.07) loomi (7.00) zarelyyyx (6.34) = 37.02": "4W 2L 0D",
-				"beanman87 (17.00) uy5gf (10.12) keysha18 (6.12) lordgrond (3.90) = 37.14": "3W 3L 0D"
+				"zippy (17.00) uy5gf (10.12) keysha18 (6.12) lordgrond (3.90) = 37.14": "3W 3L 0D"
 			},
 			"player": {
 				"stunar": "initial elo: 17.500, new elo: 18.295, rating change: 0.795",
@@ -1025,7 +1162,7 @@
 				"heleos": "initial elo: 11.069, new elo: 11.923, rating change: 0.853",
 				"loomi": "initial elo: 7.000, new elo: 8.139, rating change: 1.139",
 				"zarelyyyx": "initial elo: 6.337, new elo: 7.062, rating change: 0.725",
-				"beanman87": "initial elo: 17.000, new elo: 16.820, rating change: -0.180",
+				"zippy": "initial elo: 17.000, new elo: 16.820, rating change: -0.180",
 				"uy5gf": "initial elo: 10.117, new elo: 9.952, rating change: -0.165",
 				"keysha18": "initial elo: 6.123, new elo: 6.034, rating change: -0.089",
 				"lordgrond": "initial elo: 3.900, new elo: 3.775, rating change: -0.126"
@@ -1117,7 +1254,7 @@
 				"annayanami (13.49) dav1d1 (10.69) legrandort (8.96) unborned (3.88) = 37.02": "1W 4L 0D",
 				"provenance (13.65) komari (12.00) catge (9.15) xeyz (1.45) = 36.24": "2W 3L 0D",
 				"peeku (12.50) inta (8.95) zokie (8.56) zarelyyyx (7.06) = 37.07": "3W 2L 0D",
-				"nephirea (12.93) loomi (8.14) shiku (6.50) hyo (5.00) = 32.57": "1W 4L 0D",
+				"nephirea (12.93) loomi (8.14) shiku (6.50) hyonoka (5.00) = 32.57": "1W 4L 0D",
 				"poolnoodle (15.02) liljakatsuragi (11.00) feynox_ (5.46) keysha18 (4.65) = 36.13": "4W 1L 0D"
 			},
 			"player": {
@@ -1148,7 +1285,7 @@
 				"nephirea": "initial elo: 12.927, new elo: 11.898, rating change: -1.029",
 				"loomi": "initial elo: 8.139, new elo: 7.110, rating change: -1.029",
 				"shiku": "initial elo: 6.500, new elo: 5.341, rating change: -1.159",
-				"hyo": "initial elo: 5.000, new elo: 3.841, rating change: -1.159",
+				"hyonoka": "initial elo: 5.000, new elo: 3.841, rating change: -1.159",
 				"poolnoodle": "initial elo: 15.016, new elo: 16.318, rating change: 1.302",
 				"liljakatsuragi": "initial elo: 11.000, new elo: 12.660, rating change: 1.660",
 				"feynox_": "initial elo: 5.460, new elo: 6.801, rating change: 1.341",
@@ -1358,7 +1495,7 @@
 			"teams": {
 				"watashiii (16.70) zozo (9.02) ryoutavn (6.51) zomg (4.00) = 36.23": "4W 2L 0D",
 				"poolnoodle (16.32) catge (11.66) spitzell (9.52) patoche49 (5.84) = 43.34": "1W 5L 0D",
-				"shiinamahiru (13.29) yoshiapelao (11.31) shadow (10.70) legrandort (7.94) = 43.25": "5W 1L 0D",
+				"shiinamahiru (13.29) yoshiopeninger (11.31) shadow (10.70) legrandort (7.94) = 43.25": "5W 1L 0D",
 				"annayanami (13.94) ss_r_white_pony (12.50) dav1d1 (9.81) arpia97 (5.00) = 41.25": "2W 4L 0D"
 			},
 			"player": {
@@ -1371,7 +1508,7 @@
 				"spitzell": "initial elo: 9.517, new elo: 8.476, rating change: -1.041",
 				"patoche49": "initial elo: 5.843, new elo: 4.677, rating change: -1.166",
 				"shiinamahiru": "initial elo: 13.291, new elo: 14.316, rating change: 1.025",
-				"yoshiapelao": "initial elo: 11.309, new elo: 12.879, rating change: 1.570",
+				"yoshiopeninger": "initial elo: 11.309, new elo: 12.879, rating change: 1.570",
 				"shadow": "initial elo: 10.704, new elo: 11.521, rating change: 0.818",
 				"legrandort": "initial elo: 7.941, new elo: 8.464, rating change: 0.523",
 				"annayanami": "initial elo: 13.937, new elo: 13.590, rating change: -0.347",
@@ -1402,6 +1539,34 @@
 				"ss_r_white_pony": "initial elo: 11.543, new elo: 8.389, rating change: -3.154",
 				"justaweirdo": "initial elo: 9.181, new elo: 7.895, rating change: -1.286",
 				"chrislefko": "initial elo: 5.664, new elo: 2.799, rating change: -2.865"
+			}
+		},
+		{
+			"tour_id": "t6vrr7nl",
+			"time": "2026-06-01 19:06:00+02:00",
+			"teams": {
+				"annayanami (13.59) zokie (10.65) gabetin (9.53) icefeed2 (3.60) = 37.36": "3W 3L 0D",
+				"maikasasaki (8.50) catge (10.64) sssthnoob (10.00) patoche49 (4.77) = 33.90": "4W 2L 0D",
+				"mangoss (15.58) lika (13.36) legrandort (8.43) xeyz (-0.09) = 37.28": "3W 3L 0D",
+				"shadow (11.48) inta (9.39) spitzell (8.48) justaweirdo (7.90) = 37.24": "2W 4L 0D"
+			},
+			"player": {
+				"annayanami": "initial elo: 13.590, new elo: 13.555, rating change: -0.035",
+				"zokie": "initial elo: 10.647, new elo: 10.607, rating change: -0.040",
+				"gabetin": "initial elo: 9.530, new elo: 9.434, rating change: -0.096",
+				"icefeed2": "initial elo: 3.596, new elo: 3.547, rating change: -0.048",
+				"maikasasaki": "initial elo: 8.500, new elo: 9.641, rating change: 1.141",
+				"catge": "initial elo: 10.638, new elo: 11.075, rating change: 0.437",
+				"sssthnoob": "initial elo: 10.000, new elo: 11.141, rating change: 1.141",
+				"patoche49": "initial elo: 4.767, new elo: 5.231, rating change: 0.464",
+				"mangoss": "initial elo: 15.585, new elo: 15.543, rating change: -0.041",
+				"lika": "initial elo: 13.361, new elo: 13.315, rating change: -0.046",
+				"legrandort": "initial elo: 8.431, new elo: 8.411, rating change: -0.020",
+				"xeyz": "initial elo: -0.092, new elo: -0.134, rating change: -0.042",
+				"shadow": "initial elo: 11.478, new elo: 11.109, rating change: -0.369",
+				"inta": "initial elo: 9.389, new elo: 8.774, rating change: -0.615",
+				"spitzell": "initial elo: 8.476, new elo: 8.101, rating change: -0.375",
+				"justaweirdo": "initial elo: 7.895, new elo: 7.582, rating change: -0.313"
 			}
 		}
 	]

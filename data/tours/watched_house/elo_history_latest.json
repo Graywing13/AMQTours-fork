@@ -1,18 +1,18 @@
 {
-	"tour_id": "watched_house_20260609_155637",
-	"time": "2026-06-09 15:56:37.664022+00:00",
+	"tour_id": "watched_house_20260612_034445",
+	"time": "2026-06-12 03:44:45.077098+00:00",
 	"teams": {
-		"uebok (16.94) potassiumf (9.01) kyuuuu (4.96) beokros (3.04) = 33.95": "0W 1L 0D",
-		"furlain (14.14) xeyz (13.88) beta_peak (13.41) aryssiel (-6.94) = 34.49": "1W 0L 0D"
+		"redeyes (20.88) cm02 (12.54) catge (11.09) liljakatsuragi (9.47) = 53.98": "1W 0L 0D",
+		"i_dont_like_loli (19.53) arpia97 (15.47) caramel36 (15.47) dking20 (2.53) = 53.00": "0W 1L 0D"
 	},
 	"player": {
-		"uebok": "initial elo: 16.943, new elo: 14.038, rating change: -2.905",
-		"potassiumf": "initial elo: 9.012, new elo: 6.509, rating change: -2.503",
-		"kyuuuu": "initial elo: 4.960, new elo: 3.446, rating change: -1.513",
-		"beokros": "initial elo: 3.040, new elo: 1.527, rating change: -1.513",
-		"furlain": "initial elo: 14.144, new elo: 16.169, rating change: 2.025",
-		"xeyz": "initial elo: 13.878, new elo: 16.782, rating change: 2.905",
-		"beta_peak": "initial elo: 13.411, new elo: 15.914, rating change: 2.503",
-		"aryssiel": "initial elo: -6.943, new elo: -4.038, rating change: 2.905"
+		"redeyes": "initial elo: 20.879, new elo: 22.918, rating change: 2.039",
+		"cm02": "initial elo: 12.540, new elo: 15.774, rating change: 3.233",
+		"catge": "initial elo: 11.092, new elo: 13.586, rating change: 2.494",
+		"liljakatsuragi": "initial elo: 9.473, new elo: 11.512, rating change: 2.039",
+		"i_dont_like_loli": "initial elo: 19.527, new elo: 17.488, rating change: -2.039",
+		"arpia97": "initial elo: 15.473, new elo: 13.434, rating change: -2.039",
+		"caramel36": "initial elo: 15.473, new elo: 13.434, rating change: -2.039",
+		"dking20": "initial elo: 2.527, new elo: 0.488, rating change: -2.039"
 	}
 }
