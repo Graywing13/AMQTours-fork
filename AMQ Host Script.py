@@ -4,6 +4,7 @@ import hashlib
 import json
 import re
 import shutil
+import subprocess
 import sys
 import threading
 import asyncio
@@ -52,6 +53,7 @@ class AMQTourUI(tk.Tk):
 
         self.selected_tour_id = "usual"
         self.selected_category = "Random"
+        self.ui_ready = False
         self.category_buttons: dict[str, ttk.Button] = {}
         self.tour_buttons: dict[str, ttk.Button] = {}
         self.players_placeholder = "name (Rank), name (Rank), ..."
@@ -62,6 +64,20 @@ class AMQTourUI(tk.Tk):
         self.startup_eloscrape_running = False
         self.startup_eloscrape_errors = []
         self.ui_settings = self.load_ui_settings()
+        self.boot_tour_ids = set(self.ui_settings.get("boot_tour_ids") or self.default_boot_tour_ids())
+        self.boot_mode_vars: dict[str, tk.BooleanVar] = {}
+        self.loaded_tour_ids: set[str] = set()
+        self.loading_tour_ids: set[str] = set()
+        self.tour_load_events: dict[str, threading.Event] = {}
+        self.tour_load_lock = threading.Lock()
+        self.last_startup_status = ""
+        self.version_update_running = False
+        self.host_version_state = {
+            "status": "checking",
+            "local": "",
+            "remote": "",
+            "message": "Host Script version: checking...",
+        }
         self.dark_mode = tk.BooleanVar(value=bool(self.ui_settings.get("dark_mode", False)))
         self.tk_text_widgets: list[tk.Text] = []
         self.tk_list_widgets: list[tk.Listbox] = []
@@ -84,7 +100,9 @@ class AMQTourUI(tk.Tk):
         self._build_layout()
         self.select_category("Random")
         self.select_tour("usual")
+        self.ui_ready = True
         self.after(300, self.start_startup_eloscrape)
+        self.after(600, self.start_host_version_check)
 
     def _configure_style(self):
         self.colors = self._theme_colors()
@@ -217,9 +235,270 @@ class AMQTourUI(tk.Tk):
 
     def save_ui_settings(self):
         self.ui_settings["dark_mode"] = self.dark_mode.get()
+        self.ui_settings["boot_tour_ids"] = sorted(self.boot_tour_ids)
         UI_SETTINGS_PATH.parent.mkdir(parents=True, exist_ok=True)
         with UI_SETTINGS_PATH.open("w", encoding="utf-8") as f:
             json.dump(self.ui_settings, f, indent=2)
+
+    def loadable_tour_ids(self):
+        return [
+            tour_id
+            for tour_id, tour in TOURS.items()
+            if tour.get("eloscrape") or tour.get("inhouse") or tour.get("dry_elo")
+        ]
+
+    def default_boot_tour_ids(self):
+        return self.loadable_tour_ids()
+
+    def tour_requires_startup_load(self, tour):
+        return bool(tour.get("eloscrape") or tour.get("inhouse") or tour.get("dry_elo"))
+
+    def selected_boot_tour_ids(self):
+        selected = set(self.boot_tour_ids)
+        return [tour_id for tour_id in self.loadable_tour_ids() if tour_id in selected]
+
+    def open_settings_dialog(self):
+        dialog = tk.Toplevel(self)
+        dialog.title("Settings")
+        dialog.configure(bg=self.colors["bg"])
+        dialog.transient(self)
+        dialog.grab_set()
+        dialog.resizable(False, False)
+
+        frame = ttk.Frame(dialog, padding=16)
+        frame.grid(row=0, column=0, sticky="nsew")
+        ttk.Label(frame, text="Load On Startup", font=("Segoe UI", 11, "bold")).grid(row=0, column=0, columnspan=3, sticky="w", pady=(0, 8))
+        ttk.Label(
+            frame,
+            text="Choose which modes sync when the host script opens. Skipped modes will sync the first time you open or use them.",
+            wraplength=520,
+        ).grid(row=1, column=0, columnspan=3, sticky="w", pady=(0, 12))
+
+        vars_by_tour = {}
+        row = 2
+        for category in ["Random", "Watched", "Speed", "Inhouse"]:
+            available = [(label, tour_id) for label, tour_id in CATEGORIES.get(category, []) if tour_id in TOURS and tour_id in self.loadable_tour_ids()]
+            if not available:
+                continue
+            ttk.Label(frame, text=category, font=("Segoe UI", 10, "bold")).grid(row=row, column=0, sticky="w", pady=(8, 4))
+            row += 1
+            col = 0
+            for label, tour_id in available:
+                var = tk.BooleanVar(value=tour_id in self.boot_tour_ids)
+                vars_by_tour[tour_id] = var
+                ttk.Checkbutton(frame, text=label, variable=var).grid(row=row, column=col, sticky="w", padx=(0, 18), pady=2)
+                col += 1
+                if col >= 3:
+                    col = 0
+                    row += 1
+            if col:
+                row += 1
+
+        button_row = ttk.Frame(frame)
+        button_row.grid(row=row, column=0, columnspan=3, sticky="e", pady=(16, 0))
+
+        def select_all():
+            for var in vars_by_tour.values():
+                var.set(True)
+
+        def clear_all():
+            for var in vars_by_tour.values():
+                var.set(False)
+
+        def save():
+            self.boot_tour_ids = {tour_id for tour_id, var in vars_by_tour.items() if var.get()}
+            self.save_ui_settings()
+            self.set_status("Startup sync settings saved.")
+            dialog.destroy()
+
+        ttk.Button(button_row, text="Select All", command=select_all).grid(row=0, column=0, padx=(0, 8))
+        ttk.Button(button_row, text="Clear", command=clear_all).grid(row=0, column=1, padx=(0, 8))
+        ttk.Button(button_row, text="Cancel", command=dialog.destroy).grid(row=0, column=2, padx=(0, 8))
+        ttk.Button(button_row, text="Save", command=save).grid(row=0, column=3)
+
+    def tour_load_event(self, tour_id):
+        with self.tour_load_lock:
+            event = self.tour_load_events.get(tour_id)
+            if event is None:
+                event = threading.Event()
+                self.tour_load_events[tour_id] = event
+            return event
+
+    def mark_tour_load_finished(self, tour_id, success):
+        with self.tour_load_lock:
+            self.loading_tour_ids.discard(tour_id)
+            if success:
+                self.loaded_tour_ids.add(tour_id)
+            event = self.tour_load_events.get(tour_id)
+            if event is None:
+                event = threading.Event()
+                self.tour_load_events[tour_id] = event
+            event.set()
+
+    def start_lazy_load_tour(self, tour, reason=""):
+        if not self.tour_requires_startup_load(tour):
+            event = self.tour_load_event(tour["id"])
+            event.set()
+            return event
+
+        tour_id = tour["id"]
+        with self.tour_load_lock:
+            if tour_id in self.loaded_tour_ids:
+                event = self.tour_load_events.get(tour_id) or threading.Event()
+                event.set()
+                self.tour_load_events[tour_id] = event
+                return event
+            if tour_id in self.loading_tour_ids:
+                return self.tour_load_events[tour_id]
+            event = threading.Event()
+            self.tour_load_events[tour_id] = event
+            self.loading_tour_ids.add(tour_id)
+
+        status = reason or f"Loading {tour['label']} before use..."
+        self.after(0, lambda s=status: self.set_status(s))
+        threading.Thread(target=self.lazy_load_tour_in_background, args=(tour,), daemon=True).start()
+        return event
+
+    def lazy_load_tour_in_background(self, tour):
+        success = False
+        try:
+            self.startup_eloscrape_done.wait()
+
+            def progress_callback(percent, message):
+                status = f"Loading {tour['label']} - {message}" if message else f"Loading {tour['label']}"
+                self.after(0, lambda p=percent, s=status: self.update_eloscrape_progress(p, s))
+
+            self.sync_tour_mode_on_boot(tour, progress_callback)
+            success = True
+            self.after(0, lambda t=tour: self.update_eloscrape_progress(100, f"{t['label']} loaded."))
+            self.after(0, self.refresh_elos)
+            self.after(0, self.refresh_update_info)
+        except Exception as exc:
+            error_message = f"{tour['label']}: {type(exc).__name__}: {exc}"
+            self.startup_eloscrape_errors.append(error_message)
+            self.after(0, lambda e=error_message: self.update_eloscrape_progress(100, f"Load failed: {e}"))
+        finally:
+            self.mark_tour_load_finished(tour["id"], success)
+
+    def wait_for_tour_loaded(self, tour_id):
+        tour = TOURS[tour_id]
+        if not self.tour_requires_startup_load(tour):
+            return
+        self.wait_for_startup_eloscrape()
+        with self.tour_load_lock:
+            loaded = tour_id in self.loaded_tour_ids
+        if loaded:
+            return
+        event = self.start_lazy_load_tour(tour, f"Loading {tour['label']} before use...")
+        event.wait()
+        with self.tour_load_lock:
+            loaded = tour_id in self.loaded_tour_ids
+        if not loaded:
+            raise RuntimeError(f"{tour['label']} could not finish loading. Check the startup sync message.")
+
+    def startup_done_message(self, base_message):
+        version_message = self.host_version_state.get("message", "")
+        if version_message and self.host_version_state.get("status") != "checking":
+            return f"{base_message}. {version_message}"
+        return base_message
+
+    def remember_startup_status(self, base_message):
+        self.last_startup_status = base_message
+        self.update_eloscrape_progress(100, self.startup_done_message(base_message))
+
+    def run_git_command(self, args, timeout=25):
+        return subprocess.run(
+            ["git", *args],
+            cwd=PROJECT_ROOT,
+            text=True,
+            capture_output=True,
+            timeout=timeout,
+            creationflags=getattr(subprocess, "CREATE_NO_WINDOW", 0),
+        )
+
+    def start_host_version_check(self):
+        threading.Thread(target=self.host_version_check_in_background, daemon=True).start()
+
+    def host_version_check_in_background(self):
+        try:
+            local = self.run_git_command(["rev-parse", "HEAD"]).stdout.strip()
+            remote_output = self.run_git_command(["ls-remote", "origin", "refs/heads/main"], timeout=35).stdout.strip()
+            remote = remote_output.split()[0] if remote_output else ""
+            if not local or not remote:
+                state = {
+                    "status": "unknown",
+                    "local": local,
+                    "remote": remote,
+                    "message": "Host Script version could not be checked",
+                }
+            elif local == remote:
+                state = {
+                    "status": "up_to_date",
+                    "local": local,
+                    "remote": remote,
+                    "message": "Host Script is up to date",
+                }
+            else:
+                state = {
+                    "status": "update_available",
+                    "local": local,
+                    "remote": remote,
+                    "message": "Host Script update available",
+                }
+        except Exception as exc:
+            state = {
+                "status": "unknown",
+                "local": "",
+                "remote": "",
+                "message": f"Host Script version could not be checked: {type(exc).__name__}",
+            }
+        self.after(0, lambda s=state: self.finish_host_version_check(s))
+
+    def finish_host_version_check(self, state):
+        self.host_version_state = state
+        if getattr(self, "update_script_button", None):
+            if state.get("status") == "update_available":
+                self.update_script_button.grid()
+            else:
+                self.update_script_button.grid_remove()
+        if self.last_startup_status:
+            self.update_eloscrape_progress(self.elo_progress_var.get(), self.startup_done_message(self.last_startup_status))
+
+    def run_host_script_update(self):
+        if self.version_update_running:
+            return
+        self.version_update_running = True
+        self.update_script_button.configure(state="disabled")
+        self.set_status("Updating host script...")
+        threading.Thread(target=self.host_script_update_in_background, daemon=True).start()
+
+    def host_script_update_in_background(self):
+        try:
+            fetch = self.run_git_command(["fetch", "origin", "main"], timeout=60)
+            if fetch.returncode != 0:
+                raise RuntimeError(fetch.stderr.strip() or fetch.stdout.strip() or "git fetch failed")
+            pull = self.run_git_command(["pull", "--ff-only", "origin", "main"], timeout=90)
+            if pull.returncode != 0:
+                raise RuntimeError(pull.stderr.strip() or pull.stdout.strip() or "git pull failed")
+            result = "Host Script updated. Restart the script to use the newest version."
+            error = None
+        except Exception as exc:
+            result = ""
+            error = f"{type(exc).__name__}: {exc}"
+        self.after(0, lambda r=result, e=error: self.finish_host_script_update(r, e))
+
+    def finish_host_script_update(self, result="", error=None):
+        self.version_update_running = False
+        self.update_script_button.configure(state="normal")
+        if error:
+            self.set_status("Update failed.")
+            self.update_eloscrape_progress(self.elo_progress_var.get(), f"Update failed: {error}")
+            return
+        self.update_script_button.grid_remove()
+        self.host_version_state["status"] = "up_to_date"
+        self.host_version_state["message"] = result
+        self.set_status(result)
+        self.update_eloscrape_progress(self.elo_progress_var.get(), result)
 
     def apply_widget_theme(self):
         for widget in getattr(self, "tk_text_widgets", []):
@@ -251,13 +530,17 @@ class AMQTourUI(tk.Tk):
         header.grid(row=0, column=0, columnspan=2, sticky="ew", pady=(0, 12))
         header.columnconfigure(0, weight=1)
         ttk.Label(header, text="AMQ Host Script", style="Title.TLabel").grid(row=0, column=0, sticky="w")
-        for index, (label, url) in enumerate(LINKS.items(), start=1):
+        ttk.Button(header, text="Settings", command=self.open_settings_dialog).grid(row=0, column=1, sticky="e", padx=(8, 0))
+        self.update_script_button = ttk.Button(header, text="Update", command=self.run_host_script_update)
+        self.update_script_button.grid(row=0, column=2, sticky="e", padx=(8, 0))
+        self.update_script_button.grid_remove()
+        for index, (label, url) in enumerate(LINKS.items(), start=3):
             ttk.Button(header, text=label, command=lambda u=url: webbrowser.open(u)).grid(row=0, column=index, sticky="e", padx=(8, 0))
-        ttk.Checkbutton(header, text="Dark Mode", variable=self.dark_mode, command=self.toggle_theme).grid(row=0, column=len(LINKS) + 1, sticky="e", padx=(14, 0))
+        ttk.Checkbutton(header, text="Dark Mode", variable=self.dark_mode, command=self.toggle_theme).grid(row=0, column=len(LINKS) + 3, sticky="e", padx=(14, 0))
         self.elo_status_var = tk.StringVar(value="Eloscrape: waiting to start")
-        ttk.Label(header, textvariable=self.elo_status_var).grid(row=1, column=0, columnspan=5, sticky="w", pady=(4, 0))
+        ttk.Label(header, textvariable=self.elo_status_var).grid(row=1, column=0, columnspan=len(LINKS) + 4, sticky="w", pady=(4, 0))
         progress_row = ttk.Frame(header)
-        progress_row.grid(row=2, column=0, columnspan=5, sticky="ew", pady=(6, 0))
+        progress_row.grid(row=2, column=0, columnspan=len(LINKS) + 4, sticky="ew", pady=(6, 0))
         progress_row.columnconfigure(0, weight=1)
         self.elo_progress_var = tk.DoubleVar(value=0)
         self.elo_progress_text_var = tk.StringVar(value="0%")
@@ -535,6 +818,15 @@ class AMQTourUI(tk.Tk):
         self.refresh_elos()
         self.refresh_update_info()
         self.set_status(f"Selected {tour['label']}.")
+        if self.ui_ready and self.tour_requires_startup_load(tour):
+            with self.tour_load_lock:
+                loaded = tour_id in self.loaded_tour_ids
+                loading = tour_id in self.loading_tour_ids
+            if not loaded and not loading:
+                if self.startup_eloscrape_running and tour_id in self.boot_tour_ids:
+                    self.set_status(f"{tour['label']} is loading during startup sync.")
+                else:
+                    self.start_lazy_load_tour(tour, f"Loading {tour['label']} before use...")
 
     def _show_tour_tabs(self):
         tabs = self.main_notebook.tabs()
@@ -819,7 +1111,8 @@ class AMQTourUI(tk.Tk):
 
     def solve_in_background(self, snapshot):
         try:
-            self.wait_for_startup_eloscrape()
+            self.wait_for_startup_eloscrape(write_solver_note=True)
+            self.wait_for_tour_loaded(snapshot["tour_id"])
             final_code = self.solve_selected_tour(snapshot)
         except MissingRatingsError as exc:
             missing_names = exc.names
@@ -831,10 +1124,11 @@ class AMQTourUI(tk.Tk):
             return
         self.after(0, lambda: self.finish_solver(final_code=final_code))
 
-    def wait_for_startup_eloscrape(self):
+    def wait_for_startup_eloscrape(self, write_solver_note=False):
         if not self.startup_eloscrape_done.is_set():
             self.after(0, lambda: self.set_status("Waiting for startup eloscrape..."))
-            self.after(0, lambda: self.codes_text.insert("end", "Waiting for startup eloscrape to finish...\n"))
+            if write_solver_note:
+                self.after(0, lambda: self.codes_text.insert("end", "Waiting for startup eloscrape to finish...\n"))
             self.startup_eloscrape_done.wait()
 
     def finish_solver(self, final_code=None, error=None, missing=None):
@@ -893,9 +1187,7 @@ class AMQTourUI(tk.Tk):
 
     def manual_eloscrape_in_background(self, tour, link):
         try:
-            if not self.startup_eloscrape_done.is_set():
-                self.after(0, lambda: self.set_status("Waiting for startup eloscrape..."))
-                self.startup_eloscrape_done.wait()
+            self.wait_for_tour_loaded(tour["id"])
             self.sync_tour_from_sheet(tour)
             self.save_tourlist_link(tour, link)
             self.clear_eloscrape_local_state(tour)
@@ -995,6 +1287,10 @@ class AMQTourUI(tk.Tk):
     def start_recalculate_all_thread(self):
         self.startup_eloscrape_running = True
         self.startup_eloscrape_done.clear()
+        with self.tour_load_lock:
+            self.loaded_tour_ids.clear()
+            self.loading_tour_ids = set(self.loadable_tour_ids())
+            self.tour_load_events = {tour_id: threading.Event() for tour_id in self.loading_tour_ids}
         self.after(0, lambda: self.update_eloscrape_progress(0, "Eloscrape: recalculating all modes from scratch"))
         threading.Thread(target=self.recalculate_all_in_background, daemon=True).start()
 
@@ -1030,11 +1326,13 @@ class AMQTourUI(tk.Tk):
                             use_local_cache=False,
                             ignore_sheet_cache=True,
                         )
+                    self.mark_tour_load_finished(tour["id"], True)
                     completed_progress = 100 * index / total if total else 100
                     self.after(0, lambda p=completed_progress, t=tour: self.update_eloscrape_progress(p, f"Recalculating: {t['label']} done"))
                 except Exception as exc:
                     error_message = f"{tour['label']}: {type(exc).__name__}: {exc}"
                     self.startup_eloscrape_errors.append(error_message)
+                    self.mark_tour_load_finished(tour["id"], False)
                     completed_progress = 100 * index / total if total else 100
                     self.after(0, lambda p=completed_progress, e=error_message: self.update_eloscrape_progress(p, f"Recalculate failed: {e}"))
             self.after(0, lambda: self.update_eloscrape_progress(100, "Eloscrape finished"))
@@ -1060,11 +1358,17 @@ class AMQTourUI(tk.Tk):
         self.set_status("Eloscrape recalculation finished.")
 
     def run_startup_eloscrape(self):
-        tours = [tour for tour in TOURS.values() if tour.get("eloscrape") or tour.get("inhouse") or tour.get("dry_elo")]
+        tours = [TOURS[tour_id] for tour_id in self.selected_boot_tour_ids()]
         total = len(tours)
         try:
-            self.after(0, lambda: self.update_eloscrape_progress(0, "Sync: checking all tour modes"))
+            if not tours:
+                self.after(0, lambda: self.remember_startup_status("Startup sync skipped"))
+                return
+            self.after(0, lambda: self.update_eloscrape_progress(0, "Sync: checking selected tour modes"))
             for index, tour in enumerate(tours, start=1):
+                with self.tour_load_lock:
+                    self.loading_tour_ids.add(tour["id"])
+                    self.tour_load_events[tour["id"]] = threading.Event()
                 base_progress = 100 * (index - 1) / total if total else 0
                 progress_span = 100 / total if total else 100
 
@@ -1076,14 +1380,16 @@ class AMQTourUI(tk.Tk):
                 self.after(0, lambda t=tour, p=base_progress: self.update_eloscrape_progress(p, f"Sync: {t['label']}"))
                 try:
                     self.sync_tour_mode_on_boot(tour, progress_callback)
+                    self.mark_tour_load_finished(tour["id"], True)
                     completed_progress = 100 * index / total if total else 100
                     self.after(0, lambda p=completed_progress, t=tour: self.update_eloscrape_progress(p, f"Sync: {t['label']} done"))
                 except Exception as exc:
                     error_message = f"{tour['label']}: {type(exc).__name__}: {exc}"
                     self.startup_eloscrape_errors.append(error_message)
+                    self.mark_tour_load_finished(tour["id"], False)
                     completed_progress = 100 * index / total if total else 100
                     self.after(0, lambda p=completed_progress, e=error_message: self.update_eloscrape_progress(p, f"Sync failed: {e}"))
-            self.after(0, lambda: self.update_eloscrape_progress(100, "Sync finished"))
+            self.after(0, lambda: self.remember_startup_status("Eloscrape finished"))
         finally:
             self.startup_eloscrape_running = False
             self.startup_eloscrape_done.set()
@@ -1527,6 +1833,7 @@ class AMQTourUI(tk.Tk):
         try:
             from modules.support.inhouseData import append_inhouse_event
 
+            self.wait_for_tour_loaded(tour["id"])
             rows_written = append_inhouse_event(tour["state_path"], event)
             self.run_tour_eloscrape(tour)
         except Exception as exc:
@@ -1570,7 +1877,7 @@ class AMQTourUI(tk.Tk):
 
     def inhouse_changelog_in_background(self, tour, selected_tour_id=None):
         try:
-            self.startup_eloscrape_done.wait()
+            self.wait_for_tour_loaded(tour["id"])
             self.run_tour_eloscrape(tour, use_local_cache=True)
             changelog_text = self.selected_changelog_text(tour, selected_tour_id)
         except Exception as exc:
@@ -1651,6 +1958,7 @@ class AMQTourUI(tk.Tk):
         try:
             from modules.support.mvpGenerator import update_dry_elos_for_tour
 
+            self.wait_for_tour_loaded(tour["id"])
             updated_elos = update_dry_elos_for_tour(tour)
         except Exception as exc:
             details = traceback.format_exc()
@@ -1691,7 +1999,7 @@ class AMQTourUI(tk.Tk):
 
     def changelog_in_background(self, tour, selected_tour_id=None):
         try:
-            self.startup_eloscrape_done.wait()
+            self.wait_for_tour_loaded(tour["id"])
             if tour.get("eloscrape"):
                 self.sync_tour_from_sheet(tour)
                 self.run_tour_eloscrape(tour, use_local_cache=True)
@@ -1831,6 +2139,7 @@ class AMQTourUI(tk.Tk):
         try:
             from modules.support.mvpGenerator import generate_mvps_for_tour
 
+            self.wait_for_tour_loaded(tour["id"])
             mvp_text = generate_mvps_for_tour(tour, selected_tour_id=selected_tour_id)
         except Exception as exc:
             details = traceback.format_exc()
