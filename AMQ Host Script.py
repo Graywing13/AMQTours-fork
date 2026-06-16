@@ -421,9 +421,11 @@ class AMQTourUI(tk.Tk):
 
     def host_version_check_in_background(self):
         try:
-            local = self.run_git_command(["rev-parse", "HEAD"]).stdout.strip()
-            remote_output = self.run_git_command(["ls-remote", "origin", "refs/heads/main"], timeout=35).stdout.strip()
-            remote = remote_output.split()[0] if remote_output else ""
+            self.run_git_command(["fetch", "--quiet", "origin", "main"], timeout=45)
+            local_result = self.run_git_command(["rev-parse", "HEAD"])
+            remote_result = self.run_git_command(["rev-parse", "origin/main"])
+            local = local_result.stdout.strip()
+            remote = remote_result.stdout.strip()
             if not local or not remote:
                 state = {
                     "status": "unknown",
@@ -431,19 +433,26 @@ class AMQTourUI(tk.Tk):
                     "remote": remote,
                     "message": "Host Script version could not be checked",
                 }
-            elif local == remote:
+            elif local == remote or self.run_git_command(["merge-base", "--is-ancestor", "origin/main", "HEAD"]).returncode == 0:
                 state = {
                     "status": "up_to_date",
                     "local": local,
                     "remote": remote,
                     "message": "Host Script is up to date",
                 }
-            else:
+            elif self.run_git_command(["merge-base", "--is-ancestor", "HEAD", "origin/main"]).returncode == 0:
                 state = {
                     "status": "update_available",
                     "local": local,
                     "remote": remote,
                     "message": "Host Script update available",
+                }
+            else:
+                state = {
+                    "status": "unknown",
+                    "local": local,
+                    "remote": remote,
+                    "message": "Host Script differs from GitHub main",
                 }
         except Exception as exc:
             state = {
