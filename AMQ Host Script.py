@@ -2,15 +2,19 @@ from __future__ import annotations
 
 import hashlib
 import json
+import os
 import re
 import shutil
 import subprocess
 import sys
 import threading
 import asyncio
+import tempfile
 import tkinter as tk
 import traceback
+import urllib.request
 import webbrowser
+import zipfile
 from datetime import datetime, timezone
 from pathlib import Path
 from tkinter import ttk
@@ -38,8 +42,13 @@ from tour_config import TOURS
 
 
 UI_SETTINGS_PATH = PROJECT_ROOT / "config" / "ui_settings.json"
+HOST_VERSION_PATH = PROJECT_ROOT / "config" / "host_script_version.json"
 SETUP_CODES_PATH = PROJECT_ROOT / "config" / "setup_codes.json"
 SETUP_CODES = load_setup_codes(SETUP_CODES_PATH)
+GITHUB_REPO = "akaDryyy/AMQTours"
+GITHUB_BRANCH = "main"
+GITHUB_COMMIT_API_URL = f"https://api.github.com/repos/{GITHUB_REPO}/commits/{GITHUB_BRANCH}"
+GITHUB_ZIP_URL = f"https://github.com/{GITHUB_REPO}/archive/refs/heads/{GITHUB_BRANCH}.zip"
 
 PLAYER_PATTERN = re.compile(r"^(.*?)\s*(?:\(([^()]*)\))?\s*$")
 
@@ -416,17 +425,73 @@ class AMQTourUI(tk.Tk):
             creationflags=getattr(subprocess, "CREATE_NO_WINDOW", 0),
         )
 
+    def has_git_updater(self):
+        return bool(shutil.which("git") and (PROJECT_ROOT / ".git").exists())
+
+    def github_main_sha(self):
+        request = urllib.request.Request(
+            GITHUB_COMMIT_API_URL,
+            headers={
+                "Accept": "application/vnd.github+json",
+                "User-Agent": "AMQ-Host-Script",
+            },
+        )
+        with urllib.request.urlopen(request, timeout=25) as response:
+            payload = json.loads(response.read().decode("utf-8"))
+        return str(payload.get("sha", "")).strip()
+
+    def local_zip_version_sha(self):
+        try:
+            with HOST_VERSION_PATH.open(encoding="utf-8") as f:
+                payload = json.load(f)
+            return str(payload.get("github_main_sha", "")).strip()
+        except (OSError, json.JSONDecodeError):
+            return ""
+
+    def zip_version_state(self):
+        remote = self.github_main_sha()
+        local = self.local_zip_version_sha()
+        if not remote:
+            return {
+                "status": "unknown",
+                "local": local,
+                "remote": remote,
+                "message": "Host Script version could not be checked",
+            }
+        if local and local == remote:
+            return {
+                "status": "up_to_date",
+                "local": local,
+                "remote": remote,
+                "message": "Host Script is up to date",
+                "updater": "zip",
+            }
+        return {
+            "status": "update_available",
+            "local": local,
+            "remote": remote,
+            "message": "Host Script update available",
+            "updater": "zip",
+        }
+
     def start_host_version_check(self):
         threading.Thread(target=self.host_version_check_in_background, daemon=True).start()
 
     def host_version_check_in_background(self):
         try:
-            self.run_git_command(["fetch", "--quiet", "origin", "main"], timeout=45)
+            if not self.has_git_updater():
+                state = self.zip_version_state()
+                self.after(0, lambda s=state: self.finish_host_version_check(s))
+                return
+
+            fetch_result = self.run_git_command(["fetch", "--quiet", "origin", "main"], timeout=45)
+            if fetch_result.returncode != 0:
+                raise RuntimeError(fetch_result.stderr.strip() or fetch_result.stdout.strip() or "git fetch failed")
             local_result = self.run_git_command(["rev-parse", "HEAD"])
             remote_result = self.run_git_command(["rev-parse", "origin/main"])
             local = local_result.stdout.strip()
             remote = remote_result.stdout.strip()
-            if not local or not remote:
+            if local_result.returncode != 0 or remote_result.returncode != 0 or not local or not remote:
                 state = {
                     "status": "unknown",
                     "local": local,
@@ -439,6 +504,7 @@ class AMQTourUI(tk.Tk):
                     "local": local,
                     "remote": remote,
                     "message": "Host Script is up to date",
+                    "updater": "git",
                 }
             elif self.run_git_command(["merge-base", "--is-ancestor", "HEAD", "origin/main"]).returncode == 0:
                 state = {
@@ -446,6 +512,7 @@ class AMQTourUI(tk.Tk):
                     "local": local,
                     "remote": remote,
                     "message": "Host Script update available",
+                    "updater": "git",
                 }
             else:
                 state = {
@@ -453,6 +520,7 @@ class AMQTourUI(tk.Tk):
                     "local": local,
                     "remote": remote,
                     "message": "Host Script differs from GitHub main",
+                    "updater": "git",
                 }
         except Exception as exc:
             state = {
@@ -483,18 +551,89 @@ class AMQTourUI(tk.Tk):
 
     def host_script_update_in_background(self):
         try:
-            fetch = self.run_git_command(["fetch", "origin", "main"], timeout=60)
-            if fetch.returncode != 0:
-                raise RuntimeError(fetch.stderr.strip() or fetch.stdout.strip() or "git fetch failed")
-            pull = self.run_git_command(["pull", "--ff-only", "origin", "main"], timeout=90)
-            if pull.returncode != 0:
-                raise RuntimeError(pull.stderr.strip() or pull.stdout.strip() or "git pull failed")
-            result = "Host Script updated. Restart the script to use the newest version."
+            if self.has_git_updater():
+                result = self.update_from_git()
+            else:
+                result = self.prepare_zip_update()
             error = None
         except Exception as exc:
             result = ""
             error = f"{type(exc).__name__}: {exc}"
         self.after(0, lambda r=result, e=error: self.finish_host_script_update(r, e))
+
+    def update_from_git(self):
+        fetch = self.run_git_command(["fetch", "origin", "main"], timeout=60)
+        if fetch.returncode != 0:
+            raise RuntimeError(fetch.stderr.strip() or fetch.stdout.strip() or "git fetch failed")
+        pull = self.run_git_command(["pull", "--ff-only", "origin", "main"], timeout=90)
+        if pull.returncode != 0:
+            raise RuntimeError(pull.stderr.strip() or pull.stdout.strip() or "git pull failed")
+        return "Host Script updated. Restart the script to use the newest version."
+
+    def prepare_zip_update(self):
+        remote_sha = self.github_main_sha()
+        if not remote_sha:
+            raise RuntimeError("Could not read the newest GitHub version.")
+
+        temp_root = Path(tempfile.mkdtemp(prefix="amqtours_update_"))
+        zip_path = temp_root / "amqtours_main.zip"
+        extract_root = temp_root / "extracted"
+        request = urllib.request.Request(GITHUB_ZIP_URL, headers={"User-Agent": "AMQ-Host-Script"})
+        with urllib.request.urlopen(request, timeout=60) as response:
+            zip_path.write_bytes(response.read())
+        with zipfile.ZipFile(zip_path) as archive:
+            archive.extractall(extract_root)
+
+        candidates = [path for path in extract_root.iterdir() if path.is_dir()]
+        if not candidates:
+            raise RuntimeError("Downloaded update package was empty.")
+        package_root = candidates[0]
+        version_path = package_root / "config" / "host_script_version.json"
+        version_path.parent.mkdir(parents=True, exist_ok=True)
+        version_path.write_text(
+            json.dumps(
+                {
+                    "github_main_sha": remote_sha,
+                    "updated_at": datetime.now(timezone.utc).isoformat(),
+                    "source": "zip",
+                },
+                indent=2,
+            ),
+            encoding="utf-8",
+        )
+
+        batch_path = temp_root / "finish_amqtours_update.bat"
+        self.write_zip_update_batch(batch_path, package_root, temp_root)
+        subprocess.Popen(
+            ["cmd.exe", "/c", "start", "", "/min", str(batch_path)],
+            cwd=str(PROJECT_ROOT),
+            creationflags=getattr(subprocess, "CREATE_NO_WINDOW", 0),
+        )
+        return "Update downloaded. Close the host script to finish installing it."
+
+    def write_zip_update_batch(self, batch_path, package_root, temp_root):
+        script = f"""@echo off
+setlocal
+set "PID={os.getpid()}"
+set "SOURCE={package_root}"
+set "TARGET={PROJECT_ROOT}"
+set "TEMP_ROOT={temp_root}"
+:wait_for_host_script
+tasklist /FI "PID eq %PID%" | find "%PID%" >nul
+if not errorlevel 1 (
+    timeout /t 1 /nobreak >nul
+    goto wait_for_host_script
+)
+robocopy "%SOURCE%" "%TARGET%" /E /XD ".git" "credentials" "__pycache__" /XF "ui_settings.json" >nul
+if %ERRORLEVEL% LSS 8 (
+    rmdir /s /q "%TEMP_ROOT%" >nul 2>nul
+) else (
+    echo AMQTours update failed with robocopy error %ERRORLEVEL%.
+    pause
+)
+del "%~f0" >nul 2>nul
+"""
+        batch_path.write_text(script, encoding="utf-8")
 
     def finish_host_script_update(self, result="", error=None):
         self.version_update_running = False
