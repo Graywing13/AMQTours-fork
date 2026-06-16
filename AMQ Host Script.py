@@ -4,6 +4,7 @@ import hashlib
 import json
 import os
 import re
+import base64
 import shutil
 import subprocess
 import sys
@@ -612,28 +613,71 @@ class AMQTourUI(tk.Tk):
         return "Update downloaded. Close the host script to finish installing it."
 
     def write_zip_update_batch(self, batch_path, package_root, temp_root):
-        script = f"""@echo off
-setlocal
-set "PID={os.getpid()}"
-set "SOURCE={package_root}"
-set "TARGET={PROJECT_ROOT}"
-set "TEMP_ROOT={temp_root}"
-:wait_for_host_script
-tasklist /FI "PID eq %PID%" | find "%PID%" >nul
-if not errorlevel 1 (
-    timeout /t 1 /nobreak >nul
-    goto wait_for_host_script
-)
-robocopy "%SOURCE%" "%TARGET%" /E /XD ".git" "credentials" "__pycache__" /XF "ui_settings.json" >nul
-if %ERRORLEVEL% LSS 8 (
-    rmdir /s /q "%TEMP_ROOT%" >nul 2>nul
-) else (
-    echo AMQTours update failed with robocopy error %ERRORLEVEL%.
-    pause
-)
-del "%~f0" >nul 2>nul
+        powershell = f"""
+$ErrorActionPreference = 'Stop'
+$pidToWait = {os.getpid()}
+$source = @'
+{package_root}
+'@
+$target = @'
+{PROJECT_ROOT}
+'@
+$tempRoot = @'
+{temp_root}
+'@
+$logPath = Join-Path $tempRoot 'amqtours_update.log'
+try {{
+    Start-Transcript -LiteralPath $logPath -Force | Out-Null
+    try {{
+        Wait-Process -Id $pidToWait -ErrorAction SilentlyContinue
+        if (!(Test-Path -LiteralPath $source)) {{
+            throw "Update source not found: $source"
+        }}
+        if (!(Test-Path -LiteralPath $target)) {{
+            throw "Update target not found: $target"
+        }}
+
+        $uiSettings = Join-Path $target 'config\\ui_settings.json'
+        $uiBackup = Join-Path $tempRoot 'ui_settings.backup.json'
+        if (Test-Path -LiteralPath $uiSettings) {{
+            Copy-Item -LiteralPath $uiSettings -Destination $uiBackup -Force
+        }}
+
+        $skipDirs = @('.git', 'credentials', '__pycache__')
+        Get-ChildItem -LiteralPath $source -Force | ForEach-Object {{
+            if ($skipDirs -contains $_.Name) {{
+                return
+            }}
+            $destination = Join-Path $target $_.Name
+            Copy-Item -LiteralPath $_.FullName -Destination $destination -Recurse -Force
+        }}
+
+        if (Test-Path -LiteralPath $uiBackup) {{
+            New-Item -ItemType Directory -Force -Path (Split-Path -Parent $uiSettings) | Out-Null
+            Copy-Item -LiteralPath $uiBackup -Destination $uiSettings -Force
+        }}
+
+        Stop-Transcript | Out-Null
+        Remove-Item -LiteralPath $tempRoot -Recurse -Force -ErrorAction SilentlyContinue
+        exit 0
+    }} catch {{
+        Write-Host "AMQTours update failed: $($_.Exception.Message)"
+        Write-Host "Log file: $logPath"
+        Stop-Transcript | Out-Null
+        Read-Host "Press Enter to close"
+        exit 1
+    }}
+}} catch {{
+    Write-Host "AMQTours update failed: $($_.Exception.Message)"
+    Read-Host "Press Enter to close"
+    exit 1
+}}
 """
-        batch_path.write_text(script, encoding="utf-8")
+        encoded = base64.b64encode(powershell.encode("utf-16le")).decode("ascii")
+        script = f"""@echo off
+powershell.exe -NoProfile -ExecutionPolicy Bypass -EncodedCommand {encoded}
+"""
+        batch_path.write_text(script, encoding="ascii")
 
     def finish_host_script_update(self, result="", error=None):
         self.version_update_running = False
