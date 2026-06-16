@@ -14,6 +14,7 @@ import tempfile
 import tkinter as tk
 import traceback
 import urllib.request
+import urllib.error
 import webbrowser
 import zipfile
 from datetime import datetime, timezone
@@ -450,14 +451,32 @@ class AMQTourUI(tk.Tk):
             return ""
 
     def zip_version_state(self):
-        remote = self.github_main_sha()
         local = self.local_zip_version_sha()
+        try:
+            remote = self.github_main_sha()
+        except urllib.error.HTTPError as exc:
+            return {
+                "status": "update_available",
+                "local": local,
+                "remote": "",
+                "message": f"Host Script version check unavailable ({exc.code}); update anyway",
+                "updater": "zip",
+            }
+        except Exception:
+            return {
+                "status": "update_available",
+                "local": local,
+                "remote": "",
+                "message": "Host Script version check unavailable; update anyway",
+                "updater": "zip",
+            }
         if not remote:
             return {
-                "status": "unknown",
+                "status": "update_available",
                 "local": local,
                 "remote": remote,
-                "message": "Host Script version could not be checked",
+                "message": "Host Script version check unavailable; update anyway",
+                "updater": "zip",
             }
         if local and local == remote:
             return {
@@ -572,9 +591,10 @@ class AMQTourUI(tk.Tk):
         return "Host Script updated. Restart the script to use the newest version."
 
     def prepare_zip_update(self):
-        remote_sha = self.github_main_sha()
-        if not remote_sha:
-            raise RuntimeError("Could not read the newest GitHub version.")
+        try:
+            remote_sha = self.github_main_sha()
+        except Exception:
+            remote_sha = ""
 
         temp_root = Path(tempfile.mkdtemp(prefix="amqtours_update_"))
         zip_path = temp_root / "amqtours_main.zip"
@@ -597,6 +617,7 @@ class AMQTourUI(tk.Tk):
                     "github_main_sha": remote_sha,
                     "updated_at": datetime.now(timezone.utc).isoformat(),
                     "source": "zip",
+                    "source_url": GITHUB_ZIP_URL,
                 },
                 indent=2,
             ),
