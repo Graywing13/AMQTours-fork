@@ -603,16 +603,36 @@ class AMQTourUI(tk.Tk):
             encoding="utf-8",
         )
 
-        batch_path = temp_root / "finish_amqtours_update.bat"
-        self.write_zip_update_batch(batch_path, package_root, temp_root)
-        subprocess.Popen(
-            ["cmd.exe", "/c", "start", "", "/min", str(batch_path)],
-            cwd=str(PROJECT_ROOT),
-            creationflags=getattr(subprocess, "CREATE_NO_WINDOW", 0),
-        )
+        self.start_zip_update_process(package_root, temp_root)
         return "Update downloaded. Close the host script to finish installing it."
 
-    def write_zip_update_batch(self, batch_path, package_root, temp_root):
+    def start_zip_update_process(self, package_root, temp_root):
+        encoded = self.encoded_zip_update_command(package_root, temp_root)
+        powershell_exe = self.powershell_executable()
+        subprocess.Popen(
+            [
+                str(powershell_exe),
+                "-NoProfile",
+                "-ExecutionPolicy",
+                "Bypass",
+                "-EncodedCommand",
+                encoded,
+            ],
+            cwd=str(temp_root),
+            creationflags=getattr(subprocess, "CREATE_NO_WINDOW", 0),
+        )
+
+    def powershell_executable(self):
+        system_root = Path(os.environ.get("SystemRoot", r"C:\Windows"))
+        candidate = system_root / "System32" / "WindowsPowerShell" / "v1.0" / "powershell.exe"
+        if candidate.exists():
+            return candidate
+        found = shutil.which("powershell.exe")
+        if found:
+            return Path(found)
+        return Path("powershell.exe")
+
+    def encoded_zip_update_command(self, package_root, temp_root):
         powershell = f"""
 $ErrorActionPreference = 'Stop'
 $pidToWait = {os.getpid()}
@@ -643,13 +663,23 @@ try {{
             Copy-Item -LiteralPath $uiSettings -Destination $uiBackup -Force
         }}
 
-        $skipDirs = @('.git', 'credentials', '__pycache__')
-        Get-ChildItem -LiteralPath $source -Force | ForEach-Object {{
-            if ($skipDirs -contains $_.Name) {{
-                return
-            }}
-            $destination = Join-Path $target $_.Name
-            Copy-Item -LiteralPath $_.FullName -Destination $destination -Recurse -Force
+        $robocopyArgs = @(
+            $source,
+            $target,
+            '/E',
+            '/XD',
+            '.git',
+            'credentials',
+            '__pycache__',
+            '/XF',
+            'ui_settings.json',
+            '/R:2',
+            '/W:1'
+        )
+        & robocopy @robocopyArgs | Tee-Object -LiteralPath $logPath -Append
+        $copyCode = $LASTEXITCODE
+        if ($copyCode -ge 8) {{
+            throw "robocopy failed with exit code $copyCode"
         }}
 
         if (Test-Path -LiteralPath $uiBackup) {{
@@ -673,11 +703,7 @@ try {{
     exit 1
 }}
 """
-        encoded = base64.b64encode(powershell.encode("utf-16le")).decode("ascii")
-        script = f"""@echo off
-powershell.exe -NoProfile -ExecutionPolicy Bypass -EncodedCommand {encoded}
-"""
-        batch_path.write_text(script, encoding="ascii")
+        return base64.b64encode(powershell.encode("utf-16le")).decode("ascii")
 
     def finish_host_script_update(self, result="", error=None):
         self.version_update_running = False
