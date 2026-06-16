@@ -1,4 +1,5 @@
 from curl_cffi import requests
+from urllib.parse import urlparse, urlunparse
 from shutil import which
 from datetime import datetime
 from dateutil.relativedelta import relativedelta
@@ -79,20 +80,48 @@ def get_stat(df, player_id, column):
     
     return filtered.astype(float).iloc[0]
 
+def challonge_url_variants(url: str):
+    parsed = urlparse(url.strip())
+    if not parsed.scheme:
+        parsed = urlparse("https://" + url.strip())
+
+    base = urlunparse((parsed.scheme or "https", parsed.netloc, parsed.path.rstrip("/"), "", "", ""))
+    variants = [base]
+    if parsed.netloc == "challonge.com":
+        variants.append(urlunparse((parsed.scheme or "https", "www.challonge.com", parsed.path.rstrip("/"), "", "", "")))
+    variants.append(base + "/module?multiplier=1&match_width_multiplier=1&show_final_results=1")
+    return list(dict.fromkeys(variants))
+
+
 def download_challonge_page(url: str) -> str:
-    try:
-        response = requests.get(
-            url,
-            impersonate="chrome123",
-            timeout=20
-        )
+    headers = {
+        "accept": "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
+        "accept-language": "en-US,en;q=0.9",
+        "cache-control": "no-cache",
+        "referer": "https://challonge.com/",
+    }
+    attempts = []
+    impersonations = ["chrome124", "chrome123", "chrome120", "safari15_3"]
 
-        response.raise_for_status()
+    for candidate_url in challonge_url_variants(url):
+        for impersonate in impersonations:
+            try:
+                response = requests.get(
+                    candidate_url,
+                    headers=headers,
+                    impersonate=impersonate,
+                    timeout=30,
+                )
+                response.raise_for_status()
+                return response.text
+            except Exception as exc:
+                attempts.append(f"{candidate_url} ({impersonate}): {exc}")
 
-        return response.text
-
-    except Exception as e:
-        raise RuntimeError(f"Failed to download Challonge page: {e}")
+    attempt_text = "\n".join(f"- {attempt}" for attempt in attempts[-6:])
+    raise RuntimeError(
+        "Failed to download Challonge page. Challonge may be blocking automated requests right now.\n"
+        f"Recent attempts:\n{attempt_text}"
+    )
 
 def get_browser():
     WINDOWS_BROWSERS = [

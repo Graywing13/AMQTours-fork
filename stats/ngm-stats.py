@@ -886,12 +886,19 @@ def extract_challonge_store_data(html):
 
 
 def parse_challonge_display_players(display_name):
-    pattern = r"([^\s\[(|]+)(?:\s*\[(.*?)\])?(?:\s*\(([^)]*)\))?"
-    return [
-        (name, rounds_text, rank_text)
-        for name, rounds_text, rank_text in re.findall(pattern, display_name or "")
-        if name
-    ]
+    player_text = (display_name or "").split("|", 1)[0]
+    pattern = r"([^\s\[(|]+)(?:\s*\[(.*?)\])?(?:\s*\((-?\d+(?:\.\d+)?)\))?"
+    ignored_tokens = {"total", "guesses", "average", "avg", "="}
+    parsed_players = []
+    for name, rounds_text, rank_text in re.findall(pattern, player_text):
+        if not name:
+            continue
+        if name.casefold() in ignored_tokens:
+            continue
+        if re.fullmatch(r"-?\d+(?:\.\d+)?", name):
+            continue
+        parsed_players.append((name, rounds_text, rank_text))
+    return parsed_players
 
 
 def parse_masquerade_rank(rank_text):
@@ -1027,6 +1034,7 @@ def run_ngm_sheet_stats():
     songDB = SongDB()
 
     sheetName = "NGM Stats Export v2"
+    sheetId = NGM_STATS_SHEET_ID
     orderToSheet = [
         "Timestamp",
         "Rank", 
@@ -1224,7 +1232,7 @@ def run_ngm_sheet_stats():
     gc = get_gspread_client(DIRECTORY)
     sync_chanting_ids_file(gc, ASSETS)
     
-    sheet = gc.open(sheetName)
+    sheet = gc.open_by_key(sheetId)
     wks = get_worksheet_by_ref(sheet, gamemode)
     rows_stats = wks.get_all_values()
     wks_ids = sheet.get_worksheet_by_id(SHEET_PLAYER_IDS)
@@ -1274,7 +1282,11 @@ def run_ngm_sheet_stats():
                     common_error(
                         "Could not open the Challonge link.",
                         [str(exc)],
-                        ["Check that the Challonge link in codes.txt is correct and publicly reachable."],
+                        [
+                            "Open the Challonge link in your browser once to make sure it loads.",
+                            "If it opens in the browser, Challonge is probably blocking the script temporarily; try again in a bit.",
+                            "If it does not open in the browser, fix the Challonge link in codes.txt.",
+                        ],
                     )
             if line.lower().startswith(("sub")):
                 if line.split(':')[-1]:
@@ -1342,12 +1354,11 @@ def run_ngm_sheet_stats():
     validate_challonge_players_against_codes(data, teamDB, playerDB, alias_to_id, id_to_aliases, masquerade_mapping)
 
     for round_key, matches in data["matches_by_round"].items():
-        pattern = r"([^\s\[(|]+)(?:\s*\[(.*?)\])?(?:\s*\(([^)]*)\))?"
         for match in matches:
             match_playersTeam1 = match["player1"]["display_name"]
             match_playersTeam2 = match["player2"]["display_name"]
-            playersTeam1 = re.findall(pattern, match_playersTeam1)
-            playersTeam2 = re.findall(pattern, match_playersTeam2)
+            playersTeam1 = parse_challonge_display_players(match_playersTeam1)
+            playersTeam2 = parse_challonge_display_players(match_playersTeam2)
 
             scoreT1 = match["scores"][0]
             scoreT2 = match["scores"][1]
@@ -2257,6 +2268,7 @@ def log_export_data(sheet, tour_type, export_time, list_guess_counts, raw_json_s
 # --- AMQ EXTRA STATS SCREENSHOT FLOW ---
 
 NGM_STATS_SHEET_NAME = "NGM Stats Export v2"
+NGM_STATS_SHEET_ID = "1ihfqssregh74curDyvRE0GAFihQfovUAHpYDrtOIrOA"
 SHEET_PLAYER_IDS = 1903970832
 
 SERVER_AVERAGE_SHEET_CANDIDATES = {
@@ -2350,7 +2362,7 @@ def get_stats_worksheet(worksheets, candidates):
 def load_server_average_stats(gc):
     stats = {}
     try:
-        stats_sheet = gc.open(NGM_STATS_SHEET_NAME)
+        stats_sheet = gc.open_by_key(NGM_STATS_SHEET_ID)
         worksheets = stats_sheet.worksheets()
     except Exception:
         return stats
@@ -2373,7 +2385,7 @@ def load_server_average_stats(gc):
 
 def load_player_aliases(gc):
     try:
-        sheet = gc.open(NGM_STATS_SHEET_NAME)
+        sheet = gc.open_by_key(NGM_STATS_SHEET_ID)
         rows = sheet.get_worksheet_by_id(SHEET_PLAYER_IDS).get_all_values()
     except Exception:
         return {}, defaultdict(set)
@@ -2394,7 +2406,7 @@ def load_player_aliases(gc):
 
 def load_chanting_ids(gc):
     try:
-        sheet = gc.open(NGM_STATS_SHEET_NAME)
+        sheet = gc.open_by_key(NGM_STATS_SHEET_ID)
         rows = sheet.worksheet("MiscData").get_all_values()
     except Exception:
         return set()
@@ -2566,7 +2578,7 @@ def hero_chart_html(title, rows, average_value, server_average=None):
     server_axis = ""
     if server_average is not None:
         server_guide = f'<div class="guide server-guide" style="left:{server_pct}%"></div>'
-        server_axis = f'<span class="server-axis"><b>Server Average</b><br>{number_text(server_average)}</span>'
+        server_axis = f'<span class="axis-label server-axis" style="left:{server_pct}%"><b>Server Average</b><br>{number_text(server_average)}</span>'
     html_rows = []
     for tier, name, value in rows:
         width = max(2, min(100, (value / max_value) * 100)) if max_value else 0
@@ -2591,7 +2603,7 @@ def hero_chart_html(title, rows, average_value, server_average=None):
                 {''.join(html_rows)}
             </div>
             <div class="chart-axis">
-                <span><b>Tour Average</b><br>{number_text(average_value)}</span>
+                <span class="axis-label tour-axis" style="left:{avg_pct}%"><b>Tour Average</b><br>{number_text(average_value)}</span>
                 {server_axis}
             </div>
         </div>
@@ -2890,23 +2902,26 @@ def save_extra_stats_image(data, output_dir, filename):
         width: 2px;
     }}
     .chart-axis {{
-        display: flex;
-        justify-content: flex-start;
-        gap: 28px;
+        position: relative;
         height: 32px;
-        margin-left: 0;
+        margin-left: 147px;
         margin-right: 45px;
-        padding-left: 0;
         font-size: 16px;
         font-weight: bold;
     }}
-    .chart-axis span {{
+    .axis-label {{
+        position: absolute;
+        top: 2px;
+        min-width: 118px;
+        transform: translateX(-50%);
         text-align: center;
+        line-height: 1.15;
+        background: white;
     }}
     .server-axis {{ color: #1d4ed8; }}
     .chanting, .answer-time {{
         margin-top: 18px;
-        width: 552px;
+        width: 620px;
     }}
     .chanting .boxed-title, .answer-time .boxed-title {{ margin-bottom: 0; }}
     .two-col-row {{
