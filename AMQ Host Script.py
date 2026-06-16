@@ -4,7 +4,6 @@ import hashlib
 import json
 import os
 import re
-import base64
 import shutil
 import subprocess
 import sys
@@ -628,103 +627,104 @@ class AMQTourUI(tk.Tk):
         return "Update downloaded. Close the host script to finish installing it."
 
     def start_zip_update_process(self, package_root, temp_root):
-        encoded = self.encoded_zip_update_command(package_root, temp_root)
-        powershell_exe = self.powershell_executable()
+        runner_path = temp_root / "finish_amqtours_update.py"
+        runner_path.write_text(self.zip_update_runner_script(), encoding="utf-8")
         subprocess.Popen(
             [
-                str(powershell_exe),
-                "-NoProfile",
-                "-ExecutionPolicy",
-                "Bypass",
-                "-EncodedCommand",
-                encoded,
+                sys.executable,
+                str(runner_path),
+                str(os.getpid()),
+                str(package_root),
+                str(PROJECT_ROOT),
+                str(temp_root),
             ],
             cwd=str(temp_root),
             creationflags=getattr(subprocess, "CREATE_NO_WINDOW", 0),
         )
 
-    def powershell_executable(self):
-        system_root = Path(os.environ.get("SystemRoot", r"C:\Windows"))
-        candidate = system_root / "System32" / "WindowsPowerShell" / "v1.0" / "powershell.exe"
-        if candidate.exists():
-            return candidate
-        found = shutil.which("powershell.exe")
-        if found:
-            return Path(found)
-        return Path("powershell.exe")
+    def zip_update_runner_script(self):
+        return r'''
+from __future__ import annotations
 
-    def encoded_zip_update_command(self, package_root, temp_root):
-        powershell = f"""
-$ErrorActionPreference = 'Stop'
-$pidToWait = {os.getpid()}
-$source = @'
-{package_root}
-'@
-$target = @'
-{PROJECT_ROOT}
-'@
-$tempRoot = @'
-{temp_root}
-'@
-$logPath = Join-Path $tempRoot 'amqtours_update.log'
-try {{
-    Start-Transcript -LiteralPath $logPath -Force | Out-Null
-    try {{
-        Wait-Process -Id $pidToWait -ErrorAction SilentlyContinue
-        if (!(Test-Path -LiteralPath $source)) {{
-            throw "Update source not found: $source"
-        }}
-        if (!(Test-Path -LiteralPath $target)) {{
-            throw "Update target not found: $target"
-        }}
+import ctypes
+import os
+import shutil
+import sys
+import time
+import traceback
+from pathlib import Path
 
-        $uiSettings = Join-Path $target 'config\\ui_settings.json'
-        $uiBackup = Join-Path $tempRoot 'ui_settings.backup.json'
-        if (Test-Path -LiteralPath $uiSettings) {{
-            Copy-Item -LiteralPath $uiSettings -Destination $uiBackup -Force
-        }}
 
-        $robocopyArgs = @(
-            $source,
-            $target,
-            '/E',
-            '/XD',
-            '.git',
-            'credentials',
-            '__pycache__',
-            '/XF',
-            'ui_settings.json',
-            '/R:2',
-            '/W:1'
-        )
-        & robocopy @robocopyArgs | Tee-Object -LiteralPath $logPath -Append
-        $copyCode = $LASTEXITCODE
-        if ($copyCode -ge 8) {{
-            throw "robocopy failed with exit code $copyCode"
-        }}
+def wait_for_process(pid: int):
+    if os.name == "nt":
+        synchronize = 0x00100000
+        handle = ctypes.windll.kernel32.OpenProcess(synchronize, False, pid)
+        if handle:
+            try:
+                ctypes.windll.kernel32.WaitForSingleObject(handle, 0xFFFFFFFF)
+            finally:
+                ctypes.windll.kernel32.CloseHandle(handle)
+            return
+    while True:
+        try:
+            os.kill(pid, 0)
+        except OSError:
+            return
+        time.sleep(1)
 
-        if (Test-Path -LiteralPath $uiBackup) {{
-            New-Item -ItemType Directory -Force -Path (Split-Path -Parent $uiSettings) | Out-Null
-            Copy-Item -LiteralPath $uiBackup -Destination $uiSettings -Force
-        }}
 
-        Stop-Transcript | Out-Null
-        Remove-Item -LiteralPath $tempRoot -Recurse -Force -ErrorAction SilentlyContinue
-        exit 0
-    }} catch {{
-        Write-Host "AMQTours update failed: $($_.Exception.Message)"
-        Write-Host "Log file: $logPath"
-        Stop-Transcript | Out-Null
-        Read-Host "Press Enter to close"
-        exit 1
-    }}
-}} catch {{
-    Write-Host "AMQTours update failed: $($_.Exception.Message)"
-    Read-Host "Press Enter to close"
-    exit 1
-}}
-"""
-        return base64.b64encode(powershell.encode("utf-16le")).decode("ascii")
+def copy_update(source: Path, target: Path, temp_root: Path):
+    if not source.exists():
+        raise FileNotFoundError(f"Update source not found: {source}")
+    if not target.exists():
+        raise FileNotFoundError(f"Update target not found: {target}")
+
+    ui_settings = target / "config" / "ui_settings.json"
+    ui_backup = temp_root / "ui_settings.backup.json"
+    if ui_settings.exists():
+        ui_backup.parent.mkdir(parents=True, exist_ok=True)
+        shutil.copy2(ui_settings, ui_backup)
+
+    skip_top_level = {".git", "credentials", "__pycache__"}
+    ignore = shutil.ignore_patterns("__pycache__")
+    for item in source.iterdir():
+        if item.name in skip_top_level:
+            continue
+        destination = target / item.name
+        if item.is_dir():
+            shutil.copytree(item, destination, dirs_exist_ok=True, ignore=ignore)
+        else:
+            destination.parent.mkdir(parents=True, exist_ok=True)
+            shutil.copy2(item, destination)
+
+    if ui_backup.exists():
+        ui_settings.parent.mkdir(parents=True, exist_ok=True)
+        shutil.copy2(ui_backup, ui_settings)
+
+    version_source = source / "config" / "host_script_version.json"
+    version_target = target / "config" / "host_script_version.json"
+    if version_source.exists():
+        version_target.parent.mkdir(parents=True, exist_ok=True)
+        shutil.copy2(version_source, version_target)
+
+
+def main():
+    pid = int(sys.argv[1])
+    source = Path(sys.argv[2])
+    target = Path(sys.argv[3])
+    temp_root = Path(sys.argv[4])
+    log_path = temp_root / "amqtours_update.log"
+    try:
+        wait_for_process(pid)
+        copy_update(source, target, temp_root)
+        shutil.rmtree(temp_root, ignore_errors=True)
+    except Exception:
+        log_path.write_text(traceback.format_exc(), encoding="utf-8")
+
+
+if __name__ == "__main__":
+    main()
+'''
 
     def finish_host_script_update(self, result="", error=None):
         self.version_update_running = False
