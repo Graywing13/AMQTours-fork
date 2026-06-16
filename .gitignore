@@ -1,0 +1,4 @@
+credentials/
+stats/assets/credentials/
+__pycache__/
+*.pyc

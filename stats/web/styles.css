@@ -1,0 +1,266 @@
+:root {
+  --bg: #f6f7f9;
+  --panel: #ffffff;
+  --text: #1d2430;
+  --muted: #647084;
+  --line: #d9dee7;
+  --accent: #0f766e;
+  --accent-soft: #d9f1ee;
+  --danger: #b42318;
+  --radius: 8px;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+.app-shell {
+  width: min(1440px, 100%);
+  margin: 0 auto;
+  padding: 24px;
+}
+
+.topbar {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 24px;
+  margin-bottom: 18px;
+}
+
+h1, h2, p {
+  margin: 0;
+}
+
+h1 {
+  font-size: 28px;
+  letter-spacing: 0;
+}
+
+h2 {
+  font-size: 18px;
+  letter-spacing: 0;
+}
+
+p, label {
+  color: var(--muted);
+  font-size: 14px;
+}
+
+.controls {
+  display: grid;
+  grid-template-columns: auto minmax(260px, 420px) auto;
+  align-items: center;
+  gap: 10px;
+}
+
+select, input, button {
+  min-height: 38px;
+  border: 1px solid var(--line);
+  background: white;
+  color: var(--text);
+  border-radius: 6px;
+  font-size: 14px;
+  padding: 0 10px;
+}
+
+button {
+  background: var(--accent);
+  color: white;
+  border-color: var(--accent);
+  cursor: pointer;
+}
+
+.notice {
+  border: 1px solid #f2b8ad;
+  background: #fff1ef;
+  color: var(--danger);
+  border-radius: var(--radius);
+  padding: 12px;
+  margin-bottom: 16px;
+}
+
+.hidden {
+  display: none !important;
+}
+
+.summary-grid {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(140px, 1fr));
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+.metric {
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  padding: 12px;
+}
+
+.metric span {
+  display: block;
+  color: var(--muted);
+  font-size: 12px;
+  margin-bottom: 8px;
+}
+
+.metric strong {
+  font-size: 22px;
+}
+
+.panel {
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  padding: 14px;
+  margin-bottom: 16px;
+}
+
+.panel-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+
+.table-wrap {
+  overflow: auto;
+  border: 1px solid var(--line);
+  border-radius: 6px;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13px;
+  white-space: nowrap;
+}
+
+th, td {
+  padding: 8px 10px;
+  border-bottom: 1px solid var(--line);
+  text-align: right;
+}
+
+th {
+  position: sticky;
+  top: 0;
+  background: #eef1f5;
+  color: #2b3442;
+  cursor: pointer;
+  user-select: none;
+}
+
+th:first-child, td:first-child,
+th:nth-child(2), td:nth-child(2) {
+  text-align: left;
+}
+
+tr:hover td {
+  background: #f9fbfc;
+}
+
+.dashboard-grid {
+  display: grid;
+  grid-template-columns: 1.2fr 0.8fr;
+  gap: 16px;
+}
+
+.highlight-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(180px, 1fr));
+  gap: 12px;
+}
+
+.highlight-card, .list-card, .song-card {
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  padding: 10px;
+}
+
+.highlight-card h3, .list-card h3 {
+  margin: 0 0 8px;
+  font-size: 14px;
+}
+
+.rank-row {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 4px 0;
+  border-bottom: 1px solid #eef1f5;
+  font-size: 13px;
+}
+
+.rank-row:last-child {
+  border-bottom: 0;
+}
+
+.rank-row b {
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.song-list {
+  display: grid;
+  gap: 10px;
+}
+
+.song-card {
+  display: grid;
+  grid-template-columns: minmax(220px, 1fr) repeat(4, minmax(90px, auto));
+  gap: 10px;
+  align-items: start;
+}
+
+.song-title {
+  font-weight: bold;
+}
+
+.song-meta {
+  color: var(--muted);
+  font-size: 12px;
+  margin-top: 4px;
+}
+
+.pill {
+  display: inline-block;
+  background: var(--accent-soft);
+  color: #07564f;
+  border-radius: 999px;
+  padding: 3px 8px;
+  font-size: 12px;
+  margin: 2px 3px 2px 0;
+}
+
+@media (max-width: 900px) {
+  .app-shell {
+    padding: 14px;
+  }
+
+  .topbar, .panel-header {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .controls {
+    grid-template-columns: 1fr;
+  }
+
+  .summary-grid, .dashboard-grid, .highlight-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .song-card {
+    grid-template-columns: 1fr;
+  }
+}

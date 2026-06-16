@@ -1,0 +1,25 @@
+window.NGM_STATS_CONFIG = {
+  spreadsheetId: "1ihfqssregh74curDyvRE0GAFihQfovUAHpYDrtOIrOA",
+  statTabs: [
+    { sheet: "Random FL (usual)", tourType: "Random FL", mode: "random" },
+    { sheet: "Watched FL", tourType: "Watched FL", mode: "watched" },
+    { sheet: "Watched OP", tourType: "Watched OP", mode: "watched" },
+    { sheet: "Watched ED", tourType: "Watched ED", mode: "watched" },
+    { sheet: "Watched IN", tourType: "Watched IN", mode: "watched" },
+    { sheet: "Watched IN (-chanting)", tourType: "Watched IN (-chanting)", mode: "watched" },
+    { sheet: "Watched 2+8", tourType: "Watched FL 2+8s", mode: "watched" },
+    { sheet: "Watched 5s", tourType: "Watched FL 5s", mode: "watched" },
+    { sheet: "Watched -2009", tourType: "Watched -2009", mode: "watched" },
+    { sheet: "Random OP", tourType: "Random OP", mode: "random" },
+    { sheet: "Random ED", tourType: "Random ED", mode: "random" },
+    { sheet: "Random IN stats", tourType: "Random IN", mode: "random" },
+    { sheet: "Random OPED", tourType: "Random OPED", mode: "random" },
+    { sheet: "Random Chanting", tourType: "Random Chanting", mode: "random" },
+    { sheet: "Other", tourType: "Other", mode: "other" },
+  ],
+  detailTabs: {
+    jsonData: "JsonData",
+    listData: "ListData",
+    miscData: "MiscData",
+  },
+};
