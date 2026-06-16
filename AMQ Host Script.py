@@ -421,12 +421,33 @@ class AMQTourUI(tk.Tk):
 
     def host_version_check_in_background(self):
         try:
-            self.run_git_command(["fetch", "--quiet", "origin", "main"], timeout=45)
+            if not shutil.which("git"):
+                state = {
+                    "status": "unknown",
+                    "local": "",
+                    "remote": "",
+                    "message": "Host Script update check unavailable: Git is not installed",
+                }
+                self.after(0, lambda s=state: self.finish_host_version_check(s))
+                return
+            if not (PROJECT_ROOT / ".git").exists():
+                state = {
+                    "status": "unknown",
+                    "local": "",
+                    "remote": "",
+                    "message": "Host Script update check unavailable: not a Git copy",
+                }
+                self.after(0, lambda s=state: self.finish_host_version_check(s))
+                return
+
+            fetch_result = self.run_git_command(["fetch", "--quiet", "origin", "main"], timeout=45)
+            if fetch_result.returncode != 0:
+                raise RuntimeError(fetch_result.stderr.strip() or fetch_result.stdout.strip() or "git fetch failed")
             local_result = self.run_git_command(["rev-parse", "HEAD"])
             remote_result = self.run_git_command(["rev-parse", "origin/main"])
             local = local_result.stdout.strip()
             remote = remote_result.stdout.strip()
-            if not local or not remote:
+            if local_result.returncode != 0 or remote_result.returncode != 0 or not local or not remote:
                 state = {
                     "status": "unknown",
                     "local": local,
@@ -483,6 +504,10 @@ class AMQTourUI(tk.Tk):
 
     def host_script_update_in_background(self):
         try:
+            if not shutil.which("git"):
+                raise RuntimeError("Automatic updates require Git to be installed.")
+            if not (PROJECT_ROOT / ".git").exists():
+                raise RuntimeError("Automatic updates require a Git clone of AMQTours.")
             fetch = self.run_git_command(["fetch", "origin", "main"], timeout=60)
             if fetch.returncode != 0:
                 raise RuntimeError(fetch.stderr.strip() or fetch.stdout.strip() or "git fetch failed")
