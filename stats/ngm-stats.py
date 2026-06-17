@@ -1681,6 +1681,9 @@ def run_ngm_sheet_stats():
             game_player.add("OPplayed", game.OP)
             game_player.add("EDplayed", game.ED)
             game_player.add("INplayed", game.IN)
+            game_player.add("OPhitVsPlayedString", f"{game_player.OP} / {game.OP}") # TODO check variable access
+            game_player.add("EDhitVsPlayedString", f"{game_player.ED} / {game.ED}")
+            game_player.add("INhitVsPlayedString", f"{game_player.IN} / {game.IN}")
             game_player.add("eggs", eggs)
             game_player.add("avgVintagePlayed", game.vintage)
 
@@ -1721,6 +1724,9 @@ def run_ngm_sheet_stats():
         "OPplayed": "# OPs played",
         "EDplayed": "# EDs played",
         "INplayed": "# INs played",
+        "OPhitVsPlayedString": "# OPs hit / played",
+        "EDhitVsPlayedString": "# EDs hit / played",
+        "INhitVsPlayedString": "# INs hit / played",
         "rigAmount": "Rigs",
         "soloRigs": "Solo rigs",
         "avgoutofRigs": "avg/8 of your rigs",
@@ -1767,14 +1773,17 @@ def run_ngm_sheet_stats():
         "ΔOP",
         "# OPs hit",
         "# OPs played",
+        "# OPs hit / played",
         "ED guess rate",
         "ΔED",
         "# EDs hit",
         "# EDs played",
+        "# EDs hit / played"
         "IN guess rate",
         "ΔIN",
         "# INs hit",
         "# INs played",
+        "# INs hit / played",
         "Lives taken",
         "Lives saved",
         "Avg diff hit",
@@ -1831,14 +1840,17 @@ def run_ngm_sheet_stats():
         "\u0394OP": "OP",
         "# OPs hit": "OP",
         "# OPs played": "OP",
+        "# OPs hit / played": "OP",
         "ED guess rate": "ED",
         "\u0394ED": "ED",
         "# EDs hit": "ED",
         "# EDs played": "ED",
+        "# EDs hit / played": "ED",
         "IN guess rate": "IN",
         "\u0394IN": "IN",
         "# INs hit": "IN",
         "# INs played": "IN",
+        "# INs hit / played": "IN",
     }
 
     list_only_columns = {"Rigs", "Rigs missed", "Onlist", "Offlist"}
@@ -1883,16 +1895,13 @@ def run_ngm_sheet_stats():
         "\u0394UF",
         "OP guess rate", 
         "\u0394OP",
-        "# OPs hit",
-        "# OPs played",
+        "# OPs hit / played",
         "ED guess rate",
         "\u0394ED",
-        "# EDs hit",
-        "# EDs played",
+        "# EDs hit / played",
         "IN guess rate",
         "\u0394IN",
-        "# INs hit",
-        "# INs played",
+        "# INs hit / played",
         "Avg diff hit",
         "Avg diff played",
         "Avg vintage hit",
