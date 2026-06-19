@@ -33,6 +33,10 @@ class Player:
     OPplayed: int = 0
     EDplayed: int = 0
     INplayed: int = 0
+
+    OPfractionString: str = ""
+    EDfractionString: str = ""
+    INfractionString: str = ""
     rigAmount: int = 0
     soloRigs: int = 0
     avgoutofRigs: float = 0
@@ -79,7 +83,8 @@ class Player:
                 f"List Hit={self.list_hit}, List Miss={self.list_miss}, Solo Rigs={self.soloRigs}, Rigs/8={self.avgoutofRigs}, Correct Count={self.totalSongsHit}, Song Count={self.totalSongsPlayed}, "
                 f"Lives Taken={self.livesTaken}, Lives Saved={self.livesSaved}, avg Vintage Played={self.avgVintageString}, avg Vintage Hit={self.avgVintageHitString}, "
                 f"SKILL ISSUE={self.SKILLISSUE}, WIN={self.WIN}, LOSE={self.LOSE}, TIE={self.TIE}, "
-                f"ΔGR={self.DELTAGR}%, ΔUF={self.DELTAUF}, ΔOP={self.DELTAOP}%, ΔED={self.DELTAED}%, ΔIN={self.DELTAIN}%")
+                f"ΔGR={self.DELTAGR}%, ΔUF={self.DELTAUF}, ΔOP={self.DELTAOP}%, ΔED={self.DELTAED}%, ΔIN={self.DELTAIN}%, "
+                f"OP hit/played={OPfractionString}, ED hit/played={EDfractionString}, IN hit/played={INfractionString}")
 
     def vintage_to_str(self, vintage: float) -> str:
         year = int(vintage)
@@ -122,6 +127,9 @@ class Player:
         self.EDGR = round(100*self.EDGR, 3)
         self.INGR = round(self.IN / self.INplayed, 5) if self.INplayed else 0.0
         self.INGR = round(100*self.INGR, 3)
+        self.OPfractionString = f"{self.OP}/{self.OPplayed}"
+        self.EDfractionString = f"{self.ED}/{self.EDplayed}"
+        self.INfractionString = f"{self.IN}/{self.INplayed}"
         self.avgDifficultyPlayed = round(self.avgDifficultyPlayed / self.totalSongsPlayed, 3) if self.totalSongsPlayed else 0.0
         self.avgDifficultyHit = round(self.avgDifficultyHit / self.totalSongsHit, 3) if self.totalSongsHit else 0.0
         self.avgoutof = round(self.avgoutof / self.totalSongsHit, 3) if self.totalSongsHit else 0.0

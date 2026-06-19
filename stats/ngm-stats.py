@@ -1681,9 +1681,6 @@ def run_ngm_sheet_stats():
             game_player.add("OPplayed", game.OP)
             game_player.add("EDplayed", game.ED)
             game_player.add("INplayed", game.IN)
-            game_player.add("OPhitVsPlayedString", f"{game_player.OP} / {game.OP}") # TODO check variable access
-            game_player.add("EDhitVsPlayedString", f"{game_player.ED} / {game.ED}")
-            game_player.add("INhitVsPlayedString", f"{game_player.IN} / {game.IN}")
             game_player.add("eggs", eggs)
             game_player.add("avgVintagePlayed", game.vintage)
 
@@ -1724,9 +1721,9 @@ def run_ngm_sheet_stats():
         "OPplayed": "# OPs played",
         "EDplayed": "# EDs played",
         "INplayed": "# INs played",
-        "OPhitVsPlayedString": "# OPs hit / played",
-        "EDhitVsPlayedString": "# EDs hit / played",
-        "INhitVsPlayedString": "# INs hit / played",
+        "OPfractionString": "# OPs correct",
+        "EDfractionString": "# EDs correct",
+        "INfractionString": "# INs correct",
         "rigAmount": "Rigs",
         "soloRigs": "Solo rigs",
         "avgoutofRigs": "avg/8 of your rigs",
@@ -1773,17 +1770,17 @@ def run_ngm_sheet_stats():
         "ΔOP",
         "# OPs hit",
         "# OPs played",
-        "# OPs hit / played",
+        "# OPs correct",
         "ED guess rate",
         "ΔED",
         "# EDs hit",
         "# EDs played",
-        "# EDs hit / played"
+        "# EDs correct",
         "IN guess rate",
         "ΔIN",
         "# INs hit",
         "# INs played",
-        "# INs hit / played",
+        "# INs correct",
         "Lives taken",
         "Lives saved",
         "Avg diff hit",
@@ -1840,17 +1837,17 @@ def run_ngm_sheet_stats():
         "\u0394OP": "OP",
         "# OPs hit": "OP",
         "# OPs played": "OP",
-        "# OPs hit / played": "OP",
+        "# OPs correct": "OP",
         "ED guess rate": "ED",
         "\u0394ED": "ED",
         "# EDs hit": "ED",
         "# EDs played": "ED",
-        "# EDs hit / played": "ED",
+        "# EDs correct": "ED",
         "IN guess rate": "IN",
         "\u0394IN": "IN",
         "# INs hit": "IN",
         "# INs played": "IN",
-        "# INs hit / played": "IN",
+        "# INs correct": "IN",
     }
 
     list_only_columns = {"Rigs", "Rigs missed", "Onlist", "Offlist"}
@@ -1895,13 +1892,13 @@ def run_ngm_sheet_stats():
         "\u0394UF",
         "OP guess rate", 
         "\u0394OP",
-        "# OPs hit / played",
+        "# OPs correct",
         "ED guess rate",
         "\u0394ED",
-        "# EDs hit / played",
+        "# EDs correct",
         "IN guess rate",
         "\u0394IN",
-        "# INs hit / played",
+        "# INs correct",
         "Avg diff hit",
         "Avg diff played",
         "Avg vintage hit",
@@ -2485,8 +2482,13 @@ def trim_bottom_white(path_in):
 def pct_text(value):
     return "N/A" if value is None or pd.isna(value) else f"{value:.2%}"
 
-def number_text(value, decimals=2):
-    return "N/A" if value is None or pd.isna(value) else f"{value:.{decimals}f}"
+def pct_text_with_fraction(value, fraction_string):
+    return f"@ {pct_text(value)} ({fraction_string})"
+
+def number_text(value, _ignore=None):
+    decimals = 2
+    text = "N/A" if value is None or pd.isna(value) else f"{value:.{decimals}f}"
+    return f"({text})"
 
 def parse_stat_cell(value, is_percent=False):
     if value is None:
@@ -2532,8 +2534,10 @@ def medal_html(index):
 
 def ranked_list_html(title, rows, formatter):
     lines = []
-    for i, (name, value) in enumerate(rows[:3]):
-        lines.append(f"<div>{medal_html(i)} {escape(str(name))} ({formatter(value)})</div>")
+    if len(rows[0]) == 2:
+        rows = [x + (None,) for x in rows]
+    for i, (name, value, details) in enumerate(rows[:3]):
+        lines.append(f"<div>{medal_html(i)} {escape(str(name))} {formatter(value, details)}</div>")
     while len(lines) < 3:
         lines.append("<div>&nbsp;</div>")
     return f"""
@@ -2630,8 +2634,8 @@ def save_extra_stats_image(data, output_dir, filename):
                 <div class="two-col-row"><span>Total chanting songs played</span><span>{data['chanting_total']}</span></div>
                 <div class="two-col-row"><span>Average chanting guess rate</span><span>{pct_text(data['chanting_gr'])}</span></div>
                 <div class="chant-lists">
-                    {ranked_list_html("Top 3 Chanting Lovers", data["chanting_lovers"], pct_text)}
-                    {ranked_list_html("Top 3 Chanting Haters", data["chanting_haters"], pct_text)}
+                    {ranked_list_html("Top 3 Chanting Lovers", data["chanting_lovers"], pct_text_with_fraction)}
+                    {ranked_list_html("Top 3 Chanting Haters", data["chanting_haters"], pct_text_with_fraction)}
                 </div>
             </div>
         """
@@ -3363,7 +3367,7 @@ def export_extra_stats_screenshot(server_average_mode, gc=None, ask_cleanup=Fals
     chan_pct = total_chanting_songs / total_songs_played if total_songs_played else 0
     avg_chan_gr = (chanting_correct_sum / (total_chanting_songs * len(song_participation))) if (total_chanting_songs and song_participation) else 0
     chan_plist = [n for n in song_participation.keys() if player_chanting_seen[n] > 0]
-    chan_rates = [(n, player_chanting_correct[n]/player_chanting_seen[n]) for n in chan_plist]
+    chan_rates = [(n, player_chanting_correct[n]/player_chanting_seen[n], f"{player_chanting_correct[n]}/{player_chanting_seen[n]}") for n in chan_plist]
     answer_time_rates = [
         (name, float(np.mean(times)))
         for name, times in player_answer_times.items()
