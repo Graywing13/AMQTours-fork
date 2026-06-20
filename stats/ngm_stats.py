@@ -1003,7 +1003,7 @@ def lookup_masquerade_wlt_player(name, masquerade_mapping, playerDB, alias_to_id
         name = resolve_masquerade_name(name, masquerade_mapping, playerDB, alias_to_id, id_to_aliases)
     return playerDB.lookup_player_name(name)
 
-def run_ngm_sheet_stats():
+def run_ngm_sheet_stats(is_local):
     DIRECTORY = os.path.dirname(os.path.abspath(__file__))
     ASSETS = os.path.join(DIRECTORY, "assets")
     JSONS = os.path.join(DIRECTORY, "jsons")
@@ -1961,6 +1961,8 @@ def run_ngm_sheet_stats():
     len_send = None
     if masquerade_mode:
         print("Masquerade: Google Sheet stat submission and JsonData logging skipped.")
+    elif is_local:
+        print("Local run: Google Sheet stat submission and JsonData logging skipped.")
     else:
         wks_send = get_worksheet_by_ref(sheet, sendToSheet)
         existing_stat_rows = wks_send.get_all_values()
@@ -3441,7 +3443,7 @@ def export_extra_stats_screenshot(server_average_mode, gc=None, ask_cleanup=Fals
 
 
 def main():
-    run_ngm_sheet_stats()
+    run_ngm_sheet_stats(False)
 
 
 if __name__ == "__main__":
