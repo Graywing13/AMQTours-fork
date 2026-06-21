@@ -1,66 +1,36 @@
 import os, sys, json, re, gspread, hashlib
+import pandas as pd
+import tkinter as tk
+import numpy as np
+from bs4 import BeautifulSoup
+from datetime import datetime
+from tkinter import messagebox, ttk
+from collections import defaultdict, Counter
+from html import escape
+from shutil import which
 
 ASSETS_MODULE_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), "assets")
 if ASSETS_MODULE_DIR not in sys.path:
     sys.path.insert(0, ASSETS_MODULE_DIR)
-
 from TourClasses import *
 from TourFunctions import *
-from bs4 import BeautifulSoup
-from datetime import datetime
-import pandas as pd
-import tkinter as tk
-from tkinter import messagebox, ttk
-from collections import defaultdict, Counter
-import numpy as np
-from html import escape
-from shutil import which
+from support.formatters import pct_text, pct_text_with_fraction, number_text
+from support.player_codes import find_codes_path, read_codes_text
+from support.jsons import discover_json_files
 
 try:
     from html2image import Html2Image
+except ImportError:
+    print("Error importing Html2Image from html2image")
+    print(traceback.format_exc())
+    Html2Image = None
+
+try:
     from PIL import Image
 except ImportError:
-    Html2Image = None
+    print("Error importing Image from PIL")
+    print(traceback.format_exc())
     Image = None
-
-
-def find_codes_path(script_dir):
-    parent_dir = os.path.abspath(os.path.join(script_dir, os.pardir))
-    candidates = [
-        os.path.join(script_dir, "codes.txt"),
-        os.path.join(os.getcwd(), "codes.txt"),
-        os.path.join(parent_dir, "codes.txt"),
-    ]
-    for path in candidates:
-        if os.path.exists(path):
-            return path
-    return candidates[0]
-
-
-def read_codes_text(script_dir):
-    codes_path = find_codes_path(script_dir)
-    if not os.path.exists(codes_path):
-        return ""
-    with open(codes_path, "r", encoding="utf-8") as codes_file:
-        return codes_file.read()
-
-
-
-def discover_json_files(json_dir, regex):
-    json_files = []
-    if not os.path.isdir(json_dir):
-        return json_files
-    for file_name in os.listdir(json_dir):
-        if not file_name.lower().endswith(".json"):
-            continue
-        songs_played = None
-        if not file_name.startswith("amq_song_expoert"):
-            reg_match = re.search(regex, file_name)
-            if reg_match is not None:
-                songs_played = int(reg_match.group(1))
-        json_files.append((file_name, songs_played))
-    return json_files
-
 
 def parse_bruteforce_codes(codes_path, teams_re):
     if not os.path.exists(codes_path):
@@ -2480,17 +2450,6 @@ def trim_bottom_white(path_in):
     rows = np.where(non_white.any(axis=1))[0]
     if len(rows):
         img.crop((0, 0, img.width, rows[-1] + 8)).save(path_in)
-
-def pct_text(value):
-    return "N/A" if value is None or pd.isna(value) else f"{value:.2%}"
-
-def pct_text_with_fraction(value, fraction_string):
-    return f"@ {pct_text(value)} ({fraction_string})"
-
-def number_text(value, _ignore=None):
-    decimals = 2
-    text = "N/A" if value is None or pd.isna(value) else f"{value:.{decimals}f}"
-    return f"({text})"
 
 def parse_stat_cell(value, is_percent=False):
     if value is None:
