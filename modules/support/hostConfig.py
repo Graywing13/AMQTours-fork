@@ -17,6 +17,7 @@ from modules.support.generateCodes import (
     generate_codes_watched_in_gr,
     generate_codes_watched_in_no_chanting_gr,
     generate_codes_watched_op_gr,
+    generate_codes_watched_oped_gr,
 )
 
 
@@ -43,6 +44,7 @@ CATEGORIES = {
         ("ED", "watched_ed"),
         ("IN", "watched_ins"),
         ("IN -Chanting", "watched_ins_no_chanting"),
+        ("OPED", "watched_oped"),
         ("-2009", "watched_x_2009"),
     ],
     "Speed": [
@@ -69,6 +71,7 @@ CODE_GENERATORS = {
     "watched_2009_gr": generate_codes_watched_2009_gr,
     "watched_ed_gr": generate_codes_watched_ed_gr,
     "watched_op_gr": generate_codes_watched_op_gr,
+    "watched_oped_gr": generate_codes_watched_oped_gr,
 }
 
 

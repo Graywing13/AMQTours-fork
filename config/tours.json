@@ -57,7 +57,7 @@
     "dry_elo": true,
     "sheet": {"name": "NGM Stats Export v2", "tab_ids": 1903970832, "elo_storage_gid": 82254993, "elo_storage_cell": "A11"},
     "solver": {"stats_tab": 601464032, "stats_type": "ed", "guess_mode": "random", "code_generator": "ed_gr", "thresholds": {"one": 8, "two": 19, "three": 28}},
-    "tiermaker": {"mode": "make_tiers", "stats_tab": 601464032, "stats_type": "ed", "alpha": 3.75, "midpoint": 0.33, "min_rating": 0, "max_rating": 25}
+    "tiermaker": {"mode": "make_tiers", "stats_tab": 601464032, "stats_type": "ed", "alpha": 3.75, "midpoint": 0.33, "min_rating": 0, "max_rating": 25, "min_games": 3}
   },
   "random_ins": {
     "label": "Random INS",
@@ -147,7 +147,7 @@
     "dry_elo": true,
     "sheet": {"name": "NGM Stats Export v2", "tab_ids": 1903970832, "elo_storage_gid": 82254993, "elo_storage_cell": "A18"},
     "solver": {"stats_tab": "Watched EDs", "stats_type": "watched-ed", "guess_mode": "watched", "code_generator": "watched_ed_gr", "gamemode": "ed", "thresholds": {"one": 6, "two": 12, "three": 18, "four": 28}},
-    "tiermaker": {"mode": "make_tiers", "stats_tab": "Watched EDs", "stats_type": "watched-ed", "alpha": 3.75, "midpoint": 0.4, "min_rating": 0, "max_rating": 25}
+    "tiermaker": {"mode": "make_tiers", "stats_tab": "Watched EDs", "stats_type": "watched-ed", "alpha": 3.75, "midpoint": 0.4, "min_rating": 0, "max_rating": 25, "min_games": 3}
   },
   "watched_ins": {
     "label": "Watched INS",
@@ -170,6 +170,17 @@
     "sheet": {"name": "NGM Stats Export v2", "tab_ids": 1903970832, "elo_storage_gid": 82254993, "elo_storage_cell": "A19"},
     "solver": {"stats_tab": 154982033, "stats_type": "watched-in-no-chanting", "guess_mode": "watched", "code_generator": "watched_in_no_chanting_gr", "gamemode": "40", "thresholds": {"one": 6, "two": 12, "three": 18, "four": 28}},
     "tiermaker": {"mode": "make_tiers", "stats_tab": 154982033, "stats_type": "watched-in-no-chanting", "alpha": 3.75, "midpoint": 0.4, "min_rating": 0, "max_rating": 25}
+  },
+  "watched_oped": {
+    "label": "Watched OPED",
+    "group": "Watched",
+    "route": "watched_oped",
+    "tour_type": "watched oped",
+    "state_dir": "data/tours/watched_oped",
+    "dry_elo": true,
+    "sheet": {"name": "NGM Stats Export v2", "tab_ids": 1903970832, "elo_storage_gid": 82254993, "elo_storage_cell": "A22"},
+    "solver": {"stats_tab": 231019448, "stats_type": "watched-oped", "guess_mode": "watched", "code_generator": "watched_oped_gr", "gamemode": "oped", "thresholds": {"one": 6, "two": 12, "three": 18, "four": 28}},
+    "tiermaker": {"mode": "make_tiers", "stats_tab": 231019448, "stats_type": "watched-oped", "alpha": 3.75, "midpoint": 0.4, "min_rating": 0, "max_rating": 25}
   },
   "watched_x_2009": {
     "label": "Watched x-2009",
