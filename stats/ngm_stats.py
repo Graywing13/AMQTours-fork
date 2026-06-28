@@ -101,18 +101,18 @@ def run_ngm_sheet_stats(is_local):
 [4]: Watched EDs
 [5]: Watched INs
 [6]: Watched INs -chanting
-[7]: Watched FL 2+8s
-[8]: Watched FL 5s
-[9]: Watched -2009
-[10]: Random OPs
-[11]: Random EDs
-[12]: Random INs
-[13]: Random OPEDs
-[14]: Random Chanting
-[15]: Other Random
-[16]: Other Watched
-[17]: Brute-force
-[18]: Watched OPEDs
+[7]: Watched OPEDs
+[8]: Watched FL 2+8s
+[9]: Watched FL 5s
+[10]: Watched -2009
+[11]: Random OPs
+[12]: Random EDs
+[13]: Random INs
+[14]: Random OPEDs
+[15]: Random Chanting
+[16]: Other Random
+[17]: Other Watched
+[18]: Brute-force
 """
 
     if not is_local:
@@ -175,58 +175,65 @@ def run_ngm_sheet_stats(is_local):
             tour_type_label = "Watched IN (-chanting)"
             orderToSheet.extend(watchedColumns)
         case "7":
+            gamemode = MAIN_SHEET_WATCHED_OPEDS
+            sendToSheet = gamemode
+            is_list = True
+            server_average_mode = "watched_oped"
+            tour_type_label = "Watched OPED"
+            orderToSheet.extend(watchedColumns)
+        case "8":
             gamemode = MAIN_SHEET_SPEED
             sendToSheet = gamemode
             is_list = True
             server_average_mode = "watched_fl_speed"
             tour_type_label = "Watched FL 2+8s"
             orderToSheet.extend(watchedColumns)
-        case "8":
+        case "9":
             gamemode = MAIN_SHEET_5S
             sendToSheet = gamemode
             is_list = True
             server_average_mode = "watched_fl_5s"
             tour_type_label = "Watched FL 5s"
             orderToSheet.extend(watchedColumns)
-        case "9":
+        case "10":
             gamemode = "Watched -2009"
             sendToSheet = gamemode
             is_list = True
             server_average_mode = "watched_pre_2009"
             tour_type_label = "Watched -2009"
             orderToSheet.extend(watchedColumns)
-        case "10":
+        case "11":
             gamemode = MAIN_SHEET_OPS
             sendToSheet = gamemode
             server_average_mode = "random_op"
             tour_type_label = "Random OP"
-        case "11":
+        case "12":
             gamemode = MAIN_SHEET_EDS
             sendToSheet = gamemode
             server_average_mode = "random_ed"
             tour_type_label = "Random ED"
-        case "12":
+        case "13":
             gamemode = MAIN_SHEET_INS
             sendToSheet = gamemode
             server_average_mode = "random_in"
             tour_type_label = "Random IN"
-        case "13":
+        case "14":
             gamemode = MAIN_SHEET_OPEDS
             sendToSheet = gamemode
             server_average_mode = "random_oped"
             tour_type_label = "Random OPED"
-        case "14":
+        case "15":
             gamemode = "Random Chanting"
             sendToSheet = gamemode
             server_average_mode = "random_chanting"
             tour_type_label = "Random Chanting"
-        case "15":
+        case "16":
             gamemode = MAIN_SHEET_RANDOM
             sendToSheet = MAIN_SHEET_OTHER
             is_other = True
             server_average_mode = "random_fl"
             tour_type_label = "Other Random"
-        case "16":
+        case "17":
             gamemode = MAIN_SHEET_WATCHED
             sendToSheet = MAIN_SHEET_OTHER
             is_list = True
@@ -234,15 +241,8 @@ def run_ngm_sheet_stats(is_local):
             server_average_mode = "watched_fl"
             tour_type_label = "Other Watched"
             orderToSheet.extend(watchedColumns)
-        case "17":
-            brute_force = True
         case "18":
-            gamemode = MAIN_SHEET_WATCHED_OPEDS
-            sendToSheet = gamemode
-            is_list = True
-            server_average_mode = "watched_oped"
-            tour_type_label = "Watched OPED"
-            orderToSheet.extend(watchedColumns)
+            brute_force = True
         case "19":
             if is_local:
                 print("Masquerade mode requires Challonge and is only available through ngm_stats.py.")
