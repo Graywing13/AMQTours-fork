@@ -38,7 +38,7 @@ from modules.support.hostConfig import (
     load_setup_codes,
 )
 from modules.support import hostHistory
-from modules.support.playerRatings import MissingRatingsError, normalize_alias_key
+from modules.support.playerRatings import MissingRatingsError, normalize_alias_key, resolve_player_ratings
 from tour_config import TOURS
 
 
@@ -70,6 +70,7 @@ class AMQTourUI(tk.Tk):
         self.players_placeholder_active = False
         self.solver_running = False
         self.rank_vars: dict[str, tk.StringVar] = {}
+        self.rank_check_generation = 0
         self.startup_eloscrape_done = threading.Event()
         self.startup_eloscrape_running = False
         self.startup_eloscrape_errors = []
@@ -1045,6 +1046,7 @@ if __name__ == "__main__":
         self.selected_tour_id = tour_id
         tour = TOURS[tour_id]
         self.tour_title.configure(text=tour["label"])
+        self.rank_check_generation += 1
         self.clear_rank_assignment()
         for key, button in self.tour_buttons.items():
             button.configure(style="Selected.TButton" if key == tour_id else "TButton")
@@ -1066,6 +1068,8 @@ if __name__ == "__main__":
                     self.set_status(f"{tour['label']} is loading during startup sync.")
                 else:
                     self.start_lazy_load_tour(tour, f"Loading {tour['label']} before use...")
+        if self.ui_ready:
+            self.after_idle(self.schedule_rank_assignment_check)
 
     def _show_tour_tabs(self):
         tabs = self.main_notebook.tabs()
@@ -1216,7 +1220,11 @@ if __name__ == "__main__":
         if self.players_placeholder_active:
             return
         self.clear_rank_assignment()
-        self.after_idle(lambda: self.refresh_player_selects(show_status=False))
+        self.after_idle(self.refresh_player_input_state)
+
+    def refresh_player_input_state(self):
+        self.refresh_player_selects(show_status=False)
+        self.schedule_rank_assignment_check()
 
     def refresh_player_selects(self, show_status=True):
         players = [name for name, _rank in self.parse_player_entries(allow_placeholder=True)]
@@ -1224,6 +1232,50 @@ if __name__ == "__main__":
         self.whitelist_b.configure(values=players)
         if show_status:
             self.set_status(f"Loaded {len(players)} players into whitelist selectors.")
+
+    def schedule_rank_assignment_check(self):
+        self.rank_check_generation += 1
+        generation = self.rank_check_generation
+        try:
+            player_entries = self.parse_player_entries(allow_placeholder=True)
+        except ValueError:
+            return
+        if not player_entries:
+            self.clear_rank_assignment()
+            return
+        tour_id = self.selected_tour_id
+        manual_ratings = self.manual_ratings()
+        threading.Thread(
+            target=self.rank_assignment_check_in_background,
+            args=(generation, tour_id, player_entries, manual_ratings),
+            daemon=True,
+        ).start()
+
+    def rank_assignment_check_in_background(self, generation, tour_id, player_entries, manual_ratings):
+        try:
+            self.wait_for_tour_loaded(tour_id)
+            resolve_player_ratings(TOURS[tour_id], player_entries, manual_ratings, DATA_ROOT / "aliases.txt")
+            missing = []
+            error = None
+        except MissingRatingsError as exc:
+            missing = exc.names
+            error = None
+        except Exception as exc:
+            missing = []
+            error = f"{type(exc).__name__}: {exc}"
+        self.after(0, lambda g=generation, m=missing, e=error: self.finish_rank_assignment_check(g, m, e))
+
+    def finish_rank_assignment_check(self, generation, missing, error=None):
+        if generation != self.rank_check_generation:
+            return
+        if error:
+            self.set_status(f"Could not check player ratings: {error}")
+            return
+        if missing:
+            self.show_rank_assignment(missing)
+            self.set_status("Assign missing ratings.")
+        else:
+            self.hide_rank_assignment()
 
     def parse_player_entries(self, allow_placeholder=False):
         if self.players_placeholder_active:
@@ -1359,7 +1411,8 @@ if __name__ == "__main__":
             return
         except Exception as exc:
             details = traceback.format_exc()
-            self.after(0, lambda: self.finish_solver(error=f"{type(exc).__name__}: {exc}\n\n{details}"))
+            error = f"{type(exc).__name__}: {exc}\n\n{details}"
+            self.after(0, lambda error=error: self.finish_solver(error=error))
             return
         self.after(0, lambda: self.finish_solver(final_code=final_code))
 
@@ -1443,7 +1496,8 @@ if __name__ == "__main__":
             )
         except Exception as exc:
             details = traceback.format_exc()
-            self.after(0, lambda: self.finish_manual_eloscrape(error=f"{type(exc).__name__}: {exc}\n\n{details}"))
+            error = f"{type(exc).__name__}: {exc}\n\n{details}"
+            self.after(0, lambda error=error: self.finish_manual_eloscrape(error=error))
             return
         self.after(0, lambda: self.finish_manual_eloscrape(tour=tour, selected_tour_id=self.tour_id_from_link(link)))
 
@@ -2077,7 +2131,8 @@ if __name__ == "__main__":
             self.run_tour_eloscrape(tour)
         except Exception as exc:
             details = traceback.format_exc()
-            self.after(0, lambda: self.finish_log_inhouse_results(error=f"{type(exc).__name__}: {exc}\n\n{details}"))
+            error = f"{type(exc).__name__}: {exc}\n\n{details}"
+            self.after(0, lambda error=error: self.finish_log_inhouse_results(error=error))
             return
         self.after(0, lambda: self.finish_log_inhouse_results(rows_written=rows_written))
 
@@ -2121,7 +2176,8 @@ if __name__ == "__main__":
             changelog_text = self.selected_changelog_text(tour, selected_tour_id)
         except Exception as exc:
             details = traceback.format_exc()
-            self.after(0, lambda: self.finish_inhouse_changelog(error=f"{type(exc).__name__}: {exc}\n\n{details}"))
+            error = f"{type(exc).__name__}: {exc}\n\n{details}"
+            self.after(0, lambda error=error: self.finish_inhouse_changelog(error=error))
             return
         self.after(0, lambda: self.finish_inhouse_changelog(changelog_text=changelog_text))
 
@@ -2201,7 +2257,8 @@ if __name__ == "__main__":
             updated_elos = update_dry_elos_for_tour(tour)
         except Exception as exc:
             details = traceback.format_exc()
-            self.after(0, lambda: self.finish_update_elos(error=f"{type(exc).__name__}: {exc}\n\n{details}"))
+            error = f"{type(exc).__name__}: {exc}\n\n{details}"
+            self.after(0, lambda error=error: self.finish_update_elos(error=error))
             return
         self.after(0, lambda: self.finish_update_elos(tour=tour, updated_count=len(updated_elos)))
 
@@ -2245,7 +2302,8 @@ if __name__ == "__main__":
             changelog_text = self.selected_changelog_text(tour, selected_tour_id)
         except Exception as exc:
             details = traceback.format_exc()
-            self.after(0, lambda: self.finish_view_changelog(error=f"{type(exc).__name__}: {exc}\n\n{details}"))
+            error = f"{type(exc).__name__}: {exc}\n\n{details}"
+            self.after(0, lambda error=error: self.finish_view_changelog(error=error))
             return
         self.after(0, lambda: self.finish_view_changelog(tour=tour, changelog_text=changelog_text))
 
@@ -2382,7 +2440,8 @@ if __name__ == "__main__":
             mvp_text = generate_mvps_for_tour(tour, selected_tour_id=selected_tour_id)
         except Exception as exc:
             details = traceback.format_exc()
-            self.after(0, lambda: self.finish_mvp_generation(error=f"{type(exc).__name__}: {exc}\n\n{details}"))
+            error = f"{type(exc).__name__}: {exc}\n\n{details}"
+            self.after(0, lambda error=error: self.finish_mvp_generation(error=error))
             return
         self.after(0, lambda: self.finish_mvp_generation(tour=tour, mvp_text=mvp_text))
 

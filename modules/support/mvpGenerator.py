@@ -31,6 +31,7 @@ def generate_mvps_for_tour(tour: dict, selected_tour_id: str | None = None) -> s
     midpoint = tier_cfg.get("midpoint", 0.4 if stats_type.startswith("watched") else 0.33)
     min_rating = tier_cfg.get("min_rating", 0)
     max_rating = tier_cfg.get("max_rating", 25)
+    min_games = tier_cfg.get("min_games", 4)
 
     clean_stats, full_stats = clean_data(
         str(idtable),
@@ -39,6 +40,7 @@ def generate_mvps_for_tour(tour: dict, selected_tour_id: str | None = None) -> s
         maxFallbackWindow=6,
         activeTours=10,
         tourType=stats_type,
+        min_games=min_games,
     )
     clean_stats = clean_stats.sort_values(["Player ID", "Timestamp"])
     full_stats = full_stats.sort_values(["Player ID", "Timestamp"])
@@ -159,6 +161,7 @@ def update_dry_elos_for_tour(tour: dict) -> dict[str, float]:
     midpoint = tier_cfg.get("midpoint", 0.4 if stats_type.startswith("watched") else 0.33)
     min_rating = tier_cfg.get("min_rating", 0)
     max_rating = tier_cfg.get("max_rating", 25)
+    min_games = tier_cfg.get("min_games", 4)
 
     clean_stats, full_stats = clean_data(
         str(idtable),
@@ -167,6 +170,7 @@ def update_dry_elos_for_tour(tour: dict) -> dict[str, float]:
         maxFallbackWindow=6,
         activeTours=10,
         tourType=stats_type,
+        min_games=min_games,
     )
     clean_stats = clean_stats.sort_values(["Player ID", "Timestamp"])
     full_stats = full_stats.sort_values(["Player ID", "Timestamp"])

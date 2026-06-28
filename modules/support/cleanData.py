@@ -36,8 +36,8 @@ def internal_clean_data(idtable, statstable, isWatched, min_games=4):
 
     return df
 
-def clean_data(idtable, statstable, cleanedStatsYear, maxFallbackWindow, activeTours, tourType):
-    df = internal_clean_data(idtable, statstable, tourType.startswith("watched"))
+def clean_data(idtable, statstable, cleanedStatsYear, maxFallbackWindow, activeTours, tourType, min_games=4):
+    df = internal_clean_data(idtable, statstable, tourType.startswith("watched"), min_games=min_games)
 
     six_months_ago = datetime.now() - relativedelta(months=maxFallbackWindow)
     year_6m_ago = six_months_ago.year
