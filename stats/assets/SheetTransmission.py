@@ -64,6 +64,7 @@ SERVER_AVERAGE_SHEET_CANDIDATES = {
     "random_fl": ("Random FL (usual)",),
     "watched_fl": ("Watched FL",),
     "watched_op": ("Watched OP",),
+    "watched_oped": ("Watched OPED",),
     "watched_in": ("Watched IN",),
     "watched_in_no_chanting": ("Watched IN (-chanting)",),
     "watched_ed": ("Watched ED",),

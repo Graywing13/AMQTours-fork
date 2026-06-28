@@ -47,6 +47,7 @@ def run_ngm_sheet_stats(is_local):
     MAIN_SHEET_5S=676003100
     MAIN_SHEET_WATCHED_INS=1177294729
     MAIN_SHEET_WATCHED_EDS=484347985
+    MAIN_SHEET_WATCHED_OPEDS=231019448
 
     TEAM_AVG = 0
     TEAM_SIZE = 0
@@ -111,10 +112,11 @@ def run_ngm_sheet_stats(is_local):
 [15]: Other Random
 [16]: Other Watched
 [17]: Brute-force
+[18]: Watched OPEDs
 """
 
     if not is_local:
-        txtvar += "[18]: Masquerade\n"
+        txtvar += "[19]: Masquerade\n"
 
     print(txtvar)
     is_list = False
@@ -235,6 +237,13 @@ def run_ngm_sheet_stats(is_local):
         case "17":
             brute_force = True
         case "18":
+            gamemode = MAIN_SHEET_WATCHED_OPEDS
+            sendToSheet = gamemode
+            is_list = True
+            server_average_mode = "watched_oped"
+            tour_type_label = "Watched OPED"
+            orderToSheet.extend(watchedColumns)
+        case "19":
             if is_local:
                 print("Masquerade mode requires Challonge and is only available through ngm_stats.py.")
                 _ = input('\npress enter to close')
@@ -858,6 +867,7 @@ def run_ngm_sheet_stats(is_local):
     selected_song_types = {
         "watched_in": {"IN"},
         "watched_op": {"OP"},
+        "watched_oped": {"OP", "ED"},
         "watched_in_no_chanting": {"IN"},
         "watched_ed": {"ED"},
         "random_op": {"OP"},
